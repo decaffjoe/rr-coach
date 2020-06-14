@@ -1,19 +1,34 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <button id="clicker" @click="linkUp">Get server side bread</button>
+    <img alt="Vue logo" src="./assets/logo.png" />
+    <HelloWorld msg="Welcome to Your Vue.js App" />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import HelloWorld from "./components/HelloWorld.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     HelloWorld
+  },
+  data() {
+    return {
+      alpha: 3
+    };
+  },
+  methods: {
+    linkUp() {
+      console.log("trying to fetch...");
+      fetch("http://localhost:3000", { method: "get", mode: "cors" })
+        .then(res => res.json())
+        .then(data => console.log(data))
+        .catch(err => console.log(err));
+    }
   }
-}
+};
 </script>
 
 <style>
