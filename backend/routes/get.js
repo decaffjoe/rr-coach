@@ -16,6 +16,16 @@ router.get('/user', async function getNickname(req, res) {
     }
 });
 
+// Get all workouts (per user_id)
+router.get('/workout', async function (req, res) {
+    try {
+        const workouts = await Workout.findAll({ where: { user_id: req.query.user_id }, attributes: ['workout_id', 'createdAt'] });
+        return res.json(workouts);
+    } catch (error) {
+        return res.status(400).json('Please submit a valid user id!');
+    }
+});
+
 // Exercise-specific routes e.g. '/pullupSummary'
 for (let [key, val] of Object.entries(allExercises)) {
 
