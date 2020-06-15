@@ -17,7 +17,7 @@ router.get('/nickname', async function getNickname(req, res) {
     }
 });
 
-// Get all sets from all exercises, using workout_id
+// Get all exercise sets from all exercises per workout_id
 router.get('/workoutSummary', async function getWorkoutSummary(req, res) {
     try {
         const summary = {};
@@ -32,10 +32,10 @@ router.get('/workoutSummary', async function getWorkoutSummary(req, res) {
     }
 });
 
-// Create exercise-specific routes e.g. '/pullupSummary'
+// Exercise-specific routes e.g. '/pullupSummary'
 for (let [key, val] of Object.entries(allExercises)) {
 
-    // Get all sets, using workout_id
+    // Get all exercise sets per workout_id
     // Route name example '/pullupSummary'
     router.get(`/${key.toLowerCase()}Summary`, async function (req, res) {
         try {
@@ -49,7 +49,7 @@ for (let [key, val] of Object.entries(allExercises)) {
         }
     });
 
-    // Get progression & reps from one set, using workout_id and setNumber
+    // Get progression & reps per exercise set (& workout_id, of course)
     // Route name example '/pullupSet'
     router.get(`/${key.toLowerCase()}Set`, async function (req, res) {
         try {
