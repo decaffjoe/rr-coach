@@ -13,8 +13,8 @@ connectDB().then(() => console.log('seeding done!'))
 // RPC API ROUTES
 const getRoutes = require('./routes/get'),
     postRoutes = require('./routes/post');
-app.use('/get', getRoutes);
-app.use('/post', postRoutes);
+app.use('/', getRoutes);
+app.use('/', postRoutes);
 
 app.get('/', (req, res) => {
     res.json('hi');

@@ -42,7 +42,8 @@ const commonFields = {
             model: Workout,
             key: 'workout_id'
         },
-        unique: 'compositeIndex', allowNull: false
+        unique: 'compositeIndex',
+        allowNull: false
     }
 };
 

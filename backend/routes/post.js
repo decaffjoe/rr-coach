@@ -3,7 +3,7 @@ const express = require('express'),
 
 const User = require('../models/User');
 const Workout = require('../models/Workout');
-const { Pullup } = require('../models/Exercises');
+const { Pullup, Squat, Dip, Hinge, Row, Pushup, AntiExtension, AntiRotation, Extension, allExercises } = require('../models/Exercises');
 
 // Add Pullups set
 router.post('/pullupSet', async function postPullupSet(req, res) {
