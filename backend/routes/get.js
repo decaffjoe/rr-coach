@@ -7,7 +7,7 @@ const { allExercises } = require('../models/Exercises');
 // allExercises is the 'string: class' truth object of all exercise models
 
 // Get user nickname from user_id
-router.get('/nickname', async function getNickname(req, res) {
+router.get('/userNickname', async function getNickname(req, res) {
     try {
         const user = await User.findOne({ where: { user_id: req.query.user_id } })
         return res.json(user.toJSON().nickname);

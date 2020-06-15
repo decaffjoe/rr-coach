@@ -13,7 +13,11 @@ User.init({
         autoIncrement: false,
         unique: true
     },
-    nickname: DataTypes.STRING,
+    nickname: {
+        type: DataTypes.STRING,
+        // defaultValue: '',
+        allowNull: true
+    }
 }, {
     sequelize: db,
     modelName: 'User'

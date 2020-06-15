@@ -5,6 +5,33 @@ const User = require('../models/User');
 const Workout = require('../models/Workout');
 const { allExercises } = require('../models/Exercises');
 
+// Create new user
+router.post('/user', async function (req, res) {
+    try {
+        let newUser = await User.create(req.body, { fields: ['nickname'] });
+        newUser = newUser.toJSON();
+        // no need to return timestamp information (timestamps still in db anyways)
+        delete newUser.updatedAt, delete newUser.createdAt;
+        return res.json(newUser);
+    } catch (error) {
+        return res.status(400).json('Bad POST request!');
+    }
+
+});
+
+// Create new workout (per user_id)
+router.post('/workout', async function (req, res) {
+    try {
+        let newWorkout = await Workout.create(req.body, { fields: ['user_id'] });
+        newWorkout = newWorkout.toJSON();
+        // client already has user_id, no need to return timestamps either
+        delete newWorkout.user_id, delete newWorkout.updatedAt, delete newWorkout.createdAt;
+        return res.json(newWorkout);
+    } catch (error) {
+        return res.status(400).json('Bad POST request!');
+    }
+});
+
 // Exercise-specific routes e.g. '/pullupSet'
 for (let [key, val] of Object.entries(allExercises)) {
 
