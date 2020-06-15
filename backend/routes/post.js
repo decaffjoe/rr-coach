@@ -4,6 +4,7 @@ const express = require('express'),
 const User = require('../models/User');
 const Workout = require('../models/Workout');
 const { allExercises } = require('../models/Exercises');
+// allExercises is the 'string: class' truth object of all exercise models
 
 // Create new user
 router.post('/user', async function (req, res) {
