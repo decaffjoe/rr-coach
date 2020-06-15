@@ -3,6 +3,15 @@ const User = require('./User'),
     Workout = require('./Workout'),
     { Pullup } = require('./Exercises');
 
+async function connectDB() {
+    try {
+        await db.sync();
+        console.log('All models connected!');
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 async function resetDB() {
     try {
 
@@ -32,15 +41,6 @@ async function resetDB() {
         // let idk = await Workout.findAll({ where: { user_id: jose.user_id } });
         // let joseMostRecentWorkoutId = idk[idk.length - 1].toJSON().workout_id
 
-    } catch (err) {
-        console.log(err);
-    }
-}
-
-async function connectDB() {
-    try {
-        await db.sync();
-        console.log('All models connected!');
     } catch (err) {
         console.log(err);
     }

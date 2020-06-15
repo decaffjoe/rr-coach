@@ -3,7 +3,7 @@ const express = require('express'),
 
 const User = require('../models/User');
 const Workout = require('../models/Workout');
-const { Pullup } = require('../models/Exercises');
+const { Pullup, Squat, Dip, Hinge, Row, Pushup, AntiExtension, AntiRotation, Extension, allExercises } = require('../models/Exercises');
 
 // Get user nickname from user_id
 router.get('/nickname', async function getNickname(req, res) {
@@ -19,10 +19,12 @@ router.get('/nickname', async function getNickname(req, res) {
 // Get all rows from all exercises from workout_id
 router.get('/workoutSummary', async function getWorkoutSummary(req, res) {
     try {
-        const workout = await Workout.findOne({ where: { workout_id: req.query.workout_id } });
-        const workout_id = workout.toJSON().workout_id;
-        const pullups = await Pullup.findAll({ where: { workout_id: workout_id }, attributes: ['progression', 'set', 'reps'] });
-        return res.send(pullups);
+        const summary = {};
+        // allExercises is the 'string: class' truth object of all exercise models
+        for (let [key, val] of Object.entries(allExercises)) {
+            summary[key] = await val.findAll({ where: { workout_id: req.query.workout_id }, attributes: ['progression', 'setNumber', 'reps'] });
+        }
+        return res.json(summary);
     } catch (error) {
         console.log(error);
         return res.status(400).json('Please submit a valid workout id!');

@@ -15,7 +15,7 @@ class AntiRotation extends Model { }
 class Extension extends Model { }
 
 // String: Class of all exercise categories
-const tables = {
+const allExercises = {
     'Pullup': Pullup,
     'Squat': Squat,
     'Dip': Dip,
@@ -47,7 +47,7 @@ const commonFields = {
 };
 
 // Create all tables with respective model names
-for (let [key, val] of Object.entries(tables)) {
+for (let [key, val] of Object.entries(allExercises)) {
     val.init(commonFields, {
         // no need for timestamps, check workout for those
         timestamps: false,
@@ -56,4 +56,4 @@ for (let [key, val] of Object.entries(tables)) {
     });
 }
 
-module.exports = { Pullup, Squat, Dip, Hinge, Row, Pushup, AntiExtension, AntiRotation, Extension };
+module.exports = { Pullup, Squat, Dip, Hinge, Row, Pushup, AntiExtension, AntiRotation, Extension, allExercises };
