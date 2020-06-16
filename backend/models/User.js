@@ -15,7 +15,6 @@ User.init({
     },
     nickname: {
         type: DataTypes.STRING,
-        // defaultValue: '',
         allowNull: true
     }
 }, {
