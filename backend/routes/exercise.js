@@ -28,7 +28,6 @@ for (let [key, val] of Object.entries(allExercises)) {
     router.post(`/${key.toLowerCase()}Set`, async function (req, res) {
         try {
 
-            // GET request must specify "workout_id" and "setNumber"
             await val.create(req.body, {
                 fields: ['workout_id', 'progression', 'reps', 'setNumber']
             });
@@ -41,7 +40,7 @@ for (let [key, val] of Object.entries(allExercises)) {
         }
     });
 
-    // Get all exercise sets per workout_id
+    // Get all sets for one exercise, using workout_id
     // Route name example '/pullupSummary'
     router.get(`/${key.toLowerCase()}Summary`, async function (req, res) {
         try {
