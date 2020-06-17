@@ -1,45 +1,43 @@
 const express = require('express'),
     router = express.Router();
 
-const User = require('../models/User');
-const Workout = require('../models/Workout');
 const { allExercises } = require('../models/Exercises');
 // allExercises is the 'string: class' truth object of all exercise models
 
-// Verify that user_id exists, return nickname if so
-router.get('/user', async function getNickname(req, res) {
-    try {
-        const user = await User.findOne({ where: { user_id: req.query.user_id } })
-        return res.json(user.toJSON().nickname);
-    } catch (error) {
-        return res.status(400).json('Please submit a valid user id!');
-    }
-});
-
-// Get all workouts (per user_id)
-router.get('/workout', async function (req, res) {
-    try {
-        const workouts = await Workout.findAll({ where: { user_id: req.query.user_id }, attributes: ['workout_id', 'createdAt'] });
-        return res.json(workouts);
-    } catch (error) {
-        return res.status(400).json('Please submit a valid user id!');
-    }
-});
-
-// Exercise-specific routes e.g. '/pullupSummary'
+// Exercise-specific routes e.g. '/pullupSet'
 for (let [key, val] of Object.entries(allExercises)) {
 
-    // Get progression & reps per exercise set (& workout_id, of course)
+    // Get a specific set (by exercise & workout_id)
     // Route name example '/pullupSet'
     router.get(`/${key.toLowerCase()}Set`, async function (req, res) {
         try {
+
             // GET request must specify "workout_id" and "setNumber"
             const setData = await val.findAll({ where: { workout_id: req.query.workout_id, setNumber: req.query.setNumber }, attributes: ['progression', 'reps'] });
-
             return res.json(setData);
+
         } catch (error) {
-            console.log(error);
-            return res.status(400).json('Please submit a valid workout id!');
+
+            return res.status(400).json('Please submit a valid workout_id and setNumber');
+
+        }
+    });
+
+    // Create a new set (progression, reps, workout_id, setNumber)
+    // Route name example '/pullupSet'
+    router.post(`/${key.toLowerCase()}Set`, async function (req, res) {
+        try {
+
+            // GET request must specify "workout_id" and "setNumber"
+            await val.create(req.body, {
+                fields: ['workout_id', 'progression', 'reps', 'setNumber']
+            });
+            return res.status(200).json('Success');
+
+        } catch (error) {
+
+            return res.status(400).json('Bad POST request!');
+
         }
     });
 
@@ -47,30 +45,34 @@ for (let [key, val] of Object.entries(allExercises)) {
     // Route name example '/pullupSummary'
     router.get(`/${key.toLowerCase()}Summary`, async function (req, res) {
         try {
+
             // GET request must specify "workout_id" as query string parameter
             const setData = await val.findAll({ where: { workout_id: req.query.workout_id }, attributes: ['progression', 'setNumber', 'reps'] });
-
             return res.json(setData);
+
         } catch (error) {
-            console.log(error);
+
             return res.status(400).json('Please submit a valid workout id!');
+
         }
     });
-
 }
 
-// Get all exercise sets from all exercises per workout_id
-router.get('/workoutSummary', async function getWorkoutSummary(req, res) {
+// Get all sets from all exercises per workout_id
+router.get('/allSummary', async function (req, res) {
     try {
+
         const summary = {};
         // GET request must specify "workout_id" as query string parameter
         for (let [key, val] of Object.entries(allExercises)) {
             summary[key.toLowerCase()] = await val.findAll({ where: { workout_id: req.query.workout_id }, attributes: ['progression', 'setNumber', 'reps'] });
         }
         return res.json(summary);
+
     } catch (error) {
-        console.log(error);
+
         return res.status(400).json('Please submit a valid workout id!');
+
     }
 });
 

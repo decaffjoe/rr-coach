@@ -11,10 +11,13 @@ connectDB().then(() => console.log('seeding done!'))
     .catch(err => console.log(err));
 
 // RPC API ROUTES
-const getRoutes = require('./routes/get'),
-    postRoutes = require('./routes/post');
-app.use('/', getRoutes);
-app.use('/', postRoutes);
+const userRoutes = require('./routes/user'),
+    workoutRoutes = require('./routes/workout'),
+    exerciseRoutes = require('./routes/exercise');
+
+app.use('/user', userRoutes);
+app.use('/workout', workoutRoutes);
+app.use('/exercise', exerciseRoutes);
 
 app.get('/', (req, res) => {
     res.json('hi');
