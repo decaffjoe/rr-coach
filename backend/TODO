@@ -1,3 +1,2 @@
-* Create all of the tables
 * Stress-test composite keys
-* Create endpoints for db reads and writes
+* Write unit tests?

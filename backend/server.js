@@ -1,9 +1,11 @@
 // IMPORTS
 const express = require('express');
 const app = express();
+const cors = require('cors');
 
-// Get req.body from requests
+// Get req.body from requests, enable CORS requests
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
 // DATABASE TESTING
 const { resetDB, connectDB } = require('./models/seed');
