@@ -3,10 +3,12 @@
         <router-link to="/warmup"><button>Back to Warmup</button></router-link>
         <router-link to="/"><button>Home</button></router-link>
         <button>Skip Pair</button>
-        <h1>EXERCISE 1 & EXERCISE 2</h1>
+        <h1>{{ currentExercise }}</h1>
         <hr>
-        <p>1 / 6</p>
+        <p><span>{{ currentSetNum }}</span> / <span>{{ currentSetRange }}</span></p>
         <hr>
+        <button @click="prevSet">Previous set</button>
+        <button @click="nextSet">Next set</button>
         <h2>Pull-ups</h2>
         <p>Rep goal: 5 - 8</p>
         <form action="" method="POST">
@@ -18,10 +20,18 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
     name: "Pairs",
+    computed: {
+        currentExercise() { return this.$store.getters.currentExercise; },
+        currentSetNum() { return this.$store.getters.currentSetNum; },
+        currentSetRange() { return this.$store.getters.currentSetRange; }
+    },
     components: {  },
-    methods: {  },
+    methods: {
+        ...mapActions(["nextSet", "prevSet"]),
+    },
     data() {
         return { }
     }
