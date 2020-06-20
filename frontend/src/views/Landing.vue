@@ -2,7 +2,7 @@
     <div>
         <button>Create Account / Login</button>
         <h1>Welcome to the r/bodyweight fitness Recommended Routine (RR) Training Tracker!</h1>
-        <button>Train now!</button>
+        <router-link to="/warmup"><button>Train now!</button></router-link>
         <button>More info</button>
         <button>Nutrition guide</button>
     </div>
