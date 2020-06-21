@@ -1,14 +1,14 @@
 <template>
     <div>
-        <router-link to="/warmup"><button>Back to Warmup</button></router-link>
+        <button @click="prevPair">Previous Section</button>
         <router-link to="/"><button>Home</button></router-link>
-        <button>Skip Pair</button>
+        <button @click="nextPair">Next Section</button>
         <h1>{{ currentExercise }}</h1>
         <hr>
-        <p><span>{{ currentSetNum }}</span> / <span>{{ currentSetRange }}</span></p>
+        <button @click="prevSet" class="set">Previous set</button>
+        <p class="set"><span>{{ currentSetNum }}</span> / <span>{{ currentSetRange }}</span></p>
+        <button @click="nextSet" class="set">Next set</button>
         <hr>
-        <button @click="prevSet">Previous set</button>
-        <button @click="nextSet">Next set</button>
         <h2>Pull-ups</h2>
         <p>Rep goal: 5 - 8</p>
         <form action="" method="POST">
@@ -30,7 +30,7 @@ export default {
     },
     components: {  },
     methods: {
-        ...mapActions(["nextSet", "prevSet"]),
+        ...mapActions(["nextSet", "prevSet", "prevPair", "nextPair"]),
     },
     data() {
         return { }
@@ -47,5 +47,8 @@ div {
 }
 button {
     background-color: brown;
+}
+.set {
+    display: inline-block;
 }
 </style>

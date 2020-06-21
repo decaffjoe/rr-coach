@@ -12,7 +12,7 @@ const state = {
         'rowpush': 6,
         'core': 9
     },
-    currentExercise: 'pullsquat',
+    currentExercise: 'warmup',
     currentSetNum: 1
 };
 
@@ -25,38 +25,48 @@ const getters = {
 
 // get/modify backend state
 const actions = {
-    nextSet({ commit }) { commit('updateCurrentSetNum', state.currentSetNum + 1); },
-    prevSet({ commit }) { commit('updateCurrentSetNum', state.currentSetNum - 1); }
+    prevSet({ commit }) { commit('incrementSetNum', state.currentSetNum - 1); },
+    nextSet({ commit }) { commit('incrementSetNum', state.currentSetNum + 1); },
+    prevPair({ commit }) { commit('skipCurrentExercise', 'prev') },
+    nextPair({ commit }) { commit('skipCurrentExercise', 'next') },
 };
 
 // backend state -> ui state
 const mutations = {
-    updateCurrentSetNum: (state, value) => {
+    incrementSetNum: (state, value) => {
         // check if value forces next or previous exercise
         if (value > state.maxSets[state.currentExercise]) {
-            // progress to next exercise
-            let keys = Object.keys(state.maxSets);
-            let i = keys.indexOf(state.currentExercise);
-            // if there is a next exercise
-            if (i < keys.length - 1) {
-                state.currentExercise = keys[i + 1];
-                // start at first set
-                value = 1;
+            // if not last exercise, change set number to 1
+            if (!mutations.skipCurrentExercise(state, 'next')) {
+                state.currentSetNum = 1;
             }
-            else value = state.maxSets[state.currentExercise];
         } else if (value < 1) {
-            // go back to previous exercise
-            let keys = Object.keys(state.maxSets);
-            let i = keys.indexOf(state.currentExercise);
-            // if there is a previous exercise
-            if (i > 0) {
-                state.currentExercise = keys[i - 1];
-                // start at last set
-                value = state.maxSets[state.currentExercise];
+            // if not first exercise, change set number to max of prev
+            if (!mutations.skipCurrentExercise(state, 'prev')) {
+                state.currentSetNum = state.maxSets[state.currentExercise];
             }
-            else value = 1;
         }
-        state.currentSetNum = value;
+        else state.currentSetNum = value;
+    },
+    skipCurrentExercise: (state, value) => {
+        let keys = Object.keys(state.maxSets);
+        let i = keys.indexOf(state.currentExercise);
+        // if skipping to next pair
+        if (value === 'next') {
+            // if there is a next exercise
+            if (i < keys.length - 1) state.currentExercise = keys[i + 1];
+            // if at extremity (last exercise)
+            else return true;
+        } else if (value === 'prev') {
+            // go back to previous exercise
+            // if there is a previous exercise
+            if (i > 0) state.currentExercise = keys[i - 1];
+            // if at extremity (first exercise)
+            else return true;
+        }
+        // always start at first set
+        state.currentSetNum = 1;
+        return false;
     }
 };
 
