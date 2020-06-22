@@ -70,21 +70,41 @@ export default {
         postSet() {
             // if reps have been entered
             if (this.repsDone) {
-                // create the target url from section and set
-                let url;
+                // create the target url, adjust set number
+                let url, adjSet;
                 if (this.currentSection === 'Core') {
+                    // url
                     if ([1, 4, 7].includes(this.currentSetNum)) {
-                        url = `http://localhost/${this.sections[this.currentSection]['path1']}Set`;
+                        url = `http://localhost:3000/exercise/${this.sections[this.currentSection]['path1']}Set`;
                     } else if ([2, 5, 8].includes(this.currentSetNum)) {
-                        url = `http://localhost/${this.sections[this.currentSection]['path2']}Set`;
-                    } else url = `http://localhost/${this.sections[this.currentSection]['path3']}Set`;
-                    console.log(url + this.repsDone);
+                        url = `http://localhost:3000/exercise/${this.sections[this.currentSection]['path2']}Set`;
+                    } else url = `http://localhost:3000/exercise/${this.sections[this.currentSection]['path3']}Set`;
+                    // set number
+                    if ([1, 2, 3].includes(this.currentSetNum)) adjSet = 1;
+                    else if ([4, 5, 6].includes(this.currentSetNum)) adjSet = 2;
+                    else adjSet = 3;
                 } else {
+                    // url
                     if (this.currentSetNum % 2 !== 0) {
-                        url = `http://localhost/${this.sections[this.currentSection]['path1']}Set`;
-                    } else url = `http://localhost/${this.sections[this.currentSection]['path2']}Set`;
-                    console.log(url + this.repsDone);
+                        url = `http://localhost:3000/exercise/${this.sections[this.currentSection]['path1']}Set`;
+                    } else url = `http://localhost:3000/exercise/${this.sections[this.currentSection]['path2']}Set`;
+                    // set number
+                    if (this.currentSetNum === 1 || this.currentSetNum === 2) adjSet = 1;
+                    else if (this.currentSetNum === 3 || this.currentSetNum === 4) adjSet = 2;
+                    else adjSet = 3;
                 }
+                // make the post request
+                fetch(url, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: { "Content-Type": "application/json; charset=utf-8" },
+                    body: JSON.stringify({
+                        reps: parseInt(this.repsDone),
+                        setNumber: adjSet,
+                        progression: 4,
+                        workout_id: 4
+                    })
+                }).then(res => console.log(res)).catch(err => console.log(err));
             } else console.log('loser');
         }
     },

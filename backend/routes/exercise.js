@@ -27,7 +27,7 @@ for (let [key, val] of Object.entries(allExercises)) {
     // Route name example '/pullupSet'
     router.post(`/${key.toLowerCase()}Set`, async function (req, res) {
         try {
-
+            console.log(req.body);
             await val.create(req.body, {
                 fields: ['workout_id', 'progression', 'reps', 'setNumber']
             });

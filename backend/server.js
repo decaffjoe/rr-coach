@@ -3,8 +3,8 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 
-// Get req.body from requests, enable CORS requests
-app.use(express.urlencoded({ extended: true }));
+// Get json req.body, enable CORS requests
+app.use(express.json());
 app.use(cors());
 
 // DATABASE TESTING
