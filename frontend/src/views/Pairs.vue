@@ -6,15 +6,13 @@
         <h1>{{ currentSection }}</h1>
         <hr>
         <button @click="decrementSetNum" class="set">Previous set</button>
-        <p class="set"><span>{{ currentSetNum }}</span> / <span>{{ currentSetRange }}</span></p>
+        <p class="set"><span>{{ currentSetNum }}</span> / <span>{{ currentMaxSets }}</span></p>
         <button @click="incrementSetNum" class="set">Next set</button>
         <hr>
         <h2>{{ currentExercise }}</h2>
-        <p>{{ currentRepGoal }}</p>
-        <form action="" method="POST">
-            <p>Completed: </p>
-            <input type="text">
-        </form>
+        <p>Rep Goal: {{ currentRepGoal }}</p>
+        <p id="completed">Completed: </p>
+        <input @keypress.enter="postSet" v-model="repsDone" type="text">
         <p>The goal of this exercise is to train the body into becoming very strong and immensely handsome etc... etc...</p>
     </div>
 </template>
@@ -23,20 +21,21 @@
 export default {
     name: "Pairs",
     computed: {
-        currentSetRange() { return this.maxSets[this.currentSection] },
-        currentExercise() { return this.warmupExercises[this.currentSetNum - 1][0]},
-        currentRepGoal() { return this.warmupExercises[this.currentSetNum - 1][1]},
+        currentMaxSets() { return this.sections[this.currentSection]['maxSets'] },
+        currentExercise() { return this.sections[this.currentSection]['exercises'][this.currentSetNum - 1] },
+        currentRepGoal() { return this.sections[this.currentSection]['reps'][this.currentSetNum - 1] },
+        allSections() { return Object.keys(this.sections) },
     },
     components: {  },
     methods: {
         incrementSetNum() {
             ++this.currentSetNum;
             // check if value forces next exercise
-            if (this.currentSetNum > this.maxSets[this.currentSection]) {
+            if (this.currentSetNum > this.currentMaxSets) {
                 // if not last exercise, change set number to 1
                 if (!this.skipCurrentSection('next')) {
                     this.currentSetNum = 1;
-                } else this.currentSetNum = this.maxSets[this.currentSection];
+                } else this.currentSetNum = this.currentMaxSets;
             }
         },
         decrementSetNum() {
@@ -45,23 +44,22 @@ export default {
             if (this.currentSetNum < 1) {
                 // if not first exercise, change set number to max of prev
                 if (!this.skipCurrentSection('prev')) {
-                    this.currentSetNum = this.maxSets[this.currentSection];
+                    this.currentSetNum = this.currentMaxSets;
                 } else this.currentSetNum = 1;
             }
         },
         skipCurrentSection(direction) {
-            let keys = Object.keys(this.maxSets);
-            let i = keys.indexOf(this.currentSection);
+            let i = this.allSections.indexOf(this.currentSection);
             // if skipping to next pair
             if (direction === 'next') {
                 // if there is a next exercise
-                if (i < keys.length - 1) this.currentSection = keys[i + 1];
+                if (i < this.allSections.length - 1) this.currentSection = this.allSections[i + 1];
                 // if at extremity (last exercise)
                 else return true;
             } else if (direction === 'prev') {
                 // go back to previous exercise
                 // if there is a previous exercise
-                if (i > 0) this.currentSection = keys[i - 1];
+                if (i > 0) this.currentSection = this.allSections[i - 1];
                 // if at extremity (first exercise)
                 else return true;
             }
@@ -69,26 +67,75 @@ export default {
             this.currentSetNum = 1;
             return false;
         },
+        postSet() {
+            // if reps have been entered
+            if (this.repsDone) {
+                // create the target url from section and set
+                let url;
+                if (this.currentSection === 'Core') {
+                    if ([1, 4, 7].includes(this.currentSetNum)) {
+                        url = `http://localhost/${this.sections[this.currentSection]['path1']}Set`;
+                    } else if ([2, 5, 8].includes(this.currentSetNum)) {
+                        url = `http://localhost/${this.sections[this.currentSection]['path2']}Set`;
+                    } else url = `http://localhost/${this.sections[this.currentSection]['path3']}Set`;
+                    console.log(url + this.repsDone);
+                } else {
+                    if (this.currentSetNum % 2 !== 0) {
+                        url = `http://localhost/${this.sections[this.currentSection]['path1']}Set`;
+                    } else url = `http://localhost/${this.sections[this.currentSection]['path2']}Set`;
+                    console.log(url + this.repsDone);
+                }
+            } else console.log('loser');
+        }
     },
     data() {
         return {
-            maxSets: {
-                'warmup': 8,
-                'pullsquat': 6,
-                'diphinge': 6,
-                'rowpush': 6,
-                'core': 9
-            },
+            repsDone: undefined,
             currentSetNum: 1,
-            currentSection: 'warmup',
-            warmupExercises: [["Yuri's Shoulder Band Warmup", "5 - 10"], ["Squat Sky Reaches", "5 - 10"], ["GMB Wrist Prep", "10+"], ["Deadbugs", "30s"], ["Arch Hangs", "10"], ["Support Hold", "30s"], ["Easier Squat Progression", "10"], ["Easier Hinge Progression", "10"]],
+            currentSection: 'Pullups & Squats',
+            sections: {
+                'Warmups': {
+                    maxSets: 8,
+                    exercises: ["Yuri's Shoulder Band Warmup", "Squat Sky Reaches", "GMB Wrist Prep", "Deadbugs", "Arch Hangs", "Support Hold", "Easier Squat Progression", "Easier Hinge Progression"],
+                    reps: ["5 - 10", "5 - 10", "10+", "30s", "10", "30s", "10", "10"],
+                },
+                'Pullups & Squats': {
+                    maxSets: 6,
+                    exercises: ["Pullups", "Squats", "Pullups", "Squats", "Pullups", "Squats"],
+                    reps: ["5 - 8", "5 - 8", "5 - 8", "5 - 8", "5 - 8", "5 - 8"],
+                    path1: 'pullup',
+                    path2: 'squat',
+                },
+                'Dips & Hinges': {
+                    maxSets: 6,
+                    exercises: ["Dips", "Hinges", "Dips", "Hinges", "Dips", "Hinges"],
+                    reps: ["5 - 8", "5 - 8", "5 - 8", "5 - 8", "5 - 8", "5 - 8"],
+                    path1: 'dip',
+                    path2: 'hinge',
+                },
+                'Rows & Pushups': {
+                    maxSets: 6,
+                    exercises: ["Rows", "Pushups", "Rows", "Pushups", "Rows", "Pushups"],
+                    reps: ["5 - 8", "5 - 8", "5 - 8", "5 - 8", "5 - 8", "5 - 8"],
+                    path1: 'row',
+                    path2: 'pushup',
+                },
+                'Core': {
+                    maxSets: 9,
+                    exercises: ["Anti-Extensions", "Anti-Rotations", "Extensions", "Anti-Extensions", "Anti-Rotations", "Extensions", "Anti-Extensions", "Anti-Rotations", "Extensions"],
+                    reps: ["8 - 12", "8 - 12", "8 - 12", "8 - 12", "8 - 12", "8 - 12", "8 - 12", "8 - 12", "8 - 12"],
+                    path1: 'antiextension',
+                    path2: 'antirotation',
+                    path3: 'extension',
+                }
+            },
         }
     }
 };
 </script>
 
 <style scoped>
-form p {
+#completed {
     display: inline;
 }
 div {

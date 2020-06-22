@@ -4,7 +4,7 @@ const express = require('express'),
 const { allExercises } = require('../models/Exercises');
 // allExercises is the 'string: class' truth object of all exercise models
 
-// Exercise-specific routes e.g. '/pullupSet'
+// Exercise-specific routes
 for (let [key, val] of Object.entries(allExercises)) {
 
     // Get a specific set (by exercise & workout_id)
