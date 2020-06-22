@@ -20,12 +20,11 @@ router.get('/', async function (req, res) {
 // Create new user
 router.post('/', async function (req, res) {
     try {
-
         let newUser = await User.create(req.body, { fields: ['nickname'] });
         newUser = newUser.toJSON();
         // no need to return timestamp information (timestamps still in db anyways)
-        delete newUser.updatedAt, delete newUser.createdAt;
-        return res.json(newUser);
+        delete newUser.updatedAt, delete newUser.createdAt, delete newUser.nickname;
+        return res.json(newUser.user_id);
 
     } catch (error) {
 
