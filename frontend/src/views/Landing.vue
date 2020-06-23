@@ -1,6 +1,6 @@
 <template>
     <div>
-        <router-link to="/login"><button>Create Account / Login</button></router-link>
+        <Navbar />
         <h1>Welcome to the r/bodyweight fitness Recommended Routine (RR) Training Tracker!</h1>
         <router-link to="/pairs"><button>Train now!</button></router-link>
         <button>More info</button>
@@ -9,12 +9,13 @@
 </template>
 
 <script>
+import Navbar from "../components/Navbar.vue";
 export default {
     name: "Landing",
-    components: { },
+    components: { Navbar },
     methods: { },
     data() {
-        return {  }
+        return { }
     }
 };
 </script>

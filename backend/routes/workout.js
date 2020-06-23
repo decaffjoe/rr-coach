@@ -25,7 +25,7 @@ router.post('/', async function (req, res) {
         newWorkout = newWorkout.toJSON();
         // client already has user_id, no need to return timestamps either
         delete newWorkout.user_id, delete newWorkout.updatedAt, delete newWorkout.createdAt;
-        return res.json(newWorkout);
+        return res.json(newWorkout.workout_id);
 
     } catch (error) {
 

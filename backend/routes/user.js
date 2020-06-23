@@ -20,6 +20,7 @@ router.get('/', async function (req, res) {
 // Create new user
 router.post('/', async function (req, res) {
     try {
+
         let newUser = await User.create(req.body, { fields: ['nickname'] });
         newUser = newUser.toJSON();
         // no need to return timestamp information (timestamps still in db anyways)

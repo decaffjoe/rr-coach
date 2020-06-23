@@ -11,8 +11,8 @@
         <hr>
         <h2>{{ currentExercise }}</h2>
         <p>Rep Goal: {{ currentRepGoal }}</p>
-        <p id="completed">Completed: </p>
-        <input @keypress.enter="postSet" v-model="repsDone" type="text">
+        <p id="completed" v-if="currentSection !== 'Warmups'">Completed: </p>
+        <input @keypress.enter="postSet" v-model="repsDone" type="text" v-if="currentSection !== 'Warmups'">
         <p>The goal of this exercise is to train the body into becoming very strong and immensely handsome etc... etc...</p>
     </div>
 </template>
@@ -68,8 +68,8 @@ export default {
             return false;
         },
         postSet() {
-            // if reps have been entered
-            if (this.repsDone) {
+            // if reps have been entered and workout is active
+            if (this.repsDone && this.$cookies.isKey("workout_id")) {
                 // create the target url, adjust set number
                 let url, adjSet;
                 if (this.currentSection === 'Core') {
@@ -102,17 +102,38 @@ export default {
                         reps: parseInt(this.repsDone),
                         setNumber: adjSet,
                         progression: 4,
-                        workout_id: 4
+                        workout_id: this.$cookies.get("workout_id")
                     })
                 }).then(res => console.log(res)).catch(err => console.log(err));
             } else console.log('loser');
+        }
+    },
+    async created() {
+        try {
+            // get a new workout_id (if user is logged in without existing workout_id)
+            if (this.$cookies.isKey("user_id") && !this.$cookies.isKey("workout_id")) {
+                let url = "http://localhost:3000/workout";
+                let res = await fetch(url, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: { "Content-Type": "application/json; charset=utf-8" },
+                    body: JSON.stringify({
+                        user_id: this.$cookies.get("user_id")
+                    })
+                });
+                res = await res.json();
+                //                                  expiry path domain secure sameSite
+                this.$cookies.set("workout_id", res, "12h", null, null, null, "Strict");
+            }
+        } catch (error) {
+            console.log(error);
         }
     },
     data() {
         return {
             repsDone: undefined,
             currentSetNum: 1,
-            currentSection: 'Pullups & Squats',
+            currentSection: 'Warmups',
             sections: {
                 'Warmups': {
                     maxSets: 8,
