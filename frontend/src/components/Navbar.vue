@@ -1,7 +1,7 @@
 <template>
     <div>
         <button @click="goToLogin" v-if="!loggedIn">Create Account / Login</button>
-        <p style="display: inline-block;" v-if="user_nickname">Welcome back {{ user_nickname }}</p>
+        <p style="display: inline-block;" v-if="user_nickname">Hi, {{ user_nickname }}</p>
         <button @click="goToAccount" v-if="loggedIn">My Account</button>
         <button @click="logout" v-if="loggedIn">Logout</button>
     </div>

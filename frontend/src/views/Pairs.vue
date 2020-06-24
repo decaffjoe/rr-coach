@@ -3,7 +3,7 @@
         <button @click="skipCurrentSection('prev')">Previous Section</button>
         <router-link to="/"><button>Home</button></router-link>
         <button @click="skipCurrentSection('next')">Next Section</button>
-        <router-link to="/summary"><button>Workout Summary</button></router-link>
+        <button @click="goToSummary">Workout Summary</button>
         <h1>{{ currentSection }}</h1>
         <hr>
         <button @click="decrementSetNum" class="set">Previous set</button>
@@ -69,44 +69,83 @@ export default {
             return false;
         },
         postSet() {
-            // if reps have been entered and workout is active
-            if (this.repsDone && this.$cookies.isKey("workout_id")) {
-                // create the target url, adjust set number
-                let url, adjSet;
+            // reps gotta be inputted first eh
+            if (this.repsDone) {
+                // create the post url and real (adjusted) set number
+                let url, adjSet, currentPath;
                 if (this.currentSection === 'Core') {
-                    // url
+                    // determine exercise
                     if ([1, 4, 7].includes(this.currentSetNum)) {
-                        url = `http://localhost:3000/exercise/${this.sections[this.currentSection]['path1']}Set`;
+                        currentPath = this.sections[this.currentSection]['path1'];
                     } else if ([2, 5, 8].includes(this.currentSetNum)) {
-                        url = `http://localhost:3000/exercise/${this.sections[this.currentSection]['path2']}Set`;
-                    } else url = `http://localhost:3000/exercise/${this.sections[this.currentSection]['path3']}Set`;
+                        currentPath = this.sections[this.currentSection]['path2'];
+                    } else currentPath = this.sections[this.currentSection]['path3'];
                     // set number
                     if ([1, 2, 3].includes(this.currentSetNum)) adjSet = 1;
                     else if ([4, 5, 6].includes(this.currentSetNum)) adjSet = 2;
                     else adjSet = 3;
                 } else {
-                    // url
+                    // determine exercise
                     if (this.currentSetNum % 2 !== 0) {
-                        url = `http://localhost:3000/exercise/${this.sections[this.currentSection]['path1']}Set`;
-                    } else url = `http://localhost:3000/exercise/${this.sections[this.currentSection]['path2']}Set`;
+                        currentPath = this.sections[this.currentSection]['path1'];
+                    } else currentPath = this.sections[this.currentSection]['path2'];
                     // set number
                     if (this.currentSetNum === 1 || this.currentSetNum === 2) adjSet = 1;
                     else if (this.currentSetNum === 3 || this.currentSetNum === 4) adjSet = 2;
                     else adjSet = 3;
                 }
-                // make the post request
-                fetch(url, {
-                    method: 'POST',
-                    mode: 'cors',
-                    headers: { "Content-Type": "application/json; charset=utf-8" },
-                    body: JSON.stringify({
+                // set url
+                url = `http://localhost:3000/exercise/${currentPath}Set`;
+                let hasPosted = false;
+                // make the post request if user is logged in
+                if (this.$cookies.isKey("workout_id")) {
+                    fetch(url, {
+                        method: 'POST',
+                        mode: 'cors',
+                        headers: { "Content-Type": "application/json; charset=utf-8" },
+                        body: JSON.stringify({
+                            reps: parseInt(this.repsDone),
+                            setNumber: adjSet,
+                            progression: 4,
+                            workout_id: this.$cookies.get("workout_id")
+                        })
+                    }).then(res => console.log(res)).catch(err => console.log(err));
+                    hasPosted = true;
+                }
+                // add post url if we're not posting right now
+                if (!hasPosted) {
+                    this.workoutSummary[this.currentSection].push({
                         reps: parseInt(this.repsDone),
                         setNumber: adjSet,
                         progression: 4,
-                        workout_id: this.$cookies.get("workout_id")
-                    })
-                }).then(res => console.log(res)).catch(err => console.log(err));
+                        workout_id: this.$cookies.get("workout_id"),
+                        postPath: url,
+                        currentPath,
+                        exerciseVariant: this.currentExercise,
+                        id: this.id
+                    });
+                } else {
+                    // but save the summary even if we did post!
+                    this.workoutSummary[this.currentSection].push({
+                        reps: parseInt(this.repsDone),
+                        setNumber: adjSet,
+                        progression: 4,
+                        workout_id: this.$cookies.get("workout_id"),
+                        currentPath,
+                        exerciseVariant: this.currentExercise,
+                        id: this.id
+                    });
+                }
             } else console.log('loser');
+            this.id++;
+        },
+        goToSummary() {
+            this.$router.push({
+                name: 'Summary',
+                params: {
+                    workoutSummary: this.workoutSummary,
+                }
+            });
         }
     },
     async created() {
@@ -135,6 +174,7 @@ export default {
             repsDone: undefined,
             currentSetNum: 1,
             currentSection: 'Warmups',
+            id: 0,
             sections: {
                 'Warmups': {
                     maxSets: 8,
@@ -171,6 +211,12 @@ export default {
                     path3: 'extension',
                 }
             },
+            workoutSummary: {
+                'Pullups & Squats': [],
+                'Dips & Hinges': [],
+                'Rows & Pushups': [],
+                'Core': [],
+            }
         }
     }
 };

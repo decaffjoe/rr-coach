@@ -27,7 +27,8 @@ const routes = [
     {
         path: '/summary',
         name: 'Summary',
-        component: Summary
+        component: Summary,
+        props: true
     },
 ];
 
