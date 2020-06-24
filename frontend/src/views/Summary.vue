@@ -17,18 +17,41 @@ import Navbar from "../components/Navbar.vue";
 export default {
     name: "Summary",
     components: { Navbar, },
-    props: ['workoutSummary'],
     computed: {
-        pullups() { return this.summary['Pullups & Squats'].filter(set => set.currentPath === 'pullup') },
-        squats() { return this.summary['Pullups & Squats'].filter(set => set.currentPath === 'squat') },
-        dips() { return this.summary['Dips & Hinges'].filter(set => set.currentPath === 'dip') },
-        hinges() { return this.summary['Dips & Hinges'].filter(set => set.currentPath === 'hinge') },
-        rows() { return this.summary['Rows & Pushups'].filter(set => set.currentPath === 'row') },
-        pushups() { return this.summary['Rows & Pushups'].filter(set => set.currentPath === 'pushup') },
+        pullups() {
+            if (this.summary['Pullups & Squats']) {
+                return this.summary['Pullups & Squats'].filter(set => set.currentPath === 'pullup')
+            } else return [];
+        },
+        squats() {
+            if (this.summary['Pullups & Squats']) {
+                return this.summary['Pullups & Squats'].filter(set => set.currentPath === 'squat')
+            } else return [];
+        },
+        dips() {
+            if (this.summary['Dips & Hinges']) {
+                return this.summary['Dips & Hinges'].filter(set => set.currentPath === 'dip');
+            } else return [];
+        },
+        hinges() {
+            if (this.summary['Dips & Hinges']) {
+                return this.summary['Dips & Hinges'].filter(set => set.currentPath === 'hinge')
+            } else return [];
+        },
+        rows() {
+            if (this.summary['Rows & Pushups']) {
+                return this.summary['Rows & Pushups'].filter(set => set.currentPath === 'row')
+            } else return [];
+        },
+        pushups() {
+            if (this.summary['Rows & Pushups']) {
+                return this.summary['Rows & Pushups'].filter(set => set.currentPath === 'pushup')
+            } else return [];
+        },
     },
     data() {
         return {
-            summary: this.workoutSummary
+            summary: JSON.parse(window.sessionStorage['workoutSummary']),
         }
     }
 }

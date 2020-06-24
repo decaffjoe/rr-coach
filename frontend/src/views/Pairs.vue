@@ -3,7 +3,7 @@
         <button @click="skipCurrentSection('prev')">Previous Section</button>
         <router-link to="/"><button>Home</button></router-link>
         <button @click="skipCurrentSection('next')">Next Section</button>
-        <button @click="goToSummary">Workout Summary</button>
+        <router-link to="/summary"><button>Workout Summary</button></router-link>
         <h1>{{ currentSection }}</h1>
         <hr>
         <button @click="decrementSetNum" class="set">Previous set</button>
@@ -109,12 +109,13 @@ export default {
                             progression: 4,
                             workout_id: this.$cookies.get("workout_id")
                         })
-                    }).then(res => console.log(res)).catch(err => console.log(err));
+                    }); //.then(res => res.json()).then(res => console.log(res)).catch(err => console.log(err));
                     hasPosted = true;
                 }
                 // add post url if we're not posting right now
+                let newSet;
                 if (!hasPosted) {
-                    this.workoutSummary[this.currentSection].push({
+                    newSet = {
                         reps: parseInt(this.repsDone),
                         setNumber: adjSet,
                         progression: 4,
@@ -123,10 +124,10 @@ export default {
                         currentPath,
                         exerciseVariant: this.currentExercise,
                         id: this.id
-                    });
+                    };
                 } else {
                     // but save the summary even if we did post!
-                    this.workoutSummary[this.currentSection].push({
+                    newSet = {
                         reps: parseInt(this.repsDone),
                         setNumber: adjSet,
                         progression: 4,
@@ -134,22 +135,23 @@ export default {
                         currentPath,
                         exerciseVariant: this.currentExercise,
                         id: this.id
-                    });
+                    };
                 }
+                // update sessionStorage
+                let session = JSON.parse(window.sessionStorage['workoutSummary']);
+                console.log(session);
+                if (!session[this.currentSection]) session[this.currentSection] = [];
+                session[this.currentSection].push(newSet);
+                window.sessionStorage['workoutSummary'] = JSON.stringify(session);
+                console.log(window.sessionStorage['workoutSummary']);
             } else console.log('loser');
             this.id++;
         },
-        goToSummary() {
-            this.$router.push({
-                name: 'Summary',
-                params: {
-                    workoutSummary: this.workoutSummary,
-                }
-            });
-        }
     },
     async created() {
         try {
+            // init sessionStorage if not active
+            if (!window.sessionStorage['workoutSummary']) window.sessionStorage['workoutSummary'] = "{}";
             // get a new workout_id (if user is logged in without existing workout_id)
             if (this.$cookies.isKey("user_id") && !this.$cookies.isKey("workout_id")) {
                 let url = "http://localhost:3000/workout";
@@ -211,12 +213,6 @@ export default {
                     path3: 'extension',
                 }
             },
-            workoutSummary: {
-                'Pullups & Squats': [],
-                'Dips & Hinges': [],
-                'Rows & Pushups': [],
-                'Core': [],
-            }
         }
     }
 };

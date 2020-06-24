@@ -1,5 +1,6 @@
 <template>
     <div>
+        <router-link to="/" v-if="this.$route.name !== 'Landing'"><button>Home</button></router-link>
         <button @click="goToLogin" v-if="!loggedIn">Create Account / Login</button>
         <p style="display: inline-block;" v-if="user_nickname">Hi, {{ user_nickname }}</p>
         <button @click="goToAccount" v-if="loggedIn">My Account</button>
