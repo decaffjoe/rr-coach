@@ -3,6 +3,7 @@
         <button @click="skipCurrentSection('prev')">Previous Section</button>
         <router-link to="/"><button>Home</button></router-link>
         <button @click="skipCurrentSection('next')">Next Section</button>
+        <router-link to="/summary"><button>Workout Summary</button></router-link>
         <h1>{{ currentSection }}</h1>
         <hr>
         <button @click="decrementSetNum" class="set">Previous set</button>

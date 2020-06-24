@@ -1,5 +1,5 @@
-* Create (barebones) views
-* Route the views
+* Persistent workout state tracking
+* Workout Summary view
+* Workout Summary post to db (if not logged in)
 * Style the views
-* Create exercise components
-* Connect to backend endpoints
+* Component-ize the views
