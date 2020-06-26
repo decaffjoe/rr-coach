@@ -2,13 +2,20 @@
   <div>
       <Navbar />
       <h1>Workout Summary</h1>
+      <p v-if="!this.$cookies.isKey('user_id')">Want to save your training stats for next time? Create an account or login using the button above. (Don't worry, we'll save these stats automatically)</p>
       <p>Exercise | Set | Reps </p>
-      <p v-for="set of pullups" :key="set.id">{{ set.exerciseVariant }} {{ set.setNumber }} {{ set.reps }}</p>
-      <p v-for="set of squats" :key="set.id">{{ set.exerciseVariant }} {{ set.setNumber }} {{ set.reps }}</p>
-      <p v-for="set of dips" :key="set.id">{{ set.exerciseVariant }} {{ set.setNumber }} {{ set.reps }}</p>
-      <p v-for="set of hinges" :key="set.id">{{ set.exerciseVariant }} {{ set.setNumber }} {{ set.reps }}</p>
-      <p v-for="set of rows" :key="set.id">{{ set.exerciseVariant }} {{ set.setNumber }} {{ set.reps }}</p>
-      <p v-for="set of pushups" :key="set.id">{{ set.exerciseVariant }} {{ set.setNumber }} {{ set.reps }}</p>
+      <ul>Pullups</ul>
+      <li v-for="set of pullups" :key="set.id">{{ set.exerciseVariant }} {{ set.setNumber }} {{ set.reps }}</li>
+      <ul>Squats</ul>
+      <li v-for="set of squats" :key="set.id">{{ set.exerciseVariant }} {{ set.setNumber }} {{ set.reps }}</li>
+      <ul>Dips</ul>
+      <li v-for="set of dips" :key="set.id">{{ set.exerciseVariant }} {{ set.setNumber }} {{ set.reps }}</li>
+      <ul>Hinges</ul>
+      <li v-for="set of hinges" :key="set.id">{{ set.exerciseVariant }} {{ set.setNumber }} {{ set.reps }}</li>
+      <ul>Rows</ul>
+      <li v-for="set of rows" :key="set.id">{{ set.exerciseVariant }} {{ set.setNumber }} {{ set.reps }}</li>
+      <ul>Pushups</ul>
+      <li v-for="set of pushups" :key="set.id">{{ set.exerciseVariant }} {{ set.setNumber }} {{ set.reps }}</li>
   </div>
 </template>
 

@@ -1,5 +1,8 @@
-* Persistent workout state tracking
 * Workout Summary view
-* Workout Summary post to db (if not logged in)
+* TEST: Persistent workout state tracking
+* TEST: Workout Summary post to db (if not logged in)
+* Add yt embed & exercise description
+* Add exercise progression support
+* Fill out 'more info' and 'nutrition guide' views
 * Style the views
 * Component-ize the views

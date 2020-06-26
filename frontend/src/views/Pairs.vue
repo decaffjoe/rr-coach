@@ -1,7 +1,7 @@
 <template>
     <div>
-        <button @click="skipCurrentSection('prev')">Previous Section</button>
         <router-link to="/"><button>Home</button></router-link>
+        <button @click="skipCurrentSection('prev')">Previous Section</button>
         <button @click="skipCurrentSection('next')">Next Section</button>
         <router-link to="/summary"><button>Workout Summary</button></router-link>
         <h1>{{ currentSection }}</h1>
@@ -29,7 +29,9 @@ export default {
     },
     components: {  },
     methods: {
-        incrementSetNum() {
+        async incrementSetNum(directClick=true) {
+            // if 'next set' button pressed directly, post reps before moving to next set
+            if (directClick) await this.postSet(false);
             ++this.currentSetNum;
             // check if value forces next exercise
             if (this.currentSetNum > this.currentMaxSets) {
@@ -68,7 +70,7 @@ export default {
             this.currentSetNum = 1;
             return false;
         },
-        postSet() {
+        async postSet(directClick=true) {
             // reps gotta be inputted first eh
             if (this.repsDone) {
                 // create the post url and real (adjusted) set number
@@ -99,7 +101,7 @@ export default {
                 let hasPosted = false;
                 // make the post request if user is logged in
                 if (this.$cookies.isKey("workout_id")) {
-                    fetch(url, {
+                    let res = await fetch(url, {
                         method: 'POST',
                         mode: 'cors',
                         headers: { "Content-Type": "application/json; charset=utf-8" },
@@ -109,49 +111,38 @@ export default {
                             progression: 4,
                             workout_id: this.$cookies.get("workout_id")
                         })
-                    }); //.then(res => res.json()).then(res => console.log(res)).catch(err => console.log(err));
-                    hasPosted = true;
+                    });
+                    if (res.status === 200) { hasPosted = true; window.sessionStorage['hasPosted'] = 1; }
                 }
+                // create set object to store in sessionStorage
+                let newSet = {
+                    reps: parseInt(this.repsDone),
+                    setNumber: adjSet,
+                    progression: 4,
+                    currentPath,
+                    exerciseVariant: this.currentExercise,
+                    id: window.sessionStorage['idCounter']
+                };
                 // add post url if we're not posting right now
-                let newSet;
-                if (!hasPosted) {
-                    newSet = {
-                        reps: parseInt(this.repsDone),
-                        setNumber: adjSet,
-                        progression: 4,
-                        workout_id: this.$cookies.get("workout_id"),
-                        postPath: url,
-                        currentPath,
-                        exerciseVariant: this.currentExercise,
-                        id: this.id
-                    };
-                } else {
-                    // but save the summary even if we did post!
-                    newSet = {
-                        reps: parseInt(this.repsDone),
-                        setNumber: adjSet,
-                        progression: 4,
-                        workout_id: this.$cookies.get("workout_id"),
-                        currentPath,
-                        exerciseVariant: this.currentExercise,
-                        id: this.id
-                    };
-                }
-                // update sessionStorage
+                if (!hasPosted) newSet['postPath'] = url;
+                // read current sessionStorage
                 let session = JSON.parse(window.sessionStorage['workoutSummary']);
-                console.log(session);
                 if (!session[this.currentSection]) session[this.currentSection] = [];
+                // update sessionStorage with newSet included
                 session[this.currentSection].push(newSet);
                 window.sessionStorage['workoutSummary'] = JSON.stringify(session);
-                console.log(window.sessionStorage['workoutSummary']);
+                // update counter
+                window.sessionStorage['idCounter']++;
+                // go to next set automatically if 'enter' pressed in input
+                if (directClick) this.incrementSetNum(false);
             } else console.log('loser');
-            this.id++;
         },
     },
     async created() {
         try {
             // init sessionStorage if not active
             if (!window.sessionStorage['workoutSummary']) window.sessionStorage['workoutSummary'] = "{}";
+            if (!window.sessionStorage['idCounter']) window.sessionStorage['idCounter'] = 0;
             // get a new workout_id (if user is logged in without existing workout_id)
             if (this.$cookies.isKey("user_id") && !this.$cookies.isKey("workout_id")) {
                 let url = "http://localhost:3000/workout";
@@ -176,7 +167,6 @@ export default {
             repsDone: undefined,
             currentSetNum: 1,
             currentSection: 'Warmups',
-            id: 0,
             sections: {
                 'Warmups': {
                     maxSets: 8,
@@ -186,6 +176,8 @@ export default {
                 'Pullups & Squats': {
                     maxSets: 6,
                     exercises: ["Pullups", "Squats", "Pullups", "Squats", "Pullups", "Squats"],
+                    pullupProgression: ["Scapular Pulls", "Arch Hangs", "Pullup Negatives", "Pullups", "Weighted Pullups"],
+                    squatProgression: ["Assisted Squat", "Squat", "Split Squat", "Bulgarian Split Squat", "Beginner Shrimp Squat", "Intermediate Shrimp Squat", "Advanced Shrimp Squat", "Weighted Shrimp Squat"],
                     reps: ["5 - 8", "5 - 8", "5 - 8", "5 - 8", "5 - 8", "5 - 8"],
                     path1: 'pullup',
                     path2: 'squat',
@@ -193,6 +185,8 @@ export default {
                 'Dips & Hinges': {
                     maxSets: 6,
                     exercises: ["Dips", "Hinges", "Dips", "Hinges", "Dips", "Hinges"],
+                    dipProgression: ["Parallel Bar Support Hold", "Negative Dips", "Parallel Bar Dips", "Weighted Dips"],
+                    hingeProgression: ["Romanian Deadlift", "Single Legged Deadlift", "Banded Nordic Curl Negatives", "Banded Nordic Curl", "Nordic Curls"],
                     reps: ["5 - 8", "5 - 8", "5 - 8", "5 - 8", "5 - 8", "5 - 8"],
                     path1: 'dip',
                     path2: 'hinge',
@@ -200,6 +194,8 @@ export default {
                 'Rows & Pushups': {
                     maxSets: 6,
                     exercises: ["Rows", "Pushups", "Rows", "Pushups", "Rows", "Pushups"],
+                    rowProgression: ["Vertical Rows", "Incline Rows", "Horizontal Rows", "Wide Rows", "Weighted Inverted Rows"],
+                    pushupProgression: ["Vertical Pushup", "Incline Pushup", "Full Pushup", "Diamond Pushup", "Pseudo Planche Pushups"],
                     reps: ["5 - 8", "5 - 8", "5 - 8", "5 - 8", "5 - 8", "5 - 8"],
                     path1: 'row',
                     path2: 'pushup',
@@ -208,6 +204,9 @@ export default {
                     maxSets: 9,
                     exercises: ["Anti-Extensions", "Anti-Rotations", "Extensions", "Anti-Extensions", "Anti-Rotations", "Extensions", "Anti-Extensions", "Anti-Rotations", "Extensions"],
                     reps: ["8 - 12", "8 - 12", "8 - 12", "8 - 12", "8 - 12", "8 - 12", "8 - 12", "8 - 12", "8 - 12"],
+                    antiExtenstionProgression: ["Plank", "Ring Ab Rollouts"],
+                    antiRotationProgression: ["Banded Pallof Press"],
+                    extensionProgression: ["Reverse Hyperextension"],
                     path1: 'antiextension',
                     path2: 'antirotation',
                     path3: 'extension',

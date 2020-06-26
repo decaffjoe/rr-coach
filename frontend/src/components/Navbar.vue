@@ -26,12 +26,17 @@ export default {
             this.$router.push('/pairs');
         },
         logout() {
+            // reset cookies
             this.$cookies.remove("user_id");
             this.$cookies.remove("user_nickname");
             this.$cookies.remove("workout_id");
+            // reset login status for v-ifs
             this.loggedIn = false;
             this.user_id = undefined;
             this.user_nickname = undefined;
+            // reset sessionStorage and go back to homepage
+            window.sessionStorage.clear();
+            this.$router.push('/');
         }
     },
     data() {
