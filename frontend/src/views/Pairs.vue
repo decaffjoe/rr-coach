@@ -10,9 +10,9 @@
         <p class="set"><span>{{ currentSetNum }}</span> / <span>{{ currentMaxSets }}</span></p>
         <button @click="incrementSetNum" class="set">Next set</button>
         <hr>
-        <h2>{{ currentVariant }}</h2>
-        <button @click="easierVariant">Easier Variant</button>
-        <button @click="tougherVariant">Tougher Variant</button>
+        <h2>{{ currentVariant.name }}</h2>
+        <button @click="easierVariant" v-if="currentSection !== 'Warmups'">Easier Variant</button>
+        <button @click="tougherVariant" v-if="currentSection !== 'Warmups'">Tougher Variant</button>
         <p>Rep Goal: {{ currentRepGoal }}</p>
         <p id="completed" v-if="currentSection !== 'Warmups'">Completed: </p>
         <input @keypress.enter="postSet" v-model="repsDone" type="text" v-if="currentSection !== 'Warmups'">
@@ -30,24 +30,24 @@ export default {
         currentExercise() { return this.sections[this.currentSection]['exercises'][this.currentSetNum - 1] },
         currentVariant() {
             if (this.currentExercise === 'Pullups') {
-                return this.pullupProgression[this.pullupVariant];
+                return { name: this.pullupProgression[this.pullupVariant], num: this.pullupVariant };
             } else if (this.currentExercise === 'Squats') {
-                return this.squatProgression[this.squatVariant];
+                return { name: this.squatProgression[this.squatVariant], num: this.squatVariant };
             } else if (this.currentExercise === 'Dips') {
-                return this.dipProgression[this.dipVariant];
+                return { name: this.dipProgression[this.dipVariant], num: this.dipVariant };
             } else if (this.currentExercise === 'Hinges') {
-                return this.hingeProgression[this.hingeVariant];
+                return { name: this.hingeProgression[this.hingeVariant], num: this.hingeVariant };
             } else if (this.currentExercise === 'Rows') {
-                return this.rowProgression[this.rowVariant];
+                return { name: this.rowProgression[this.rowVariant], num: this.rowVariant };
             } else if (this.currentExercise === 'Pushups') {
-                return this.pushupProgression[this.pushupVariant];
+                return { name: this.pushupProgression[this.pushupVariant], num: this.pushupVariant };
             } else if (this.currentExercise === 'Anti-Extensions') {
-                return this.antiExtenstionProgression[this.antiExtensionVariant];
+                return { name: this.antiExtenstionProgression[this.antiExtensionVariant], num: this.antiExtensionVariant };
             } else if (this.currentExercise === 'Anti-Rotations') {
-                return this.antiRotationProgression[this.antiRotationVariant];
+                return { name: this.antiRotationProgression[this.antiRotationVariant], num: this.antiRotationVariant };
             } else if (this.currentExercise === 'Extensions') {
-                return this.extensionProgression[this.extensionVariant];
-            } else return this.currentExercise;
+                return { name: this.extensionProgression[this.extensionVariant], num: this.extensionVariant };
+            } else return { name: this.currentExercise };
         }
     },
     components: {  },
@@ -209,7 +209,7 @@ export default {
                         body: JSON.stringify({
                             reps: parseInt(this.repsDone),
                             setNumber: adjSet,
-                            progression: 4,
+                            progression: this.currentVariant.num,
                             workout_id: this.$cookies.get("workout_id")
                         })
                     });
@@ -219,9 +219,8 @@ export default {
                 let newSet = {
                     reps: parseInt(this.repsDone),
                     setNumber: adjSet,
-                    progression: 4,
+                    progression: this.currentVariant.num,
                     currentPath,
-                    exerciseVariant: this.currentExercise,
                     id: window.sessionStorage['idCounter']
                 };
                 // add post url if we're not posting right now
@@ -269,22 +268,22 @@ export default {
             currentSetNum: 1,
             currentSection: 'Warmups',
             pullupProgression: ["Scapular Pulls", "Arch Hangs", "Pullup Negatives", "Pullups", "Weighted Pullups"],
-            pullupVariant: 0,
             squatProgression: ["Assisted Squat", "Squat", "Split Squat", "Bulgarian Split Squat", "Beginner Shrimp Squat", "Intermediate Shrimp Squat", "Advanced Shrimp Squat", "Weighted Shrimp Squat"],
-            squatVariant: 0,
             dipProgression: ["Parallel Bar Support Hold", "Negative Dips", "Parallel Bar Dips", "Weighted Dips"],
-            dipVariant: 0,
             hingeProgression: ["Romanian Deadlift", "Single Legged Deadlift", "Banded Nordic Curl Negatives", "Banded Nordic Curl", "Nordic Curls"],
-            hingeVariant: 0,
             rowProgression: ["Vertical Rows", "Incline Rows", "Horizontal Rows", "Wide Rows", "Weighted Inverted Rows"],
-            rowVariant: 0,
             pushupProgression: ["Vertical Pushup", "Incline Pushup", "Full Pushup", "Diamond Pushup", "Pseudo Planche Pushups"],
-            pushupVariant: 0,
             antiExtenstionProgression: ["Plank", "Ring Ab Rollouts"],
-            antiExtensionVariant: 0,
             antiRotationProgression: ["Banded Pallof Press"],
-            antiRotationVariant: 0,
             extensionProgression: ["Reverse Hyperextension"],
+            pullupVariant: 0,
+            squatVariant: 0,
+            dipVariant: 0,
+            hingeVariant: 0,
+            rowVariant: 0,
+            pushupVariant: 0,
+            antiExtensionVariant: 0,
+            antiRotationVariant: 0,
             extensionVariant: 0,
             sections: {
                 'Warmups': {
