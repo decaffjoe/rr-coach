@@ -10,7 +10,9 @@
         <p class="set"><span>{{ currentSetNum }}</span> / <span>{{ currentMaxSets }}</span></p>
         <button @click="incrementSetNum" class="set">Next set</button>
         <hr>
-        <h2>{{ currentExercise }}</h2>
+        <h2>{{ currentVariant }}</h2>
+        <button @click="easierVariant">Easier Variant</button>
+        <button @click="tougherVariant">Tougher Variant</button>
         <p>Rep Goal: {{ currentRepGoal }}</p>
         <p id="completed" v-if="currentSection !== 'Warmups'">Completed: </p>
         <input @keypress.enter="postSet" v-model="repsDone" type="text" v-if="currentSection !== 'Warmups'">
@@ -22,10 +24,31 @@
 export default {
     name: "Pairs",
     computed: {
-        currentMaxSets() { return this.sections[this.currentSection]['maxSets'] },
-        currentExercise() { return this.sections[this.currentSection]['exercises'][this.currentSetNum - 1] },
-        currentRepGoal() { return this.sections[this.currentSection]['reps'][this.currentSetNum - 1] },
         allSections() { return Object.keys(this.sections) },
+        currentMaxSets() { return this.sections[this.currentSection]['maxSets'] },
+        currentRepGoal() { return this.sections[this.currentSection]['reps'][this.currentSetNum - 1] },
+        currentExercise() { return this.sections[this.currentSection]['exercises'][this.currentSetNum - 1] },
+        currentVariant() {
+            if (this.currentExercise === 'Pullups') {
+                return this.pullupProgression[this.pullupVariant];
+            } else if (this.currentExercise === 'Squats') {
+                return this.squatProgression[this.squatVariant];
+            } else if (this.currentExercise === 'Dips') {
+                return this.dipProgression[this.dipVariant];
+            } else if (this.currentExercise === 'Hinges') {
+                return this.hingeProgression[this.hingeVariant];
+            } else if (this.currentExercise === 'Rows') {
+                return this.rowProgression[this.rowVariant];
+            } else if (this.currentExercise === 'Pushups') {
+                return this.pushupProgression[this.pushupVariant];
+            } else if (this.currentExercise === 'Anti-Extensions') {
+                return this.antiExtenstionProgression[this.antiExtensionVariant];
+            } else if (this.currentExercise === 'Anti-Rotations') {
+                return this.antiRotationProgression[this.antiRotationVariant];
+            } else if (this.currentExercise === 'Extensions') {
+                return this.extensionProgression[this.extensionVariant];
+            } else return this.currentExercise;
+        }
     },
     components: {  },
     methods: {
@@ -69,6 +92,84 @@ export default {
             // always start at first set
             this.currentSetNum = 1;
             return false;
+        },
+        easierVariant() {
+            if (this.currentExercise === 'Pullups') {
+                if (this.pullupVariant > 0) return --this.pullupVariant;
+                else return;
+            }
+            else if (this.currentExercise === 'Squats') {
+                if (this.squatVariant > 0) return --this.squatVariant;
+                else return;
+            }
+            else if (this.currentExercise === 'Dips') {
+                if (this.dipVariant > 0) return --this.dipVariant;
+                else return;
+            }
+            else if (this.currentExercise === 'Hinges') {
+                if (this.hingeVariant > 0) return --this.hingeVariant;
+                else return;
+            }
+            else if (this.currentExercise === 'Rows') {
+                if (this.rowVariant > 0) return --this.rowVariant;
+                else return;
+            }
+            else if (this.currentExercise === 'Pushups') {
+                if (this.pushupVariant > 0) return --this.pushupVariant;
+                else return;
+            }
+            else if (this.currentExercise === 'Anti-Extensions') {
+                if (this.antiExtensionVariant > 0) return --this.antiExtensionVariant;
+                else return;
+            }
+            else if (this.currentExercise === 'Anti-Rotations') {
+                if (this.antiRotationVariant > 0) return --this.antiRotationVariant;
+                else return;
+            }
+            else if (this.currentExercise === 'Extensions') {
+                if (this.extensionVariant > 0) return --this.extensionVariant;
+                else return;
+            }
+            else return;
+        },
+        tougherVariant() {
+            if (this.currentExercise === 'Pullups') {
+                if (this.pullupVariant < this.pullupProgression.length - 1) return ++this.pullupVariant;
+                else return;
+            }
+            else if (this.currentExercise === 'Squats') {
+                if (this.squatVariant < this.squatProgression.length - 1) return ++this.squatVariant;
+                else return;
+            }
+            else if (this.currentExercise === 'Dips') {
+                if (this.dipVariant < this.dipProgression.length - 1) return ++this.dipVariant;
+                else return;
+            }
+            else if (this.currentExercise === 'Hinges') {
+                if (this.hingeVariant < this.hingeProgression.length - 1) return ++this.hingeVariant;
+                else return;
+            }
+            else if (this.currentExercise === 'Rows') {
+                if (this.rowVariant < this.rowProgression.length - 1) return ++this.rowVariant;
+                else return;
+            }
+            else if (this.currentExercise === 'Pushups') {
+                if (this.pushupVariant < this.pushupProgression.length - 1) return ++this.pushupVariant;
+                else return;
+            }
+            else if (this.currentExercise === 'Anti-Extensions') {
+                if (this.antiExtensionVariant < this.antiExtensionProgression.length - 1) return ++this.antiExtensionVariant;
+                else return;
+            }
+            else if (this.currentExercise === 'Anti-Rotations') {
+                if (this.antiRotationVariant < this.antiRotationProgression.length - 1) return ++this.antiRotationVariant;
+                else return;
+            }
+            else if (this.currentExercise === 'Extensions') {
+                if (this.extensionVariant < this.extensionProgression.length - 1) return ++this.extensionVariant;
+                else return;
+            }
+            else return;
         },
         async postSet(directClick=true) {
             // reps gotta be inputted first eh
@@ -167,6 +268,24 @@ export default {
             repsDone: undefined,
             currentSetNum: 1,
             currentSection: 'Warmups',
+            pullupProgression: ["Scapular Pulls", "Arch Hangs", "Pullup Negatives", "Pullups", "Weighted Pullups"],
+            pullupVariant: 0,
+            squatProgression: ["Assisted Squat", "Squat", "Split Squat", "Bulgarian Split Squat", "Beginner Shrimp Squat", "Intermediate Shrimp Squat", "Advanced Shrimp Squat", "Weighted Shrimp Squat"],
+            squatVariant: 0,
+            dipProgression: ["Parallel Bar Support Hold", "Negative Dips", "Parallel Bar Dips", "Weighted Dips"],
+            dipVariant: 0,
+            hingeProgression: ["Romanian Deadlift", "Single Legged Deadlift", "Banded Nordic Curl Negatives", "Banded Nordic Curl", "Nordic Curls"],
+            hingeVariant: 0,
+            rowProgression: ["Vertical Rows", "Incline Rows", "Horizontal Rows", "Wide Rows", "Weighted Inverted Rows"],
+            rowVariant: 0,
+            pushupProgression: ["Vertical Pushup", "Incline Pushup", "Full Pushup", "Diamond Pushup", "Pseudo Planche Pushups"],
+            pushupVariant: 0,
+            antiExtenstionProgression: ["Plank", "Ring Ab Rollouts"],
+            antiExtensionVariant: 0,
+            antiRotationProgression: ["Banded Pallof Press"],
+            antiRotationVariant: 0,
+            extensionProgression: ["Reverse Hyperextension"],
+            extensionVariant: 0,
             sections: {
                 'Warmups': {
                     maxSets: 8,
@@ -176,8 +295,6 @@ export default {
                 'Pullups & Squats': {
                     maxSets: 6,
                     exercises: ["Pullups", "Squats", "Pullups", "Squats", "Pullups", "Squats"],
-                    pullupProgression: ["Scapular Pulls", "Arch Hangs", "Pullup Negatives", "Pullups", "Weighted Pullups"],
-                    squatProgression: ["Assisted Squat", "Squat", "Split Squat", "Bulgarian Split Squat", "Beginner Shrimp Squat", "Intermediate Shrimp Squat", "Advanced Shrimp Squat", "Weighted Shrimp Squat"],
                     reps: ["5 - 8", "5 - 8", "5 - 8", "5 - 8", "5 - 8", "5 - 8"],
                     path1: 'pullup',
                     path2: 'squat',
@@ -185,8 +302,6 @@ export default {
                 'Dips & Hinges': {
                     maxSets: 6,
                     exercises: ["Dips", "Hinges", "Dips", "Hinges", "Dips", "Hinges"],
-                    dipProgression: ["Parallel Bar Support Hold", "Negative Dips", "Parallel Bar Dips", "Weighted Dips"],
-                    hingeProgression: ["Romanian Deadlift", "Single Legged Deadlift", "Banded Nordic Curl Negatives", "Banded Nordic Curl", "Nordic Curls"],
                     reps: ["5 - 8", "5 - 8", "5 - 8", "5 - 8", "5 - 8", "5 - 8"],
                     path1: 'dip',
                     path2: 'hinge',
@@ -194,8 +309,6 @@ export default {
                 'Rows & Pushups': {
                     maxSets: 6,
                     exercises: ["Rows", "Pushups", "Rows", "Pushups", "Rows", "Pushups"],
-                    rowProgression: ["Vertical Rows", "Incline Rows", "Horizontal Rows", "Wide Rows", "Weighted Inverted Rows"],
-                    pushupProgression: ["Vertical Pushup", "Incline Pushup", "Full Pushup", "Diamond Pushup", "Pseudo Planche Pushups"],
                     reps: ["5 - 8", "5 - 8", "5 - 8", "5 - 8", "5 - 8", "5 - 8"],
                     path1: 'row',
                     path2: 'pushup',
@@ -204,9 +317,6 @@ export default {
                     maxSets: 9,
                     exercises: ["Anti-Extensions", "Anti-Rotations", "Extensions", "Anti-Extensions", "Anti-Rotations", "Extensions", "Anti-Extensions", "Anti-Rotations", "Extensions"],
                     reps: ["8 - 12", "8 - 12", "8 - 12", "8 - 12", "8 - 12", "8 - 12", "8 - 12", "8 - 12", "8 - 12"],
-                    antiExtenstionProgression: ["Plank", "Ring Ab Rollouts"],
-                    antiRotationProgression: ["Banded Pallof Press"],
-                    extensionProgression: ["Reverse Hyperextension"],
                     path1: 'antiextension',
                     path2: 'antirotation',
                     path3: 'extension',
