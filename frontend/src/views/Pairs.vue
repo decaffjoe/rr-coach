@@ -11,8 +11,8 @@
         <button @click="incrementSetNum" class="set">Next set</button>
         <hr>
         <h2>{{ currentVariant.name }}</h2>
-        <button @click="easierVariant" v-if="currentSection !== 'Warmups'">Easier Variant</button>
-        <button @click="tougherVariant" v-if="currentSection !== 'Warmups'">Tougher Variant</button>
+        <button @click="easierVariant" v-if="currentSection !== 'Warmups' && currentVariant.num > 0">Easier Variant</button>
+        <button @click="tougherVariant" v-if="currentSection !== 'Warmups' && currentVariant.num < currentVariant.max">Tougher Variant</button>
         <p>Rep Goal: {{ currentRepGoal }}</p>
         <p id="completed" v-if="currentSection !== 'Warmups'">Completed: </p>
         <input @keypress.enter="postSet" v-model="repsDone" type="text" v-if="currentSection !== 'Warmups'">
@@ -30,23 +30,23 @@ export default {
         currentExercise() { return this.sections[this.currentSection]['exercises'][this.currentSetNum - 1] },
         currentVariant() {
             if (this.currentExercise === 'Pullups') {
-                return { name: this.pullupProgression[this.pullupVariant], num: this.pullupVariant };
+                return { name: this.pullupProgression[this.pullupVariant], num: this.pullupVariant, max: this.pullupProgression.length - 1 };
             } else if (this.currentExercise === 'Squats') {
-                return { name: this.squatProgression[this.squatVariant], num: this.squatVariant };
+                return { name: this.squatProgression[this.squatVariant], num: this.squatVariant, max: this.squatProgression.length - 1 };
             } else if (this.currentExercise === 'Dips') {
-                return { name: this.dipProgression[this.dipVariant], num: this.dipVariant };
+                return { name: this.dipProgression[this.dipVariant], num: this.dipVariant, max: this.dipProgression.length - 1 };
             } else if (this.currentExercise === 'Hinges') {
-                return { name: this.hingeProgression[this.hingeVariant], num: this.hingeVariant };
+                return { name: this.hingeProgression[this.hingeVariant], num: this.hingeVariant, max: this.hingeProgression.length - 1 };
             } else if (this.currentExercise === 'Rows') {
-                return { name: this.rowProgression[this.rowVariant], num: this.rowVariant };
+                return { name: this.rowProgression[this.rowVariant], num: this.rowVariant, max: this.rowProgression.length - 1 };
             } else if (this.currentExercise === 'Pushups') {
-                return { name: this.pushupProgression[this.pushupVariant], num: this.pushupVariant };
+                return { name: this.pushupProgression[this.pushupVariant], num: this.pushupVariant, max: this.pushupProgression.length - 1 };
             } else if (this.currentExercise === 'Anti-Extensions') {
-                return { name: this.antiExtenstionProgression[this.antiExtensionVariant], num: this.antiExtensionVariant };
+                return { name: this.antiExtenstionProgression[this.antiExtensionVariant], num: this.antiExtensionVariant, max: this.antiExtenstionProgression.length - 1 };
             } else if (this.currentExercise === 'Anti-Rotations') {
-                return { name: this.antiRotationProgression[this.antiRotationVariant], num: this.antiRotationVariant };
+                return { name: this.antiRotationProgression[this.antiRotationVariant], num: this.antiRotationVariant, max: this.antiRotationProgression.length - 1 };
             } else if (this.currentExercise === 'Extensions') {
-                return { name: this.extensionProgression[this.extensionVariant], num: this.extensionVariant };
+                return { name: this.extensionProgression[this.extensionVariant], num: this.extensionVariant, max: this.extensionProgression.length - 1 };
             } else return { name: this.currentExercise };
         }
     },
