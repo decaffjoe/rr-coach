@@ -1,5 +1,4 @@
-* Add yt embed & variant descriptions
-* Workout Summary view
+* Display YT embed & variant descriptions
 * TEST: Persistent workout state tracking
 * TEST: Workout Summary post to db (if not logged in)
 * Fill out 'more info' and 'nutrition guide' views
