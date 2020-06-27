@@ -17,6 +17,7 @@
         <p id="completed" v-if="currentSection !== 'Warmups'">Completed: </p>
         <input @keypress.enter="postSet" v-model="repsDone" type="text" v-if="currentSection !== 'Warmups'">
         <a style="display: block;" :href="currentVariant.url" v-if="currentVariant.url">Demonstration</a>
+        <iframe width="400" height="200" :src="currentVariant.url" v-if="currentVariant.url"></iframe>
         <ul v-if="currentVariant.desc">
             <!-- Using the first character as key because ordering doesn't matter and no operations are done -->
             <li v-for="point of currentVariant.desc.split('.')" :key="point[0]">{{ point }}</li>
@@ -46,7 +47,7 @@ export default {
             } else if (this.currentExercise === 'Pushups') {
                 return { ...this.pushupProgression[this.pushupVariant], num: this.pushupVariant, max: this.pushupProgression.length - 1 };
             } else if (this.currentExercise === 'Anti-Extensions') {
-                return { ...this.antiExtenstionProgression[this.antiExtensionVariant], num: this.antiExtensionVariant, max: this.antiExtenstionProgression.length - 1 };
+                return { ...this.antiExtensionProgression[this.antiExtensionVariant], num: this.antiExtensionVariant, max: this.antiExtensionProgression.length - 1 };
             } else if (this.currentExercise === 'Anti-Rotations') {
                 return { ...this.antiRotationProgression[this.antiRotationVariant], num: this.antiRotationVariant, max: this.antiRotationProgression.length - 1 };
             } else if (this.currentExercise === 'Extensions') {
@@ -360,22 +361,22 @@ export default {
             pullupProgression: [
                 {
                     name: "Scapular Pulls",
-                    url: "https://www.youtube.com/watch?v=FgYoc4O-cio&feature=youtu.be&t=1m21s",
+                    url: "https://www.youtube.com/embed/FgYoc4O-cio?start=81",
                     desc: "Elbows should stay straight.Your back will arch more as you get stronger.These should be performed with a pause at the top. Squeeze your shoulders, hold it for 3-5s then release into a dead hang under control.If you can't pull out of the dead hang at all, consider using bands or your feet to assist you until you gain the necessary strength"
                 },
                 {
                     name: "Arch Hangs",
-                    url: "https://www.youtube.com/watch?v=C995b3KLXS4&feature=youtu.be&t=7s",
+                    url: "https://www.youtube.com/embed/C995b3KLXS4?start=7",
                     desc: "Elbows should stay straight.Hold it for time/reps.Progress towards a 90 degree in your shoulder"
                 },
                 {
                     name: "Pullup Negatives",
-                    url: "https://vimeo.com/76666801",
+                    url: "https://player.vimeo.com/video/76666801",
                     desc: "Jump to the top of the pullup position, then slowly (as slowly as you can), lower yourself until your arms are straight.Build up to 10sec negatives!",
                 },
                 {
                     name: "Pullups",
-                    url: "https://www.youtube.com/watch?v=eGo4IYlbE5g",
+                    url: "https://www.youtube.com/embed/eGo4IYlbE5g",
                     desc: "See general form cues"
                 },
                 {
@@ -387,12 +388,12 @@ export default {
             squatProgression: [
                 {
                     name: "Assisted Squat",
-                    url: "https://www.youtube.com/watch?v=OuR_Fp7AB0c",
+                    url: "https://www.youtube.com/embed/OuR_Fp7AB0c",
                     desc: "Grab something in front of you and use your hands to assist in the squat.Reduce assistance over time"
                 },
                 {
                     name: "Squat",
-                    url: "https://www.youtube.com/watch?v=zJBLDJMJiDE",
+                    url: "https://www.youtube.com/embed/zJBLDJMJiDE",
                     desc: "See general form cues"
                 },
                 {
@@ -402,12 +403,12 @@ export default {
                 },
                 {
                     name: "Bulgarian Split Squat",
-                    url: "https://www.youtube.com/watch?v=kkdmHTASZg8&feature=youtu.be&t=1m15s",
+                    url: "https://www.youtube.com/embed/kkdmHTASZg8?start=75",
                     desc: "Pretend the barbell doesn't exist.You can progress this further by elevating both your legs"
                 },
                 {
                     name: "Beginner Shrimp Squat",
-                    url: "https://www.youtube.com/watch?v=TKt0-c83GSc&feature=youtu.be&t=3m9s",
+                    url: "https://www.youtube.com/embed/TKt0-c83GSc?start=189",
                     desc: "Make sure your knee and toes leave the floor at the same time"
                 },
                 {
@@ -434,12 +435,12 @@ export default {
                 },
                 {
                     name: "Negative Dips",
-                    url: "https://www.youtube.com/watch?v=T3Scqw1BbCc",
+                    url: "https://www.youtube.com/embed/T3Scqw1BbCc",
                     desc: "This exercise is only the descent.To get to the starting position you can jump or use a box or anything"
                 },
                 {
                     name: "Parallel Bar Dips",
-                    url: "https://www.youtube.com/watch?v=2z8JmcrW-As",
+                    url: "https://www.youtube.com/embed/2z8JmcrW-As",
                     desc: "See general form cues"
                 },
                 {
@@ -451,54 +452,54 @@ export default {
             hingeProgression: [
                 {
                     name: "Romanian Deadlift",
-                    url: "https://gfycat.com/blueultimatebaiji",
+                    url: "https://gfycat.com/ifr/BlueUltimateBaiji",
                     desc: "Stand up straight.Brace and squeeze your butt to flatten your low back (neutral spine to maybe slightly arched).Send your butt back and lean your torso forward to avoid falling over.You can place the hands on your chest and abdomen for feedback or let them hang by your sides.Note: The GIF is 'robotic' for demonstration purposes, your execution should be smooth"
                 },
                 {
                     name: "Single Legged Deadlift",
-                    url: "https://www.youtube.com/watch?v=iDV8r5u6En0",
+                    url: "https://www.youtube.com/embed/iDV8r5u6En0",
                     desc: "Please ignore the barbell.If you lack the balance to perform these with a leg in the air, you can use an arm to brace yourself against a surface or you can straddle your legs to help with balance"
                 },
                 {
                     name: "Banded Nordic Curl Negatives",
-                    url: "https://www.youtube.com/watch?v=HUXS3S2xSX4",
+                    url: "https://www.youtube.com/embed/HUXS3S2xSX4",
                     desc: "Anchor your feet under something sturdy.You want to be anchored about a fist's distance away from your ankle.Squeeze your butt to keep your hips extended.Slowly lower your torso, avoiding piking at the hips.Do a little push-up when you reach the bottom to get back to the top and 'skip' the concentric"
                 },
                 {
                     name: "Banded Nordic Curl",
-                    url: "https://www.youtube.com/watch?v=HUXS3S2xSX4",
+                    url: "https://www.youtube.com/embed/HUXS3S2xSX4",
                     desc: "Anchor your feet under something sturdy.You want to be anchored about a fist's distance away from your ankle.Squeeze your butt to keep your hips extended.Slowly lower your torso, avoiding piking at the hips.Note: Repeat these two progressions with weaker bands until you can move on"
                 },
                 {
                     name: "Nordic Curls",
-                    url: "https://www.youtube.com/watch?v=d8AAPcYxPo8",
+                    url: "https://www.youtube.com/embed/d8AAPcYxPo8",
                     desc: "Anchor your feet under something sturdy.You want to be anchored about a fist's distance away from your ankle.Squeeze your butt to keep your hips extended.Slowly lower your torso, avoiding piking at the hips"
                 },
             ],
             rowProgression: [
                 {
                     name: "Vertical Rows",
-                    url: "https://www.youtube.com/watch?v=rloXYB8M3vU&feature=youtu.be",
+                    url: "https://www.youtube.com/embed/rloXYB8M3vU",
                     desc: "Perform a row, but with the body position vertical"
                 },
                 {
                     name: "Incline Rows",
-                    url: "https://www.youtube.com/watch?v=LR2EnFWpVao",
+                    url: "https://www.youtube.com/embed/LR2EnFWpVao",
                     desc: "Perform a row, but with the body position somewhere between vertical and horizontal.Go closer to horizontal to make it harder"
                 },
                 {
                     name: "Horizontal Rows",
-                    url: "https://www.youtube.com/watch?v=dvkIaarnf0g",
+                    url: "https://www.youtube.com/embed/dvkIaarnf0g",
                     desc: "See general form cues"
                 },
                 {
                     name: "Wide Rows",
-                    url: "https://www.youtube.com/watch?v=1yMRvsuk9Xg",
+                    url: "https://www.youtube.com/embed/1yMRvsuk9Xg",
                     desc: "It's okay to flare your elbows on this one.On a bar: take a wide grip (150% of shoulder width) and perform rows like this.On rings: while performing a row, bring out the elbows to the side up to a 90 degree angle"
                 },
                 {
                     name: "Weighted Inverted Rows",
-                    url: "https://www.youtube.com/watch?v=3cYR6pis5zc",
+                    url: "https://www.youtube.com/embed/3cYR6pis5zc",
                     desc: "These can be done with a weight plate on your chest/belly (uncomfortable and unreliable), or with a weight vest (minimal setup, but limited weight), or with a dip belt hanging from your waist or chest (This method can be loaded the most, however you need to elevate your entire body so that the plates don't touch the floor at the bottom).Alternatively, you can do Barbell or Dumbbell rows."
                 },
             ],
@@ -510,48 +511,48 @@ export default {
                 },
                 {
                     name: "Incline Pushup",
-                    url: "https://www.youtube.com/watch?v=4dF1DOWzf20&feature=youtu.be&t=3m56s",
+                    url: "https://www.youtube.com/embed/4dF1DOWzf20?start=236",
                     desc: "Finding some raised object, put your hands on said object and perform a pushup.Lower the height to increase the difficulty"
                 },
                 {
                     name: "Full Pushup",
-                    url: "https://www.youtube.com/watch?v=IODxDxX7oi4",
+                    url: "https://www.youtube.com/embed/IODxDxX7oi4",
                     desc: "See general form cues"
                 },
                 {
                     name: "Diamond Pushup",
-                    url: "https://www.youtube.com/watch?v=_4EGPVJuqfA",
+                    url: "https://www.youtube.com/embed/_4EGPVJuqfA",
                     desc: "Put your hands close together so the thumbs and index fingers touch, then perform a pushup.If this is too difficult or feels uncomfortable, put your hands just a bit closer than in a normal pushup.Work on moving the hands closer together over time until you reach diamond pushups"
                 },
                 {
                     name: "Pseudo Planche Pushups",
-                    url: "https://www.youtube.com/watch?v=Cdmg0CfMZeo",
+                    url: "https://www.youtube.com/embed/Cdmg0CfMZeo",
                     desc: "Putting your hands sideways, lean forward with a straight body until your shoulders are in front of your hands.Perform a pushup while maintaining forward lean.Protract the shoulderblades at the top.Increase forward lean to make more difficult.Decrease forward lean to make easier.You won't run out of resistance anytime soon if you keep increasing your forward lean"
                 },
             ],
-            antiExtenstionProgression: [
+            antiExtensionProgression: [
                 {
                     name: "Plank",
-                    url: "https://www.youtube.com/watch?v=44ScXWFaVBs&feature=youtu.be&t=10s",
+                    url: "https://www.youtube.com/embed/44ScXWFaVBs?start=10",
                     desc: "Work up to a 30s hold then move on to your ring rollouts.You're only doing the planks, don't do every drill in the video"
                 },
                 {
                     name: "Ring Ab Rollouts",
-                    url: "https://www.youtube.com/watch?v=LBUfnmugKLw",
+                    url: "https://www.youtube.com/embed/LBUfnmugKLw",
                     desc: "Elbows should stay straight.Remain in a hollow body position (ribs down, butt tucked).Keep your hands as close as your overhead mobility will allow.Higher ring position will make this easier.Elevating the feet will make it harder"
                 },
             ],
             antiRotationProgression: [
                 {
                     name: "Banded Pallof Press",
-                    url: "https://www.youtube.com/watch?v=AH_QZLm_0-s",
+                    url: "https://www.youtube.com/embed/AH_QZLm_0-s",
                     desc: "These are performed under control with a short pause when your arms are fully extended"
                 },
             ],
             extensionProgression: [
                 {
                     name: "Reverse Hyperextension",
-                    url: "https://www.youtube.com/watch?v=ZeRsNzFcQLQ&",
+                    url: "https://www.youtube.com/embed/ZeRsNzFcQLQ",
                     desc: "Keep your butt tucked"
                 },
             ],
