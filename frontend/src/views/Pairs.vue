@@ -16,7 +16,11 @@
         <p>Rep Goal: {{ currentRepGoal }}</p>
         <p id="completed" v-if="currentSection !== 'Warmups'">Completed: </p>
         <input @keypress.enter="postSet" v-model="repsDone" type="text" v-if="currentSection !== 'Warmups'">
-        <p>The goal of this exercise is to train the body into becoming very strong and immensely handsome etc... etc...</p>
+        <a style="display: block;" :href="currentVariant.url" v-if="currentVariant.url">Demonstration</a>
+        <ul v-if="currentVariant.desc">
+            <!-- Using the first character as key because ordering doesn't matter and no operations are done -->
+            <li v-for="point of currentVariant.desc.split('.')" :key="point[0]">{{ point }}</li>
+        </ul>
     </div>
 </template>
 
@@ -47,7 +51,7 @@ export default {
                 return { ...this.antiRotationProgression[this.antiRotationVariant], num: this.antiRotationVariant, max: this.antiRotationProgression.length - 1 };
             } else if (this.currentExercise === 'Extensions') {
                 return { ...this.extensionProgression[this.extensionVariant], num: this.extensionVariant, max: this.extensionProgression.length - 1 };
-            } else return { name: this.currentExercise };
+            } else return { ...this.currentExercise };
         }
     },
     components: {  },
@@ -270,7 +274,48 @@ export default {
             sections: {
                 'Warmups': {
                     maxSets: 8,
-                    exercises: ["Yuri's Shoulder Band Warmup", "Squat Sky Reaches", "GMB Wrist Prep", "Deadbugs", "Arch Hangs", "Support Hold", "Easier Squat Progression", "Easier Hinge Progression"],
+                    exercises: [
+                        {
+                            name: "Yuri's Shoulder Band Warmup",
+                            url: "https://www.youtube.com/embed/Vwn5hSf3WEg",
+                            desc: ""
+                        },
+                        {
+                            name: "Squat Sky Reaches",
+                            url: "https://www.youtube.com/embed/lbozu0DPcYI",
+                            desc: ""
+                        },
+                        {
+                            name: "GMB Wrist Prep",
+                            url: "https://www.youtube.com/embed/mSZWSQSSEjE",
+                            desc: "Do as many reps as you want"
+                        },
+                        {
+                            name: "Deadbugs",
+                            url: "https://www.nick-e.com/deadbug/",
+                            desc: ""
+                        },
+                        {
+                            name: "Arch Hangs",
+                            url: "https://www.youtube.com/embed/C995b3KLXS4",
+                            desc: "Add these after you reach Negative Pullups"
+                        },
+                        {
+                            name: "Support Hold",
+                            url: "",
+                            desc: "Add these after you reach Negative Dips"
+                        },
+                        {
+                            name: "Easier Squat Progression",
+                            url: "",
+                            desc: "Add these after you reach Bulgarian Split Squats"
+                        },
+                        {
+                            name: "Easier Hinge Progression",
+                            url: "",
+                            desc: "Add these after you reach Banded Nordic Curls"
+                        },
+                    ],
                     reps: ["5 - 10", "5 - 10", "10+", "30s", "10", "30s", "10", "10"],
                 },
                 'Pullups & Squats': {

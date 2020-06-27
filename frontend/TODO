@@ -1,6 +1,7 @@
-* Display YT embed & variant descriptions
+* Smart YT embed/image/website link on Pairs page
 * TEST: Persistent workout state tracking
 * TEST: Workout Summary post to db (if not logged in)
 * Fill out 'more info' and 'nutrition guide' views
+* Get user's previous workout summaries from db
 * Style the views
 * Component-ize the views
