@@ -1,8 +1,8 @@
-* Smart YT embed/image/website link on Pairs page
-* Get embed urls (instead of regular links) for all strength exercises
 * TEST: Persistent workout state tracking
 * TEST: Workout Summary post to db (if not logged in)
-* Fill out 'more info' and 'nutrition guide' views
-* Get user's previous workout summaries from db
+* Summary Page:
+    - Sort workouts by date
+    - Select today's workout by default
+    - Change the titles to reflect date chosen
 * Style the views
 * Component-ize the views

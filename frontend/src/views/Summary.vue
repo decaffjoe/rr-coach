@@ -1,28 +1,44 @@
 <template>
-  <div>
-      <Navbar />
-      <h1>Workout Summary</h1>
-      <p v-if="!this.$cookies.isKey('user_id')">Want to save your training stats for next time? Create an account or login using the button above. (Don't worry, we'll save these stats automatically)</p>
-      <p>Exercise | Set | Reps </p>
-      <ul>Pullups</ul>
-      <li v-for="set of pullups" :key="set.id">{{ pullupProgression[set.progression].name }} {{ set.setNumber }} {{ set.reps }}</li>
-      <ul>Squats</ul>
-      <li v-for="set of squats" :key="set.id">{{ squatProgression[set.progression].name }} {{ set.setNumber }} {{ set.reps }}</li>
-      <ul>Dips</ul>
-      <li v-for="set of dips" :key="set.id">{{ dipProgression[set.progression].name }} {{ set.setNumber }} {{ set.reps }}</li>
-      <ul>Hinges</ul>
-      <li v-for="set of hinges" :key="set.id">{{ hingeProgression[set.progression].name }} {{ set.setNumber }} {{ set.reps }}</li>
-      <ul>Rows</ul>
-      <li v-for="set of rows" :key="set.id">{{ rowProgression[set.progression].name }} {{ set.setNumber }} {{ set.reps }}</li>
-      <ul>Pushups</ul>
-      <li v-for="set of pushups" :key="set.id">{{ pushupProgression[set.progression].name }} {{ set.setNumber }} {{ set.reps }}</li>
-      <ul>Anti-Extensions</ul>
-      <li v-for="set of antiExtensions" :key="set.id">{{ antiExtenstionProgression[set.progression].name }} {{ set.setNumber }} {{ set.reps }}</li>
-      <ul>Anti-Rotations</ul>
-      <li v-for="set of antiRotations" :key="set.id">{{ antiRotationProgression[set.progression].name }} {{ set.setNumber }} {{ set.reps }}</li>
-      <ul>Extensions</ul>
-      <li v-for="set of extensions" :key="set.id">{{ extensionProgression[set.progression].name }} {{ set.setNumber }} {{ set.reps }}</li>
-  </div>
+    <div>
+        <Navbar />
+        <h1>Workout Summary</h1>
+        <p v-if="!this.$cookies.isKey('user_id')">Want to save your training stats for next time? Create an account or login using the button above. (Don't worry, we'll save these stats automatically)</p>
+        <p>Workout from:</p>
+        <select v-model="prevWorkoutId" v-if="this.$cookies.isKey('user_id')">
+            <option v-for="workout of workoutHistory" :key="workout.createdAt" :value="workout.workout_id">{{ new Date(workout.createdAt).toDateString() }}</option>
+        </select>
+        <button @click="getPreviousWorkoutSummary">Get Summary</button>
+        <div>
+            <p>Exercise | Set | Reps </p>
+            <ul>Pullups
+                <li v-for="set of pullups" :key="set.id">{{ pullupProgression[set.progression].name }} {{ set.setNumber }} {{ set.reps }}</li>
+            </ul>
+            <ul>Squats
+                <li v-for="set of squats" :key="set.id">{{ squatProgression[set.progression].name }} {{ set.setNumber }} {{ set.reps }}</li>
+            </ul>
+            <ul>Dips
+                <li v-for="set of dips" :key="set.id">{{ dipProgression[set.progression].name }} {{ set.setNumber }} {{ set.reps }}</li>
+            </ul>
+            <ul>Hinges
+                <li v-for="set of hinges" :key="set.id">{{ hingeProgression[set.progression].name }} {{ set.setNumber }} {{ set.reps }}</li>
+            </ul>
+            <ul>Rows
+                <li v-for="set of rows" :key="set.id">{{ rowProgression[set.progression].name }} {{ set.setNumber }} {{ set.reps }}</li>
+            </ul>
+            <ul>Pushups
+                <li v-for="set of pushups" :key="set.id">{{ pushupProgression[set.progression].name }} {{ set.setNumber }} {{ set.reps }}</li>
+            </ul>
+            <ul>Anti-Extensions
+                <li v-for="set of antiExtensions" :key="set.id">{{ antiExtenstionProgression[set.progression].name }} {{ set.setNumber }} {{ set.reps }}</li>
+            </ul>
+            <ul>Anti-Rotations
+                <li v-for="set of antiRotations" :key="set.id">{{ antiRotationProgression[set.progression].name }} {{ set.setNumber }} {{ set.reps }}</li>
+            </ul>
+            <ul>Extensions
+                <li v-for="set of extensions" :key="set.id">{{ extensionProgression[set.progression].name }} {{ set.setNumber }} {{ set.reps }}</li>
+            </ul>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -30,55 +46,74 @@ import Navbar from "../components/Navbar.vue";
 export default {
     name: "Summary",
     components: { Navbar, },
+    async created() {
+        // get user's previous workouts by date, if logged in
+        if (this.$cookies.isKey("user_id")) {
+            let url = `http://localhost:3000/workout?user_id=${this.$cookies.get("user_id")}`;
+            try {
+                let res = await fetch(url);
+                this.workoutHistory = await res.json();
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    },
+    methods: {
+        async getPreviousWorkoutSummary() {
+            let url = `http://localhost:3000/exercise/allSummary?workout_id=${this.prevWorkoutId}`;
+            try {
+                let res = await fetch(url);
+                if (res.status === 200) {
+                    res = await res.json();
+                    this.summary = res;
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        },
+    },
     computed: {
         pullups() {
-            if (this.summary['Pullups & Squats']) {
-                return this.summary['Pullups & Squats'].filter(set => set.currentPath === 'pullup')
-            } else return [];
+            if (this.summary['pullup']) return this.summary['pullup'];
+            else return [];
         },
         squats() {
-            if (this.summary['Pullups & Squats']) {
-                return this.summary['Pullups & Squats'].filter(set => set.currentPath === 'squat')
-            } else return [];
+            if (this.summary['squat']) return this.summary['squat'];
+            else return [];
         },
         dips() {
-            if (this.summary['Dips & Hinges']) {
-                return this.summary['Dips & Hinges'].filter(set => set.currentPath === 'dip');
-            } else return [];
+            if (this.summary['dip']) return this.summary['dip'];
+            else return [];
         },
         hinges() {
-            if (this.summary['Dips & Hinges']) {
-                return this.summary['Dips & Hinges'].filter(set => set.currentPath === 'hinge')
-            } else return [];
+            if (this.summary['hinge']) return this.summary['hinge'];
+            else return [];
         },
         rows() {
-            if (this.summary['Rows & Pushups']) {
-                return this.summary['Rows & Pushups'].filter(set => set.currentPath === 'row')
-            } else return [];
+            if (this.summary['row']) return this.summary['row'];
+            else return [];
         },
         pushups() {
-            if (this.summary['Rows & Pushups']) {
-                return this.summary['Rows & Pushups'].filter(set => set.currentPath === 'pushup')
-            } else return [];
+            if (this.summary['pushup']) return this.summary['pushup'];
+            else return [];
         },
         antiExtensions() {
-            if (this.summary['Core']) {
-                return this.summary['Core'].filter(set => set.currentPath === 'antiextension')
-            } else return [];
+            if (this.summary['antiextension']) return this.summary['antiextension'];
+            else return [];
         },
         antiRotations() {
-            if (this.summary['Core']) {
-                return this.summary['Core'].filter(set => set.currentPath === 'antirotation')
-            } else return [];
+            if (this.summary['antirotation']) return this.summary['antirotation'];
+            else return [];
         },
         extensions() {
-            if (this.summary['Core']) {
-                return this.summary['Core'].filter(set => set.currentPath === 'extension')
-            } else return [];
+            if (this.summary['extension']) return this.summary['extension'];
+            else return [];
         },
     },
     data() {
         return {
+            prevWorkoutId: undefined,
+            workoutHistory: undefined,
             summary: JSON.parse(window.sessionStorage['workoutSummary']),
             pullupProgression: [
                 {

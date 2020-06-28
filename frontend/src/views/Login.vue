@@ -12,6 +12,7 @@
         <h2>Already have an account? Login with your user id!</h2>
         <input @keypress.enter="logInUser" v-model="loginString" type="text">
         <button @click="logInUser">Login</button>
+        <p v-show="errorMsg">{{ errorMsg }}</p>
         <p>If you just finished your workout, we'll automatically save your stats once you create an account or login. Head over to "My Account" once you're done!</p>
     </div>
 </template>
@@ -34,9 +35,11 @@ export default {
                     if (nickname.status === 200) {
                         nickname = await nickname.json();
                         this.makeCookies(this.loginString, nickname);
+                        // redirect to home page
+                        this.$router.push('/');
+                    } else {
+                        this.errorMsg = "Uh oh, that didn't work";
                     }
-                    // redirect to home page
-                    this.$router.push('/');
                 }
                 // post existing workout data (if they worked out first)
                 this.postExistingWorkout();
@@ -124,6 +127,7 @@ export default {
             newUserNickname: undefined,
             newUserId: undefined,
             loginString: undefined,
+            errorMsg: undefined,
         }
     }
 }

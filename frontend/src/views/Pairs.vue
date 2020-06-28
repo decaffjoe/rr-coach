@@ -16,7 +16,6 @@
         <p>Rep Goal: {{ currentRepGoal }}</p>
         <p id="completed" v-if="currentSection !== 'Warmups'">Completed: </p>
         <input @keypress.enter="postSet" v-model="repsDone" type="text" v-if="currentSection !== 'Warmups'">
-        <a style="display: block;" :href="currentVariant.url" v-if="currentVariant.url">Demonstration</a>
         <iframe width="400" height="200" :src="currentVariant.url" v-if="currentVariant.url"></iframe>
         <ul v-if="currentVariant.desc">
             <!-- Using the first character as key because ordering doesn't matter and no operations are done -->
@@ -225,16 +224,15 @@ export default {
                     reps: parseInt(this.repsDone),
                     setNumber: adjSet,
                     progression: this.currentVariant.num,
-                    currentPath,
-                    id: window.sessionStorage['idCounter']
+                    // id: window.sessionStorage['idCounter']
                 };
                 // add post url if we're not posting right now
                 if (!hasPosted) newSet['postPath'] = url;
                 // read current sessionStorage
                 let session = JSON.parse(window.sessionStorage['workoutSummary']);
-                if (!session[this.currentSection]) session[this.currentSection] = [];
+                if (!session[currentPath]) session[currentPath] = [];
                 // update sessionStorage with newSet included
-                session[this.currentSection].push(newSet);
+                session[currentPath].push(newSet);
                 window.sessionStorage['workoutSummary'] = JSON.stringify(session);
                 // update counter
                 window.sessionStorage['idCounter']++;
@@ -573,5 +571,9 @@ button {
 }
 .set {
     display: inline-block;
+}
+iframe {
+    display: block;
+    margin: 0 auto;
 }
 </style>
