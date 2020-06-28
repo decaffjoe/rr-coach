@@ -2,7 +2,7 @@
     <div>
         <router-link to="/" v-if="this.$route.name !== 'Landing'"><button>Home</button></router-link>
         <button @click="goToLogin" v-if="!loggedIn">Create Account / Login</button>
-        <p style="display: inline-block;" v-if="user_nickname">Hi, {{ user_nickname }}</p>
+        <p v-if="loggedIn">Hi, {{ user_nickname }}</p>
         <button @click="goToAccount" v-if="loggedIn">My Account</button>
         <button @click="logout" v-if="loggedIn">Logout</button>
     </div>
@@ -14,7 +14,8 @@ export default {
     created() {
         if (this.$cookies.isKey("user_id")) {
             this.loggedIn = true;
-            if (this.$cookies.isKey("user_nickname")) this.user_nickname = this.$cookies.get("user_nickname");
+            let name = this.$cookies.get("user_nickname");
+            if (name) this.user_nickname = name;
             else this.user_nickname = this.$cookies.get("user_id");
         }
     },
@@ -50,5 +51,7 @@ export default {
 </script>
 
 <style scoped>
-
+p {
+    display: inline-block;
+}
 </style>

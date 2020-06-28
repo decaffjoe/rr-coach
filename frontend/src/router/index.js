@@ -3,7 +3,7 @@ import VueRouter from 'vue-router';
 import Landing from '../views/Landing.vue';
 import Login from '../views/Login.vue';
 import Pairs from '../views/Pairs.vue';
-import Summary from '../views/Summary.vue';
+import TrainingSummary from '../views/TrainingSummary.vue';
 
 // Load Vue Router
 Vue.use(VueRouter);
@@ -26,8 +26,8 @@ const routes = [
     },
     {
         path: '/summary',
-        name: 'Summary',
-        component: Summary
+        name: 'TrainingSummary',
+        component: TrainingSummary
     },
 ];
 

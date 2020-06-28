@@ -5,6 +5,7 @@
         <p id="nickname">(Optional) nickname: </p>
         <input v-model="newUserNickname" type="text">
         <button @click="createUser" id="createID">Create id</button>
+        <p v-show="createError">{{ createError }}</p>
         <p>*No passwords, email, or anything else- so hold on to this somewhere safe!</p>
         <p id="yourID">Your ID:</p>
         <input v-model="newUserId" type="text">
@@ -12,7 +13,7 @@
         <h2>Returning users please login here</h2>
         <input @keypress.enter="logInUser" v-model="loginString" type="text">
         <button @click="logInUser">Login</button>
-        <p v-show="errorMsg">{{ errorMsg }}</p>
+        <p v-show="loginError">{{ loginError }}</p>
         <p>If you just finished your workout, your stats will be saved automatically once you sign up or login</p>
         <p>Head over to "My Account" to see them</p>
     </div>
@@ -22,7 +23,7 @@
 export default {
     name: "Login",
     methods: {
-        makeCookies(user_id, user_nickname=undefined) {
+        makeCookies(user_id, user_nickname="") {
             //                                    expiry   path  domain secure sameSite
             this.$cookies.set("user_id", user_id, Infinity, null, null, null, "Strict");
             this.$cookies.set("user_nickname", user_nickname, Infinity, null, null, null, "Strict");
@@ -39,9 +40,9 @@ export default {
                         // redirect to home page
                         this.$router.push('/');
                     } else {
-                        this.errorMsg = "Uh oh, that didn't work";
+                        this.loginError = "Uh oh, that didn't work";
                     }
-                }
+                } else this.loginError = "Please enter an id";
                 // post existing workout data (if they worked out first)
                 this.postExistingWorkout();
             } catch (error) {
@@ -49,36 +50,36 @@ export default {
             }
         },
         async createUser() {
+            if (this.newUserId) return this.createError = "You've already created an id!";
+            if (this.loginString) return this.createError = "It looks like you might be trying to login";
             try {
-                if (!this.newUserId && !this.loginString) {
-                    // create user in db
-                    let res;
-                    if (this.newUserNickname) {
-                        res = await fetch('http://localhost:3000/user', {
-                            method: 'POST',
-                            mode: 'cors',
-                            headers: { "Content-Type": "application/json; charset=utf-8" },
-                            body: JSON.stringify({
-                                nickname: this.newUserNickname,
-                            }),
-                        });
-                    } else res = await fetch('http://localhost:3000/user', { method: 'POST', mode: 'cors', });
-                    // create cookie in client with user info
-                    if (res.status === 200) {
-                        this.newUserId = await res.json();
-                        this.makeCookies(this.newUserId, this.newUserNickname);
-                    }
-                    // post existing workout data (if they worked out first)
-                    this.postExistingWorkout();
+                // create user in db
+                let res;
+                if (this.newUserNickname) {
+                    res = await fetch('http://localhost:3000/user', {
+                        method: 'POST',
+                        mode: 'cors',
+                        headers: { "Content-Type": "application/json; charset=utf-8" },
+                        body: JSON.stringify({
+                            nickname: this.newUserNickname,
+                        }),
+                    });
+                } else res = await fetch('http://localhost:3000/user', { method: 'POST', mode: 'cors', });
+                // create cookie in client with user info
+                if (res.status === 200) {
+                    this.newUserId = await res.json();
+                    this.makeCookies(this.newUserId, this.newUserNickname);
                 }
+                // post existing workout data (if they worked out first)
+                this.postExistingWorkout();
             } catch(error) { console.log(error); }
         },
         // post existing workout data (if they worked out first, then logged in/created account)
         async postExistingWorkout() {
             if (window.sessionStorage['workoutSummary']) {
                 let session = JSON.parse(window.sessionStorage['workoutSummary']);
-                // if no sets saved, exit
-                if (!(session['Pullups & Squats'] || session['Dips & Hinges'] || session['Rows & Pushups'] || session['Core'])) return;
+                // if no pullups/squats/dips/hinges were done, assume empty/user didn't workout
+                if (!(session['pullup'] || session['squat'] || session['dip'] || session['hinge'])) return;
                 let section, set, url, firstPost = true;
                 // iterate over exercise categories
                 for (section in session) {
@@ -128,7 +129,8 @@ export default {
             newUserNickname: undefined,
             newUserId: undefined,
             loginString: undefined,
-            errorMsg: undefined,
+            loginError: undefined,
+            createError: undefined,
         }
     }
 }

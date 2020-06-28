@@ -8,7 +8,7 @@
             <li>See video demonstrations and form tips</li>
         </ul>
         <router-link to="/pairs" id="train-link"><button>Train now!</button></router-link>
-        <a href="https://www.reddit.com/r/bodyweightfitness/wiki/kb/recommended_routine"><button>Full guide</button></a>
+        <a href="https://www.reddit.com/r/bodyweightfitness/wiki/kb/recommended_routine"><button>Full training guide</button></a>
         <a href="https://thefitness.wiki/improving-your-diet/"><button>Nutrition guide</button></a>
     </div>
 </template>
