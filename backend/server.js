@@ -9,7 +9,7 @@ app.use(cors());
 
 // DATABASE TESTING
 const { resetDB, connectDB } = require('./models/seed');
-connectDB().then(() => console.log('seeding done!'))
+resetDB().then(() => console.log('seeding done!'))
     .catch(err => console.log(err));
 
 // RPC API ROUTES

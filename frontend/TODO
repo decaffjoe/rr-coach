@@ -1,8 +1,15 @@
-* TEST: Persistent workout state tracking
-* TEST: Workout Summary post to db (if not logged in)
-* Summary Page:
+INFRA:
+* Style the views
+* Component-ize the views
+
+TEST:
+* Persistent workout state tracking
+* Training Summary post to db (if not logged in)
+
+FEATURES:
+* Remember user progression for each exercise
+* Training Summary Page:
     - Sort workouts by date
     - Select today's workout by default
     - Change the titles to reflect date chosen
-* Style the views
-* Component-ize the views
+
