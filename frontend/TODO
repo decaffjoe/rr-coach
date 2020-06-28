@@ -1,6 +1,8 @@
 INFRA:
 * Component-ize the views
 * Style the views
+* Error handling for all user inputs
+* Pre-load & cache iframes?
 
 BUGS:
 * Need info for Warmups -> Support Hold | Easier Squat Progression | Easier Hinge Progression
