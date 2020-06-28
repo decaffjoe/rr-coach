@@ -2,7 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Landing from '../views/Landing.vue';
 import Login from '../views/Login.vue';
-import Pairs from '../views/Pairs.vue';
+import TrainNow from '../views/TrainNow.vue';
 import TrainingSummary from '../views/TrainingSummary.vue';
 
 // Load Vue Router
@@ -20,9 +20,9 @@ const routes = [
         component: Login
     },
     {
-        path: '/pairs',
-        name: 'Pairs',
-        component: Pairs
+        path: '/train',
+        name: 'TrainNow',
+        component: TrainNow
     },
     {
         path: '/summary',

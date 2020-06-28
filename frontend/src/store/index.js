@@ -205,26 +205,26 @@ const state = {
     ],
 };
 
-// update components with ui state
-// using local computed arrow funcs for now...
-const getters = {
-    // newUserId: state => state.newUserId,
-};
+// // update components with ui state
+// // using local computed arrow funcs for now...
+// const getters = {
+//    newUserId: state => state.newUserId,
+// };
 
-// get/modify backend state
-const actions = {
-};
+// // get/modify backend state
+// const actions = {
+// };
 
-// backend state -> ui state
-const mutations = {
-    // createUser: (state, userId) => {
-    //     return state.newUserId = userId;
-    // },
-};
+// // backend state -> ui state
+// const mutations = {
+//    createUser: (state, userId) => {
+//        return state.newUserId = userId;
+//    },
+// };
 
 export default new Vuex.Store({
     state,
-    getters,
-    actions,
-    mutations
+    // getters,
+    // actions,
+    // mutations
 });

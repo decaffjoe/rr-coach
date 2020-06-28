@@ -7,7 +7,7 @@
             <li>View a full history of your training sessions</li>
             <li>See video demonstrations and form tips</li>
         </ul>
-        <router-link to="/pairs" id="train-link"><button>Train now!</button></router-link>
+        <router-link to="/train" id="train-link"><button>Train now!</button></router-link>
         <a href="https://www.reddit.com/r/bodyweightfitness/wiki/kb/recommended_routine"><button>Full training guide</button></a>
         <a href="https://thefitness.wiki/improving-your-diet/"><button>Nutrition guide</button></a>
     </div>
