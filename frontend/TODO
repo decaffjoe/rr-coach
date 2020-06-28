@@ -1,15 +1,20 @@
 INFRA:
-* Style the views
 * Component-ize the views
+* Style the views
+
+BUGS:
+* Need info for Warmups -> Support Hold | Easier Squat Progression | Easier Hinge Progression
 
 TEST:
 * Persistent workout state tracking
 * Training Summary post to db (if not logged in)
 
 FEATURES:
-* Remember user progression for each exercise
 * Training Summary Page:
     - Sort workouts by date
     - Select today's workout by default
     - Change the titles to reflect date chosen
-
+    - Comparison tool between any two workouts
+        - Latest session is one by default (but is changeable)
+* Remember user progression for each exercise
+* Rest timer in between each set (too soon <= 90-270s => too long)

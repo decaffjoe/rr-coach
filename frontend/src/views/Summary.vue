@@ -364,7 +364,7 @@ export default {
             extensionProgression: [
                 {
                     name: "Reverse Hyperextension",
-                    url: "https://www.youtube.com/watch?v=ZeRsNzFcQLQ&",
+                    url: "https://www.youtube.com/watch?v=ZeRsNzFcQLQ",
                     desc: "Keep your butt tucked"
                 },
             ],

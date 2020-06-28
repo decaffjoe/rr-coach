@@ -2,9 +2,14 @@
     <div>
         <Navbar />
         <h1>Welcome to the r/bodyweight fitness Recommended Routine (RR) Training Tracker!</h1>
-        <router-link to="/pairs"><button>Train now!</button></router-link>
-        <button><a href="https://www.reddit.com/r/bodyweightfitness/wiki/kb/recommended_routine">More info</a></button>
-        <button><a href="https://thefitness.wiki/improving-your-diet/">Nutrition guide</a></button>
+        <ul>
+            <li>Pick a progression for each exercise and keep track of your reps</li>
+            <li>View a full history of your training sessions</li>
+            <li>See video demonstrations and form tips</li>
+        </ul>
+        <router-link to="/pairs" id="train-link"><button>Train now!</button></router-link>
+        <a href="https://www.reddit.com/r/bodyweightfitness/wiki/kb/recommended_routine"><button>Full guide</button></a>
+        <a href="https://thefitness.wiki/improving-your-diet/"><button>Nutrition guide</button></a>
     </div>
 </template>
 
@@ -26,5 +31,9 @@ div {
 }
 h1 {
     color: blue;
+}
+#train-link {
+    display: block;
+    margin-bottom: 1.0em;
 }
 </style>

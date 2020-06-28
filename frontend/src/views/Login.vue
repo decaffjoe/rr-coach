@@ -1,19 +1,20 @@
 <template>
     <div>
         <router-link to="/"><button>Back to Home</button></router-link>
-        <h1>New to the site? All you need is an id!</h1>
+        <h1>New? All you need is an id</h1>
         <p id="nickname">(Optional) nickname: </p>
         <input v-model="newUserNickname" type="text">
         <button @click="createUser" id="createID">Create id</button>
-        <p>*No passwords or email, so hold on to this somewhere safe!</p>
+        <p>*No passwords, email, or anything else- so hold on to this somewhere safe!</p>
         <p id="yourID">Your ID:</p>
         <input v-model="newUserId" type="text">
-        <router-link to="/pairs"><button>Got it, let's lift</button></router-link>
-        <h2>Already have an account? Login with your user id!</h2>
+        <router-link to="/pairs"><button>Got it, let's train</button></router-link>
+        <h2>Returning users please login here</h2>
         <input @keypress.enter="logInUser" v-model="loginString" type="text">
         <button @click="logInUser">Login</button>
         <p v-show="errorMsg">{{ errorMsg }}</p>
-        <p>If you just finished your workout, we'll automatically save your stats once you create an account or login. Head over to "My Account" once you're done!</p>
+        <p>If you just finished your workout, your stats will be saved automatically once you sign up or login</p>
+        <p>Head over to "My Account" to see them</p>
     </div>
 </template>
 
@@ -142,9 +143,5 @@ div {
 }
 #yourID {
     display: inline-block;
-}
-#createID {
-    display: block;
-    margin: 0 auto;
 }
 </style>
