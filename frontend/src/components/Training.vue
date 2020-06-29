@@ -1,24 +1,28 @@
 <template>
     <div>
+        <!-- HEADER -->
         <router-link to="/"><button>Home</button></router-link>
         <button @click="skipCurrentSection('prev')">Previous Section</button>
         <button @click="skipCurrentSection('next')">Next Section</button>
         <router-link to="/summary"><button>Workout Summary</button></router-link>
         <h1>{{ currentSection }}</h1>
+        <!-- SET CONTROL -->
         <hr>
         <button @click="decrementSetNum" class="set">Previous set</button>
         <p class="set"><span>{{ currentSetNum }}</span> / <span>{{ currentMaxSets }}</span></p>
         <button @click="incrementSetNum" class="set">Next set</button>
         <hr>
+        <!-- EXERCISE NAME AND REPS -->
         <h2>{{ currentVariant.name }}</h2>
         <button @click="easierVariant" v-if="currentSection !== 'Warmups' && currentVariant.num > 0">Easier Variant</button>
         <button @click="tougherVariant" v-if="currentSection !== 'Warmups' && currentVariant.num < currentVariant.max">Tougher Variant</button>
         <p>Rep Goal: {{ currentRepGoal }}</p>
+        <!-- USER REP INPUT -->
         <p id="completed" v-if="currentSection !== 'Warmups'">Completed: </p>
         <input @keypress.enter="postSet" v-model="repsDone" type="text" v-if="currentSection !== 'Warmups'">
+        <!-- EXERCISE INSTRUCTION -->
         <iframe width="400" height="200" :src="currentVariant.url" v-if="currentVariant.url"></iframe>
         <ul v-if="currentVariant.desc">
-            <!-- Using the first character as key because ordering doesn't matter and no operations are done -->
             <li v-for="point of currentVariant.desc.split('.')" :key="point.id">{{ point }}</li>
         </ul>
     </div>
@@ -28,10 +32,19 @@
 export default {
     name: "Training",
     computed: {
+        // needed for skipping by section
         allSections() { return Object.keys(this.sections) },
+        // keep set control in bounds
         currentMaxSets() { return this.sections[this.currentSection]['maxSets'] },
-        currentRepGoal() { return this.sections[this.currentSection]['reps'][this.currentSetNum - 1] },
-        currentExercise() {
+        // display the rep target
+        currentRepGoal() {
+            if (this.currentSection === 'Warmups') {
+                return this.sections[this.currentSection]['exercises'][this.currentSetNum - 1]['reps'];
+            } else if (this.currentSection === 'Core') return "8 - 12";
+            else return "5 - 8";
+        },
+        // determine which generic exercise is being done e.g. 'pullup' or 'squat'
+        currentPath() {
             if (this.currentSection === 'Warmups') {
                 return this.sections['Warmups']['exercises'][this.currentSetNum - 1];
             } else if (this.currentSection === 'Core') {
@@ -43,27 +56,27 @@ export default {
                 else return this.sections[this.currentSection]['path1'];
             }
         },
+        // determine which specific exercise is being done
+        // return info, progression int value & progression int value maximum
         currentVariant() {
-            if (this.currentSection === 'Warmups') return { ...this.currentExercise };
-            else return { ...this.$store.getters.progressions[`${this.currentExercise}Progression`][this.variants[this.currentExercise]], num: this.variants[this.currentExercise], max: this.$store.getters.progressions[`${this.currentExercise}Progression`].length - 1 };
+            if (this.currentSection === 'Warmups') return { ...this.currentPath };
+            else return { ...this.$store.getters.progressions[`${this.currentPath}Progression`][this.variants[this.currentPath]], num: this.variants[this.currentPath], max: this.$store.getters.progressions[`${this.currentPath}Progression`].length - 1 };
         }
     },
     watch: {
+        // update exercise variant cookies when variant is changed
         variants: {
             handler(value) {
                 if (this.currentSection !== 'Warmups') {
-                    console.log('--- watch ---');
-                    console.log(value[this.currentExercise]);
-                    console.log(this.currentExercise);
-                    this.$cookies.set(`${this.currentExercise}Variant`, value[this.currentExercise], Infinity, null, null, null, "Strict");
+                    this.$cookies.set(`${this.currentPath}Variant`, value[this.currentPath], Infinity, null, null, null, "Strict");
                 }
             }, deep: true
         }
     },
     methods: {
-        async incrementSetNum(directClick=true) {
-            // if 'next set' button pressed directly, post reps before moving to next set
-            if (directClick) await this.postSet(false);
+        // go to next set, post current set reps if 'next set' button was clicked
+        async incrementSetNum(clickedDirectly=true) {
+            if (clickedDirectly) await this.postSet(false);
             ++this.currentSetNum;
             // check if value forces next exercise
             if (this.currentSetNum > this.currentMaxSets) {
@@ -73,6 +86,7 @@ export default {
                 } else this.currentSetNum = this.currentMaxSets;
             }
         },
+        // go back a set
         decrementSetNum() {
             --this.currentSetNum;
             // check if value forces previous exercise
@@ -83,6 +97,7 @@ export default {
                 } else this.currentSetNum = 1;
             }
         },
+        // skip forward or backward e.g. from 'Warmups' to 'Pullups & Squats'
         skipCurrentSection(direction) {
             let i = this.allSections.indexOf(this.currentSection);
             // if skipping to next pair
@@ -102,43 +117,39 @@ export default {
             this.currentSetNum = 1;
             return false;
         },
-        async easierVariant() {
+        // go to easier specific exercise variant
+        easierVariant() {
             if (this.currentSection === 'Warmups') return;
-            if (this.variants[this.currentExercise] > 0) return --this.variants[this.currentExercise];
+            // check to make sure we aren't on easiest variant
+            if (this.variants[this.currentPath] > 0) return --this.variants[this.currentPath];
             else return;
         },
+        // go to tougher specific exercise variant
         tougherVariant() {
             if (this.currentSection === 'Warmups') return;
-            console.log('--- tougherVariant ---');
-            console.log(this.variants[this.currentExercise]);
-            if (this.variants[this.currentExercise] < this.$store.getters.progressions[`${this.currentExercise}Progression`].length - 1) return ++this.variants[this.currentExercise];
+            // check to make sure we aren't on toughest variant
+            if (this.variants[this.currentPath] < this.$store.getters.progressions[`${this.currentPath}Progression`].length - 1) return ++this.variants[this.currentPath];
             else return;
         },
-        async postSet(directClick=true) {
+        // send set data to the API (assume <Enter> pressed in 'Completed' input field)
+        async postSet(clickedDirectly=true) {
             // reps gotta be inputted first eh
             if (this.repsDone) {
-                // create the post url and real (adjusted) set number
-                let url, adjSet, currentPath;
+                // create the post url and real (adjusted) set number e.g. "Squats set 2" instead of set 4/6
+                let url, adjSet;
                 if (this.currentSection === 'Core') {
-                    // determine exercise
-                    if (this.currentSetNum % 3 === 0) currentPath = this.sections['Core']['path3'];
-                    else if (this.currentSetNum % 3 === 2) currentPath = this.sections['Core']['path2'];
-                    else if (this.currentSetNum % 3 === 1) currentPath = this.sections['Core']['path1'];
-                    // set number
+                    // determine set number
                     if (this.currentSetNum <= 3) adjSet = 1;
                     else if (this.currentSetNum >= 7) adjSet = 3;
                     else adjSet = 2;
                 } else {
-                    // determine exercise
-                    if (this.currentSetNum % 2 === 0) currentPath = this.sections[this.currentSection]['path2'];
-                    else currentPath = this.sections[this.currentSection]['path1'];
-                    // set number
+                    // determine set number
                     if (this.currentSetNum <= 2) adjSet = 1;
                     else if (this.currentSetNum >= 5) adjSet = 3;
                     else adjSet = 2;
                 }
                 // set url
-                url = `http://localhost:3000/exercise/${currentPath}Set`;
+                url = `http://localhost:3000/exercise/${this.currentPath}Set`;
                 let hasPosted = false;
                 // make the post request if user is logged in
                 if (this.$cookies.isKey("workout_id")) {
@@ -166,17 +177,18 @@ export default {
                 if (!hasPosted) newSet['postPath'] = url;
                 // read current sessionStorage
                 let session = JSON.parse(window.sessionStorage['workoutSummary']);
-                if (!session[currentPath]) session[currentPath] = [];
+                if (!session[this.currentPath]) session[this.currentPath] = [];
                 // update sessionStorage with newSet included
-                session[currentPath].push(newSet);
+                session[this.currentPath].push(newSet);
                 window.sessionStorage['workoutSummary'] = JSON.stringify(session);
                 // update counter
                 window.sessionStorage['idCounter']++;
                 // go to next set automatically if 'enter' pressed in input
-                if (directClick) this.incrementSetNum(false);
+                if (clickedDirectly) this.incrementSetNum(false);
             }
         },
     },
+    // get current or init new workout status/summary, workout_id and exercise variant values
     async created() {
         try {
             // init sessionStorage if not active
@@ -197,7 +209,7 @@ export default {
                 //                                  expiry path domain secure sameSite
                 this.$cookies.set("workout_id", res, "12h", null, null, null, "Strict");
             }
-            // overwrite variant integers with cookie values
+            // use variants from cookies, or default to easiest variant
             let varObj = {};
             for (let ex of this.$store.state.allExercises) {
                 if (this.$cookies.isKey(`${ex}Variant`)) {
@@ -232,71 +244,70 @@ export default {
                         {
                             name: "Yuri's Shoulder Band Warmup",
                             url: "https://www.youtube.com/embed/Vwn5hSf3WEg",
-                            desc: ""
+                            desc: "",
+                            reps: "5 - 10"
                         },
                         {
                             name: "Squat Sky Reaches",
                             url: "https://www.youtube.com/embed/lbozu0DPcYI",
-                            desc: ""
+                            desc: "",
+                            reps: "5 - 10"
                         },
                         {
                             name: "GMB Wrist Prep",
                             url: "https://www.youtube.com/embed/mSZWSQSSEjE",
-                            desc: "Do as many reps as you want"
+                            desc: "Do as many reps as you want",
+                            reps: "10+"
                         },
                         {
                             name: "Deadbugs",
                             url: "https://www.nick-e.com/deadbug/",
-                            desc: ""
+                            desc: "",
+                            reps: "30s"
                         },
                         {
                             name: "Arch Hangs",
                             url: "https://www.youtube.com/embed/C995b3KLXS4",
-                            desc: "Add these after you reach Negative Pullups"
+                            desc: "Add these after you reach Negative Pullups",
+                            reps: "10"
                         },
                         {
                             name: "Support Hold",
                             url: "",
-                            desc: "Add these after you reach Negative Dips"
+                            desc: "Add these after you reach Negative Dips",
+                            reps: "30s"
                         },
                         {
                             name: "Easier Squat Progression",
                             url: "",
-                            desc: "Add these after you reach Bulgarian Split Squats"
+                            desc: "Add these after you reach Bulgarian Split Squats",
+                            reps: "10"
                         },
                         {
                             name: "Easier Hinge Progression",
                             url: "",
-                            desc: "Add these after you reach Banded Nordic Curls"
+                            desc: "Add these after you reach Banded Nordic Curls",
+                            reps: "10"
                         },
                     ],
-                    reps: ["5 - 10", "5 - 10", "10+", "30s", "10", "30s", "10", "10"],
                 },
                 'Pullups & Squats': {
                     maxSets: 6,
-                    exercises: ["Pullups", "Squats", "Pullups", "Squats", "Pullups", "Squats"],
-                    reps: ["5 - 8", "5 - 8", "5 - 8", "5 - 8", "5 - 8", "5 - 8"],
                     path1: 'pullup',
                     path2: 'squat',
                 },
                 'Dips & Hinges': {
                     maxSets: 6,
-                    exercises: ["Dips", "Hinges", "Dips", "Hinges", "Dips", "Hinges"],
-                    reps: ["5 - 8", "5 - 8", "5 - 8", "5 - 8", "5 - 8", "5 - 8"],
                     path1: 'dip',
                     path2: 'hinge',
                 },
                 'Rows & Pushups': {
                     maxSets: 6,
-                    exercises: ["Rows", "Pushups", "Rows", "Pushups", "Rows", "Pushups"],
-                    reps: ["5 - 8", "5 - 8", "5 - 8", "5 - 8", "5 - 8", "5 - 8"],
                     path1: 'row',
                     path2: 'pushup',
                 },
                 'Core': {
                     maxSets: 9,
-                    exercises: ["Anti-Extensions", "Anti-Rotations", "Extensions", "Anti-Extensions", "Anti-Rotations", "Extensions", "Anti-Extensions", "Anti-Rotations", "Extensions"],
-                    reps: ["8 - 12", "8 - 12", "8 - 12", "8 - 12", "8 - 12", "8 - 12", "8 - 12", "8 - 12", "8 - 12"],
                     path1: 'antiextension',
                     path2: 'antirotation',
                     path3: 'extension',

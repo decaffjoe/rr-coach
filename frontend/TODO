@@ -5,9 +5,13 @@ INFRA:
 * Pre-load & cache iframes?
 
 BUGS:
+* Going back to previous sets, reps should be displayed
+    - If value of previous set is changed, update should be made to DB/sessionStorage
+* Shouldn't be able to add more than 3 sets/exercise to DB/sessionStorage
 * Need info for Warmups -> Support Hold | Easier Squat Progression | Easier Hinge Progression
 
 TEST:
+* Like everything, actually (write some unit/integration/etc... tests too)
 * Persistent workout state tracking
 * Training Summary post to db (if not logged in)
 
@@ -18,5 +22,7 @@ FEATURES:
     - Change the titles to reflect date chosen
     - Comparison tool between any two workouts
         - Latest session is one by default (but is changeable)
-* Remember user progression for each exercise
+* Remember user exercise variants
+    - Store exercise variant values in DB (sessionStorage in-browser)
+    - When logging in load variant values from DB
 * Rest timer in between each set (too soon <= 90-270s => too long)
