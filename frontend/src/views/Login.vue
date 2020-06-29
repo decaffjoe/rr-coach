@@ -27,6 +27,12 @@ export default {
             //                                    expiry   path  domain secure sameSite
             this.$cookies.set("user_id", user_id, Infinity, null, null, null, "Strict");
             this.$cookies.set("user_nickname", user_nickname, Infinity, null, null, null, "Strict");
+            // set progression variant cookies
+            for (let ex of this.$store.state.allExercises) {
+                if (!this.$cookies.isKey(`${ex}Variant`)) {
+                    this.$cookies.set(`${ex}Variant`, 0, Infinity, null, null, null, "Strict");
+                }
+            }
         },
         async logInUser() {
             try {

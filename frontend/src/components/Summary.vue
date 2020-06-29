@@ -9,6 +9,7 @@
         <div>
             <table>
                 <div v-for="ex in Object.keys(sets)" :key="ex">
+                    <!-- e.g. "Pullups" -->
                     <tr><th colspan="2">{{ `${ex[0].toUpperCase()}${ex.slice(1)}s` }}</th></tr>
                     <tr id="legend">
                         <td>Progression</td>
@@ -56,28 +57,31 @@ export default {
     computed: {
         sets() {
             let obj = {};
-            for (let ex of ['pullup', 'squat', 'dip', 'hinge', 'row', 'pushup', 'antiextension', 'antirotation', 'extension']) {
+            for (let ex of this.$store.state.allExercises) {
                 if (this.summary[ex]) obj[ex] = this.summary[ex];
             }
             return obj;
         },
+        progressions() {
+            return this.$store.state.progressions;
+        }
     },
     data() {
         return {
             prevWorkoutId: undefined,
             workoutHistory: undefined,
             summary: JSON.parse(window.sessionStorage['workoutSummary']),
-            progressions: {
-                'pullupProgression': this.$store.state.pullupProgression,
-                'squatProgression': this.$store.state.squatProgression,
-                'dipProgression': this.$store.state.dipProgression,
-                'hingeProgression': this.$store.state.hingeProgression,
-                'rowProgression': this.$store.state.rowProgression,
-                'pushupProgression': this.$store.state.pushupProgression,
-                'antiextensionProgression': this.$store.state.antiExtensionProgression,
-                'antirotationProgression': this.$store.state.antiRotationProgression,
-                'extensionProgression': this.$store.state.extensionProgression,
-            },
+            // progressions: {
+            //     'pullupProgression': this.$store.state.pullupProgression,
+            //     'squatProgression': this.$store.state.squatProgression,
+            //     'dipProgression': this.$store.state.dipProgression,
+            //     'hingeProgression': this.$store.state.hingeProgression,
+            //     'rowProgression': this.$store.state.rowProgression,
+            //     'pushupProgression': this.$store.state.pushupProgression,
+            //     'antiextensionProgression': this.$store.state.antiExtensionProgression,
+            //     'antirotationProgression': this.$store.state.antiRotationProgression,
+            //     'extensionProgression': this.$store.state.extensionProgression,
+            // },
         }
     }
 }
@@ -94,6 +98,7 @@ th {
     text-align: left;
 }
 #legend {
+    text-align: left;
     font-size: 0.9em;
     font-weight: normal;
 }

@@ -5,6 +5,7 @@ Vue.use(Vuex);
 
 // ui state
 const state = {
+    allExercises: ['pullup', 'squat', 'dip', 'hinge', 'row', 'pushup', 'antiextension', 'antirotation', 'extension'],
     pullupProgression: [
         {
             name: "Scapular Pulls",
@@ -177,7 +178,7 @@ const state = {
             desc: "Putting your hands sideways, lean forward with a straight body until your shoulders are in front of your hands.Perform a pushup while maintaining forward lean.Protract the shoulderblades at the top.Increase forward lean to make more difficult.Decrease forward lean to make easier.You won't run out of resistance anytime soon if you keep increasing your forward lean"
         },
     ],
-    antiExtensionProgression: [
+    antiextensionProgression: [
         {
             name: "Plank",
             url: "https://www.youtube.com/embed/44ScXWFaVBs?start=10",
@@ -189,7 +190,7 @@ const state = {
             desc: "Elbows should stay straight.Remain in a hollow body position (ribs down, butt tucked).Keep your hands as close as your overhead mobility will allow.Higher ring position will make this easier.Elevating the feet will make it harder"
         },
     ],
-    antiRotationProgression: [
+    antirotationProgression: [
         {
             name: "Banded Pallof Press",
             url: "https://www.youtube.com/embed/AH_QZLm_0-s",
@@ -207,9 +208,23 @@ const state = {
 
 // // update components with ui state
 // // using local computed arrow funcs for now...
-// const getters = {
-//    newUserId: state => state.newUserId,
-// };
+const getters = {
+   newUserId: state => state.newUserId,
+    progressions: state => {
+        return {
+            'pullupProgression': state.pullupProgression,
+            'squatProgression': state.squatProgression,
+            'dipProgression': state.dipProgression,
+            'hingeProgression': state.hingeProgression,
+            'rowProgression': state.rowProgression,
+            'pushupProgression': state.pushupProgression,
+            'antiextensionProgression': state.antiextensionProgression,
+            'antirotationProgression': state.antirotationProgression,
+            'extensionProgression': state.extensionProgression,
+        }
+
+   },
+};
 
 // // get/modify backend state
 // const actions = {
@@ -224,7 +239,7 @@ const state = {
 
 export default new Vuex.Store({
     state,
-    // getters,
+    getters,
     // actions,
     // mutations
 });

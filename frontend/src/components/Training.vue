@@ -19,7 +19,7 @@
         <iframe width="400" height="200" :src="currentVariant.url" v-if="currentVariant.url"></iframe>
         <ul v-if="currentVariant.desc">
             <!-- Using the first character as key because ordering doesn't matter and no operations are done -->
-            <li v-for="point of currentVariant.desc.split('.')" :key="point[0]">{{ point }}</li>
+            <li v-for="point of currentVariant.desc.split('.')" :key="point.id">{{ point }}</li>
         </ul>
     </div>
 </template>
@@ -31,30 +31,35 @@ export default {
         allSections() { return Object.keys(this.sections) },
         currentMaxSets() { return this.sections[this.currentSection]['maxSets'] },
         currentRepGoal() { return this.sections[this.currentSection]['reps'][this.currentSetNum - 1] },
-        currentExercise() { return this.sections[this.currentSection]['exercises'][this.currentSetNum - 1] },
+        currentExercise() {
+            if (this.currentSection === 'Warmups') {
+                return this.sections['Warmups']['exercises'][this.currentSetNum - 1];
+            } else if (this.currentSection === 'Core') {
+                if (this.currentSetNum % 3 === 0) return this.sections['Core']['path3'];
+                else if (this.currentSetNum % 3 === 2) return this.sections['Core']['path2'];
+                else return this.sections['Core']['path1'];
+            } else {
+                if (this.currentSetNum % 2 === 0) return this.sections[this.currentSection]['path2'];
+                else return this.sections[this.currentSection]['path1'];
+            }
+        },
         currentVariant() {
-            if (this.currentExercise === 'Pullups') {
-                return { ...this.pullupProgression[this.pullupVariant], num: this.pullupVariant, max: this.pullupProgression.length - 1 };
-            } else if (this.currentExercise === 'Squats') {
-                return { ...this.squatProgression[this.squatVariant], num: this.squatVariant, max: this.squatProgression.length - 1 };
-            } else if (this.currentExercise === 'Dips') {
-                return { ...this.dipProgression[this.dipVariant], num: this.dipVariant, max: this.dipProgression.length - 1 };
-            } else if (this.currentExercise === 'Hinges') {
-                return { ...this.hingeProgression[this.hingeVariant], num: this.hingeVariant, max: this.hingeProgression.length - 1 };
-            } else if (this.currentExercise === 'Rows') {
-                return { ...this.rowProgression[this.rowVariant], num: this.rowVariant, max: this.rowProgression.length - 1 };
-            } else if (this.currentExercise === 'Pushups') {
-                return { ...this.pushupProgression[this.pushupVariant], num: this.pushupVariant, max: this.pushupProgression.length - 1 };
-            } else if (this.currentExercise === 'Anti-Extensions') {
-                return { ...this.antiExtensionProgression[this.antiExtensionVariant], num: this.antiExtensionVariant, max: this.antiExtensionProgression.length - 1 };
-            } else if (this.currentExercise === 'Anti-Rotations') {
-                return { ...this.antiRotationProgression[this.antiRotationVariant], num: this.antiRotationVariant, max: this.antiRotationProgression.length - 1 };
-            } else if (this.currentExercise === 'Extensions') {
-                return { ...this.extensionProgression[this.extensionVariant], num: this.extensionVariant, max: this.extensionProgression.length - 1 };
-            } else return { ...this.currentExercise };
+            if (this.currentSection === 'Warmups') return { ...this.currentExercise };
+            else return { ...this.$store.getters.progressions[`${this.currentExercise}Progression`][this.variants[this.currentExercise]], num: this.variants[this.currentExercise], max: this.$store.getters.progressions[`${this.currentExercise}Progression`].length - 1 };
         }
     },
-    components: {  },
+    watch: {
+        variants: {
+            handler(value) {
+                if (this.currentSection !== 'Warmups') {
+                    console.log('--- watch ---');
+                    console.log(value[this.currentExercise]);
+                    console.log(this.currentExercise);
+                    this.$cookies.set(`${this.currentExercise}Variant`, value[this.currentExercise], Infinity, null, null, null, "Strict");
+                }
+            }, deep: true
+        }
+    },
     methods: {
         async incrementSetNum(directClick=true) {
             // if 'next set' button pressed directly, post reps before moving to next set
@@ -97,82 +102,16 @@ export default {
             this.currentSetNum = 1;
             return false;
         },
-        easierVariant() {
-            if (this.currentExercise === 'Pullups') {
-                if (this.pullupVariant > 0) return --this.pullupVariant;
-                else return;
-            }
-            else if (this.currentExercise === 'Squats') {
-                if (this.squatVariant > 0) return --this.squatVariant;
-                else return;
-            }
-            else if (this.currentExercise === 'Dips') {
-                if (this.dipVariant > 0) return --this.dipVariant;
-                else return;
-            }
-            else if (this.currentExercise === 'Hinges') {
-                if (this.hingeVariant > 0) return --this.hingeVariant;
-                else return;
-            }
-            else if (this.currentExercise === 'Rows') {
-                if (this.rowVariant > 0) return --this.rowVariant;
-                else return;
-            }
-            else if (this.currentExercise === 'Pushups') {
-                if (this.pushupVariant > 0) return --this.pushupVariant;
-                else return;
-            }
-            else if (this.currentExercise === 'Anti-Extensions') {
-                if (this.antiExtensionVariant > 0) return --this.antiExtensionVariant;
-                else return;
-            }
-            else if (this.currentExercise === 'Anti-Rotations') {
-                if (this.antiRotationVariant > 0) return --this.antiRotationVariant;
-                else return;
-            }
-            else if (this.currentExercise === 'Extensions') {
-                if (this.extensionVariant > 0) return --this.extensionVariant;
-                else return;
-            }
+        async easierVariant() {
+            if (this.currentSection === 'Warmups') return;
+            if (this.variants[this.currentExercise] > 0) return --this.variants[this.currentExercise];
             else return;
         },
         tougherVariant() {
-            if (this.currentExercise === 'Pullups') {
-                if (this.pullupVariant < this.pullupProgression.length - 1) return ++this.pullupVariant;
-                else return;
-            }
-            else if (this.currentExercise === 'Squats') {
-                if (this.squatVariant < this.squatProgression.length - 1) return ++this.squatVariant;
-                else return;
-            }
-            else if (this.currentExercise === 'Dips') {
-                if (this.dipVariant < this.dipProgression.length - 1) return ++this.dipVariant;
-                else return;
-            }
-            else if (this.currentExercise === 'Hinges') {
-                if (this.hingeVariant < this.hingeProgression.length - 1) return ++this.hingeVariant;
-                else return;
-            }
-            else if (this.currentExercise === 'Rows') {
-                if (this.rowVariant < this.rowProgression.length - 1) return ++this.rowVariant;
-                else return;
-            }
-            else if (this.currentExercise === 'Pushups') {
-                if (this.pushupVariant < this.pushupProgression.length - 1) return ++this.pushupVariant;
-                else return;
-            }
-            else if (this.currentExercise === 'Anti-Extensions') {
-                if (this.antiExtensionVariant < this.antiExtensionProgression.length - 1) return ++this.antiExtensionVariant;
-                else return;
-            }
-            else if (this.currentExercise === 'Anti-Rotations') {
-                if (this.antiRotationVariant < this.antiRotationProgression.length - 1) return ++this.antiRotationVariant;
-                else return;
-            }
-            else if (this.currentExercise === 'Extensions') {
-                if (this.extensionVariant < this.extensionProgression.length - 1) return ++this.extensionVariant;
-                else return;
-            }
+            if (this.currentSection === 'Warmups') return;
+            console.log('--- tougherVariant ---');
+            console.log(this.variants[this.currentExercise]);
+            if (this.variants[this.currentExercise] < this.$store.getters.progressions[`${this.currentExercise}Progression`].length - 1) return ++this.variants[this.currentExercise];
             else return;
         },
         async postSet(directClick=true) {
@@ -182,24 +121,21 @@ export default {
                 let url, adjSet, currentPath;
                 if (this.currentSection === 'Core') {
                     // determine exercise
-                    if ([1, 4, 7].includes(this.currentSetNum)) {
-                        currentPath = this.sections[this.currentSection]['path1'];
-                    } else if ([2, 5, 8].includes(this.currentSetNum)) {
-                        currentPath = this.sections[this.currentSection]['path2'];
-                    } else currentPath = this.sections[this.currentSection]['path3'];
+                    if (this.currentSetNum % 3 === 0) currentPath = this.sections['Core']['path3'];
+                    else if (this.currentSetNum % 3 === 2) currentPath = this.sections['Core']['path2'];
+                    else if (this.currentSetNum % 3 === 1) currentPath = this.sections['Core']['path1'];
                     // set number
-                    if ([1, 2, 3].includes(this.currentSetNum)) adjSet = 1;
-                    else if ([4, 5, 6].includes(this.currentSetNum)) adjSet = 2;
-                    else adjSet = 3;
+                    if (this.currentSetNum <= 3) adjSet = 1;
+                    else if (this.currentSetNum >= 7) adjSet = 3;
+                    else adjSet = 2;
                 } else {
                     // determine exercise
-                    if (this.currentSetNum % 2 !== 0) {
-                        currentPath = this.sections[this.currentSection]['path1'];
-                    } else currentPath = this.sections[this.currentSection]['path2'];
+                    if (this.currentSetNum % 2 === 0) currentPath = this.sections[this.currentSection]['path2'];
+                    else currentPath = this.sections[this.currentSection]['path1'];
                     // set number
-                    if (this.currentSetNum === 1 || this.currentSetNum === 2) adjSet = 1;
-                    else if (this.currentSetNum === 3 || this.currentSetNum === 4) adjSet = 2;
-                    else adjSet = 3;
+                    if (this.currentSetNum <= 2) adjSet = 1;
+                    else if (this.currentSetNum >= 5) adjSet = 3;
+                    else adjSet = 2;
                 }
                 // set url
                 url = `http://localhost:3000/exercise/${currentPath}Set`;
@@ -261,6 +197,14 @@ export default {
                 //                                  expiry path domain secure sameSite
                 this.$cookies.set("workout_id", res, "12h", null, null, null, "Strict");
             }
+            // overwrite variant integers with cookie values
+            let varObj = {};
+            for (let ex of this.$store.state.allExercises) {
+                if (this.$cookies.isKey(`${ex}Variant`)) {
+                    varObj[ex] = this.$cookies.get(`${ex}Variant`);
+                } else varObj[ex] = 0;
+            }
+            this.variants = varObj;
         } catch (error) {
             console.log(error);
         }
@@ -270,24 +214,17 @@ export default {
             repsDone: undefined,
             currentSetNum: 1,
             currentSection: 'Warmups',
-            pullupProgression: this.$store.state.pullupProgression,
-            squatProgression: this.$store.state.squatProgression,
-            dipProgression: this.$store.state.dipProgression,
-            hingeProgression: this.$store.state.hingeProgression,
-            rowProgression: this.$store.state.rowProgression,
-            pushupProgression: this.$store.state.pushupProgression,
-            antiExtensionProgression: this.$store.state.antiExtensionProgression,
-            antiRotationProgression: this.$store.state.antiRotationProgression,
-            extensionProgression: this.$store.state.extensionProgression,
-            pullupVariant: 0,
-            squatVariant: 0,
-            dipVariant: 0,
-            hingeVariant: 0,
-            rowVariant: 0,
-            pushupVariant: 0,
-            antiExtensionVariant: 0,
-            antiRotationVariant: 0,
-            extensionVariant: 0,
+            variants: {
+                'pullup': undefined,
+                'squat': undefined,
+                'dip': undefined,
+                'hinge': undefined,
+                'row': undefined,
+                'pushup': undefined,
+                'antiextension': undefined,
+                'antirotation': undefined,
+                'extension': undefined,
+            },
             sections: {
                 'Warmups': {
                     maxSets: 8,
