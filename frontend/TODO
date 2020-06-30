@@ -8,8 +8,6 @@ INFRA:
 BUGS:
 * saveSet():
     - PUT to db if a set is updated (reps and/or progression)
-    - Run when navigating away from /train (if "Home", "Prev/Next Section", "Training Summary" clicked)
-* Support multiple simultaneous variants per exercise (setup currentVariant like repsDone)
 * Need info for Warmups -> Support Hold | Easier Squat Progression | Easier Hinge Progression
 
 TEST:

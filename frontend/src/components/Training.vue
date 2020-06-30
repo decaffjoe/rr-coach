@@ -60,7 +60,18 @@ export default {
         // return which specific exercise is being done (with info, progression int value & progression int max value)
         currentVariant() {
             if (this.currentSection === 'Warmups') return { ...this.currentPath };
-            else return { ...this.$store.getters.progressions[`${this.currentPath}Progression`][this.variants[this.currentPath]], num: this.variants[this.currentPath], max: this.$store.getters.progressions[`${this.currentPath}Progression`].length - 1 };
+            else {
+                // if returning to previous set, check sessionStorage for variant
+                let session = JSON.parse(window.sessionStorage['workoutSummary']);
+                let theOneTrueVariant;
+                if (session[this.currentPath] && session[this.currentPath][this.specificExerciseSet - 1]) {
+                    theOneTrueVariant = session[this.currentPath][this.specificExerciseSet - 1]['progression'];
+                }
+                // else get variant from cookie (tracked by 'this.variants')
+                else theOneTrueVariant = this.variants[this.currentPath];
+                // return progression info, integer value and max integer value of generic exercise progression
+                return { ...this.$store.getters.progressions[`${this.currentPath}Progression`][theOneTrueVariant], num: theOneTrueVariant, max: this.$store.getters.progressions[`${this.currentPath}Progression`].length - 1 };
+            }
         },
         // user reps
         repsDone: {
@@ -178,11 +189,11 @@ export default {
                 if (!session[this.currentPath][this.specificExerciseSet - 1]) set = {};
                 else set = session[this.currentPath][this.specificExerciseSet - 1];
                 // if object existed and nothing changed, return
-                if (set['reps'] === this.repsDone && set['progression'] === this.variants[this.currentPath]) return;
+                if (set['reps'] === this.repsDone && set['progression'] === this.currentVariant.num) return;
                 // change was made (or new set), save current values to set
                 set['reps'] = this.repsDone;
                 set['setNumber'] = this.specificExerciseSet;
-                set['progression'] = this.variants[this.currentPath];
+                set['progression'] = this.currentVariant.num;
 
                 // API
                 // set url to post
@@ -236,7 +247,7 @@ export default {
                 let res = await fetch(url, {
                     method: 'POST',
                     mode: 'cors',
-                    headers: { "Content-Type": "application/json; charset=utf-8" },
+                    headers: { 'Content-Type': 'application/json; charset=utf-8' },
                     body: JSON.stringify({
                         user_id: this.$cookies.get("user_id")
                     })
@@ -245,7 +256,7 @@ export default {
                 //                                  expiry path domain secure sameSite
                 this.$cookies.set("workout_id", res, "12h", null, null, null, "Strict");
             }
-            // use variants from cookies, or default to easiest variant
+            // use variants from cookies, or default to easiest variant (progression 0)
             let varObj = {};
             for (let ex of this.$store.state.allExercises) {
                 if (this.$cookies.isKey(`${ex}Variant`)) {
