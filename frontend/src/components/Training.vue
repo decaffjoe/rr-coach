@@ -19,7 +19,7 @@
         <p>Rep Goal: {{ currentRepGoal }}</p>
         <!-- USER REP INPUT -->
         <p id="completed" v-if="currentSection !== 'Warmups'">Completed: </p>
-        <input @keypress.enter="postSet" v-model="repsDone" type="text" v-if="currentSection !== 'Warmups'">
+        <input @keypress.enter="saveSet" v-model="repsDone" type="text" v-if="currentSection !== 'Warmups'">
         <!-- EXERCISE INSTRUCTION -->
         <iframe width="400" height="200" :src="currentVariant.url" v-if="currentVariant.url"></iframe>
         <ul v-if="currentVariant.desc">
@@ -71,19 +71,7 @@ export default {
                 else return undefined;
             },
             // for when user enters reps
-            set(value) {
-                // get workout summary from sessionStorage
-                let session = JSON.parse(window.sessionStorage['workoutSummary']);
-                if (!session[this.currentPath]) session[this.currentPath] = [];
-                // create/overwrite set object in sessionStorage with new reps value
-                session[this.currentPath][this.currentSetNum - 1] = {
-                    reps: parseInt(value),
-                    setNumber: this.adjSet,
-                    progression: this.variants[this.currentPath],
-                };
-                // save sessionStorage
-                window.sessionStorage['workoutSummary'] = JSON.stringify(session);
-            }
+            set(value) { return parseInt(value); }
         },
         // return the 'actual' set e.g. pullup set 3/3 (instead of pullup & squat set 5/6)
         adjSet() {
@@ -115,7 +103,7 @@ export default {
         // go to next set, post current set reps if 'next set' button was clicked
         async incrementSetNum(e, clickedDirectly=true) {
             console.log('incSet: ' + clickedDirectly);
-            if (clickedDirectly) await this.postSet(null, false);
+            if (clickedDirectly) await this.saveSet(null, false);
             ++this.currentSetNum;
             // check if value forces next exercise
             if (this.currentSetNum > this.currentMaxSets) {
@@ -189,40 +177,50 @@ export default {
             } return;
         },
         // send set data to the API (assume <Enter> pressed in 'Completed' input field)
-        async postSet(e, clickedDirectly=true) {
-            console.log('postSet: ' + clickedDirectly);
+        async saveSet(e, clickedDirectly=true) {
             // reps gotta be inputted first eh
-            console.log('repsDone???: ' + this.repsDone);
             if (this.repsDone) {
-                // get set from sessionStorage
+
+                // SESSION STORAGE
+                // read workout summary from sessionStorage
                 let session = JSON.parse(window.sessionStorage['workoutSummary']);
-                let set = session[this.currentPath][this.currentSetNum - 1];
-                console.log(set);
-                console.log("set['hasPosted']: " + set['hasPosted']);
-                // if user has come back to a set that's already been posted, don't post again
-                if (set['hasPosted'] === true) {
+                if (!session[this.currentPath]) session[this.currentPath] = [];
+                // create new set or read in existing set
+                let set;
+                if (!session[this.currentPath][this.currentSetNum - 1]) set = {};
+                else set = session[this.currentPath][this.currentSetNum - 1];
+                // check to see if reps or progression have changed (if re-visiting)
+                if (set['reps'] !== this.repsDone || set['progression'] !== this.variants[this.currentPath]) {
                     if (clickedDirectly) return this.incrementSetNum(null, false);
-                } else if (set['hasPosted'] === false) return;
+                    else return;
+                }
+                // change was made, change set values to match current ones
+                set['reps'] = this.repsDone;
+                set['setNumber'] = this.adjSet;
+                set['progression'] = this.variants[this.currentPath];
+
+                // API
                 // set url to post
                 let url = `http://localhost:3000/exercise/${this.currentPath}Set`;
+                // assume logged out, or post failure
                 let hasPosted = false;
                 // make the post request if user is logged in
                 if (this.$cookies.isKey("workout_id")) {
+                    let body = { ...set['reps'], ...set['setNumber'], ...set['progression'], workout_id: this.$cookies.get("workout_id") };
                     let res = await fetch(url, {
                         method: 'POST',
                         mode: 'cors',
                         headers: { "Content-Type": "application/json; charset=utf-8" },
-                        body: JSON.stringify({
-                            ...set,
-                            workout_id: this.$cookies.get("workout_id")
-                        })
+                        body: JSON.stringify(body)
                     });
                     if (res.status === 200) {
                         hasPosted = true;
                         set['hasPosted'] = true;
                     }
                 }
-                // add post url if we're not posting right now
+
+                // SESSION STORAGE PT. 2
+                // add post url to set if we're not posting to db right now
                 if (!hasPosted) {
                     set['postPath'] = url;
                     set['hasPosted'] = false;
@@ -232,7 +230,7 @@ export default {
                 }
                 // go to next set automatically if 'enter' pressed in input
                 if (clickedDirectly) this.incrementSetNum(null, false);
-            }
+            } else console.log('???: ' + this.repsDone);
         },
     },
     // get current or init new workout status/summary, workout_id and exercise variant values
