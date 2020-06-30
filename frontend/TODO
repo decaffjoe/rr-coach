@@ -3,11 +3,13 @@ INFRA:
 * Style the views
 * Error handling for all user inputs
 * Pre-load & cache iframes?
+* Write docs for the frontend logic
 
 BUGS:
-* Going back to previous sets, reps should be displayed
-    - If value of previous set is changed, update should be made to DB/sessionStorage
-* Shouldn't be able to add more than 3 sets/exercise to DB/sessionStorage
+* saveSet():
+    - PUT to db if a set is updated (reps and/or progression)
+    - Run when navigating away from /train (if "Home", "Prev/Next Section", "Training Summary" clicked)
+* Shouldn't be able to add more than 3 sets/exercise to DB/sessionStorage (maybe explicit-adds feature?)
 * Need info for Warmups -> Support Hold | Easier Squat Progression | Easier Hinge Progression
 
 TEST:
