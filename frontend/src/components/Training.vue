@@ -43,7 +43,7 @@ export default {
             } else if (this.currentSection === 'Core') return "8 - 12";
             else return "5 - 8";
         },
-        // determine which generic exercise is being done e.g. 'pullup' or 'squat'
+        // return which generic exercise is being done e.g. 'pullup' or 'squat'
         currentPath() {
             if (this.currentSection === 'Warmups') {
                 return this.sections['Warmups']['exercises'][this.currentSetNum - 1];
@@ -56,11 +56,49 @@ export default {
                 else return this.sections[this.currentSection]['path1'];
             }
         },
-        // determine which specific exercise is being done
-        // return info, progression int value & progression int value maximum
+        // return which specific exercise is being done (with info, progression int value & progression int max value)
         currentVariant() {
             if (this.currentSection === 'Warmups') return { ...this.currentPath };
             else return { ...this.$store.getters.progressions[`${this.currentPath}Progression`][this.variants[this.currentPath]], num: this.variants[this.currentPath], max: this.$store.getters.progressions[`${this.currentPath}Progression`].length - 1 };
+        },
+        // user reps
+        repsDone: {
+            // for when user navigates to previously completed set
+            get() {
+                let session = JSON.parse(window.sessionStorage['workoutSummary']);
+                if (!session[this.currentPath]) return undefined;
+                if (session[this.currentPath][this.currentSetNum - 1]) return session[this.currentPath][this.currentSetNum - 1]['reps'];
+                else return undefined;
+            },
+            // for when user enters reps
+            set(value) {
+                // get workout summary from sessionStorage
+                let session = JSON.parse(window.sessionStorage['workoutSummary']);
+                if (!session[this.currentPath]) session[this.currentPath] = [];
+                // create/overwrite set object in sessionStorage with new reps value
+                session[this.currentPath][this.currentSetNum - 1] = {
+                    reps: parseInt(value),
+                    setNumber: this.adjSet,
+                    progression: this.variants[this.currentPath],
+                };
+                // save sessionStorage
+                window.sessionStorage['workoutSummary'] = JSON.stringify(session);
+            }
+        },
+        // return the 'actual' set e.g. pullup set 3/3 (instead of pullup & squat set 5/6)
+        adjSet() {
+            if (this.currentSection === 'Warmups') return undefined;
+            if (this.currentSection === 'Core') {
+                // determine set number
+                if (this.currentSetNum <= 3) return 1;
+                else if (this.currentSetNum >= 7) return 3;
+                else return 2;
+            } else {
+                // determine set number
+                if (this.currentSetNum <= 2) return 1;
+                else if (this.currentSetNum >= 5) return 3;
+                else return 2;
+            }
         }
     },
     watch: {
@@ -75,8 +113,9 @@ export default {
     },
     methods: {
         // go to next set, post current set reps if 'next set' button was clicked
-        async incrementSetNum(clickedDirectly=true) {
-            if (clickedDirectly) await this.postSet(false);
+        async incrementSetNum(e, clickedDirectly=true) {
+            console.log('incSet: ' + clickedDirectly);
+            if (clickedDirectly) await this.postSet(null, false);
             ++this.currentSetNum;
             // check if value forces next exercise
             if (this.currentSetNum > this.currentMaxSets) {
@@ -121,35 +160,51 @@ export default {
         easierVariant() {
             if (this.currentSection === 'Warmups') return;
             // check to make sure we aren't on easiest variant
-            if (this.variants[this.currentPath] > 0) return --this.variants[this.currentPath];
-            else return;
+            if (this.variants[this.currentPath] > 0) {
+                // decrement variant integer
+                --this.variants[this.currentPath];
+                // if reps have already been done, overwrite existing object from sessionStorage with new variant
+                if (this.repsDone) {
+                    let session = JSON.parse(window.sessionStorage['workoutSummary']);
+                    session[this.currentPath][this.currentSetNum - 1]['progression'] = this.variants[this.currentPath];
+                    // save sessionStorage
+                    window.sessionStorage['workoutSummary'] = JSON.stringify(session);
+                }
+            } return;
         },
         // go to tougher specific exercise variant
         tougherVariant() {
             if (this.currentSection === 'Warmups') return;
             // check to make sure we aren't on toughest variant
-            if (this.variants[this.currentPath] < this.$store.getters.progressions[`${this.currentPath}Progression`].length - 1) return ++this.variants[this.currentPath];
-            else return;
+            if (this.variants[this.currentPath] < this.$store.getters.progressions[`${this.currentPath}Progression`].length - 1) {
+                // increment variant integer
+                ++this.variants[this.currentPath];
+                // if reps have already been done, overwrite existing object from sessionStorage with new variant
+                if (this.repsDone) {
+                    let session = JSON.parse(window.sessionStorage['workoutSummary']);
+                    session[this.currentPath][this.currentSetNum - 1]['progression'] = this.variants[this.currentPath];
+                    // save sessionStorage
+                    window.sessionStorage['workoutSummary'] = JSON.stringify(session);
+                }
+            } return;
         },
         // send set data to the API (assume <Enter> pressed in 'Completed' input field)
-        async postSet(clickedDirectly=true) {
+        async postSet(e, clickedDirectly=true) {
+            console.log('postSet: ' + clickedDirectly);
             // reps gotta be inputted first eh
+            console.log('repsDone???: ' + this.repsDone);
             if (this.repsDone) {
-                // create the post url and real (adjusted) set number e.g. "Squats set 2" instead of set 4/6
-                let url, adjSet;
-                if (this.currentSection === 'Core') {
-                    // determine set number
-                    if (this.currentSetNum <= 3) adjSet = 1;
-                    else if (this.currentSetNum >= 7) adjSet = 3;
-                    else adjSet = 2;
-                } else {
-                    // determine set number
-                    if (this.currentSetNum <= 2) adjSet = 1;
-                    else if (this.currentSetNum >= 5) adjSet = 3;
-                    else adjSet = 2;
-                }
-                // set url
-                url = `http://localhost:3000/exercise/${this.currentPath}Set`;
+                // get set from sessionStorage
+                let session = JSON.parse(window.sessionStorage['workoutSummary']);
+                let set = session[this.currentPath][this.currentSetNum - 1];
+                console.log(set);
+                console.log("set['hasPosted']: " + set['hasPosted']);
+                // if user has come back to a set that's already been posted, don't post again
+                if (set['hasPosted'] === true) {
+                    if (clickedDirectly) return this.incrementSetNum(null, false);
+                } else if (set['hasPosted'] === false) return;
+                // set url to post
+                let url = `http://localhost:3000/exercise/${this.currentPath}Set`;
                 let hasPosted = false;
                 // make the post request if user is logged in
                 if (this.$cookies.isKey("workout_id")) {
@@ -158,33 +213,25 @@ export default {
                         mode: 'cors',
                         headers: { "Content-Type": "application/json; charset=utf-8" },
                         body: JSON.stringify({
-                            reps: parseInt(this.repsDone),
-                            setNumber: adjSet,
-                            progression: this.currentVariant.num,
+                            ...set,
                             workout_id: this.$cookies.get("workout_id")
                         })
                     });
-                    if (res.status === 200) { hasPosted = true; window.sessionStorage['hasPosted'] = 1; }
+                    if (res.status === 200) {
+                        hasPosted = true;
+                        set['hasPosted'] = true;
+                    }
                 }
-                // create set object to store in sessionStorage
-                let newSet = {
-                    reps: parseInt(this.repsDone),
-                    setNumber: adjSet,
-                    progression: this.currentVariant.num,
-                    // id: window.sessionStorage['idCounter']
-                };
                 // add post url if we're not posting right now
-                if (!hasPosted) newSet['postPath'] = url;
-                // read current sessionStorage
-                let session = JSON.parse(window.sessionStorage['workoutSummary']);
-                if (!session[this.currentPath]) session[this.currentPath] = [];
-                // update sessionStorage with newSet included
-                session[this.currentPath].push(newSet);
-                window.sessionStorage['workoutSummary'] = JSON.stringify(session);
-                // update counter
-                window.sessionStorage['idCounter']++;
+                if (!hasPosted) {
+                    set['postPath'] = url;
+                    set['hasPosted'] = false;
+                    // update sessionStorage with set included
+                    session[this.currentPath][this.currentSetNum - 1] = set;
+                    window.sessionStorage['workoutSummary'] = JSON.stringify(session);
+                }
                 // go to next set automatically if 'enter' pressed in input
-                if (clickedDirectly) this.incrementSetNum(false);
+                if (clickedDirectly) this.incrementSetNum(null, false);
             }
         },
     },
@@ -193,7 +240,6 @@ export default {
         try {
             // init sessionStorage if not active
             if (!window.sessionStorage['workoutSummary']) window.sessionStorage['workoutSummary'] = "{}";
-            if (!window.sessionStorage['idCounter']) window.sessionStorage['idCounter'] = 0;
             // get a new workout_id (if user is logged in without existing workout_id)
             if (this.$cookies.isKey("user_id") && !this.$cookies.isKey("workout_id")) {
                 let url = "http://localhost:3000/workout";
@@ -223,7 +269,6 @@ export default {
     },
     data() {
         return {
-            repsDone: undefined,
             currentSetNum: 1,
             currentSection: 'Warmups',
             variants: {

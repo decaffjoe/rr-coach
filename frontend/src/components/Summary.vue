@@ -31,7 +31,6 @@ export default {
     name: "Summary",
     // get user's previous workouts by date, if logged in
     async created() {
-        console.log(this.summary);
         if (this.$cookies.isKey("user_id")) {
             let url = `http://localhost:3000/workout?user_id=${this.$cookies.get("user_id")}`;
             try {

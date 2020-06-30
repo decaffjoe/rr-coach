@@ -11,7 +11,7 @@ BUGS:
 * Need info for Warmups -> Support Hold | Easier Squat Progression | Easier Hinge Progression
 
 TEST:
-* Like everything, actually (write some unit/integration/etc... tests too)
+* Like everything haha (write some unit/integration/etc... tests too)
 * Persistent workout state tracking
 * Training Summary post to db (if not logged in)
 
@@ -21,8 +21,7 @@ FEATURES:
     - Select today's workout by default
     - Change the titles to reflect date chosen
     - Comparison tool between any two workouts
-        - Latest session is one by default (but is changeable)
-* Remember user exercise variants
-    - Store exercise variant values in DB (sessionStorage in-browser)
-    - When logging in load variant values from DB
+        - Latest session is standard by default (but is changeable)
+        - Present graph of reps over time
 * Rest timer in between each set (too soon <= 90-270s => too long)
+* Add alternate paths for strength exercises

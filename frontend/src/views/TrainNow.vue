@@ -7,7 +7,7 @@
 <script>
 import Training from '../components/Training.vue';
 export default {
-    name: "Pairs",
+    name: "TrainNow",
     components: { Training, },
 };
 </script>
