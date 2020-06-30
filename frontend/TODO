@@ -9,7 +9,7 @@ BUGS:
 * saveSet():
     - PUT to db if a set is updated (reps and/or progression)
     - Run when navigating away from /train (if "Home", "Prev/Next Section", "Training Summary" clicked)
-* Shouldn't be able to add more than 3 sets/exercise to DB/sessionStorage (maybe explicit-adds feature?)
+* Support multiple simultaneous variants per exercise (setup currentVariant like repsDone)
 * Need info for Warmups -> Support Hold | Easier Squat Progression | Easier Hinge Progression
 
 TEST:

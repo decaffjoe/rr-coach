@@ -2,15 +2,15 @@
     <div>
         <!-- HEADER -->
         <!-- TODO: saveSet before navigating away from the page -->
-        <router-link to="/"><button>Home</button></router-link>
+        <button @click="goToPage('/')">Home</button>
         <button @click="skipCurrentSection('prev')">Previous Section</button>
         <button @click="skipCurrentSection('next')">Next Section</button>
-        <router-link to="/summary"><button>Workout Summary</button></router-link>
+        <button @click="goToPage('/summary')">Workout Summary</button>
         <h1>{{ currentSection }}</h1>
         <!-- SET CONTROL -->
         <hr>
         <button @click="decrementSetNum" class="set">Previous set</button>
-        <p class="set"><span>{{ currentSetNum }}</span> / <span>{{ currentMaxSets }}</span></p>
+        <p class="set"><span>{{ currentSectionSet }}</span> / <span>{{ currentMaxSets }}</span></p>
         <button @click="incrementSetNum" class="set">Next set</button>
         <hr>
         <!-- EXERCISE NAME AND REPS -->
@@ -40,20 +40,20 @@ export default {
         // display the rep target
         currentRepGoal() {
             if (this.currentSection === 'Warmups') {
-                return this.sections[this.currentSection]['exercises'][this.currentSetNum - 1]['reps'];
+                return this.sections[this.currentSection]['exercises'][this.currentSectionSet - 1]['reps'];
             } else if (this.currentSection === 'Core') return "8 - 12";
             else return "5 - 8";
         },
         // return which generic exercise is being done e.g. 'pullup' or 'squat'
         currentPath() {
             if (this.currentSection === 'Warmups') {
-                return this.sections['Warmups']['exercises'][this.currentSetNum - 1];
+                return this.sections['Warmups']['exercises'][this.currentSectionSet - 1];
             } else if (this.currentSection === 'Core') {
-                if (this.currentSetNum % 3 === 0) return this.sections['Core']['path3'];
-                else if (this.currentSetNum % 3 === 2) return this.sections['Core']['path2'];
+                if (this.currentSectionSet % 3 === 0) return this.sections['Core']['path3'];
+                else if (this.currentSectionSet % 3 === 2) return this.sections['Core']['path2'];
                 else return this.sections['Core']['path1'];
             } else {
-                if (this.currentSetNum % 2 === 0) return this.sections[this.currentSection]['path2'];
+                if (this.currentSectionSet % 2 === 0) return this.sections[this.currentSection]['path2'];
                 else return this.sections[this.currentSection]['path1'];
             }
         },
@@ -69,24 +69,24 @@ export default {
                 if (this.enteredReps) return this.enteredReps;
                 let session = JSON.parse(window.sessionStorage['workoutSummary']);
                 if (!session[this.currentPath]) return undefined;
-                if (session[this.currentPath][this.currentSetNum - 1]) return session[this.currentPath][this.currentSetNum - 1]['reps'];
+                if (session[this.currentPath][this.specificExerciseSet - 1]) return session[this.currentPath][this.specificExerciseSet - 1]['reps'];
                 else return undefined;
             },
             // for when user enters reps
             set(value) { return this.enteredReps = value; }
         },
-        // return the 'actual' set e.g. pullup set 3/3 (instead of pullup & squat set 5/6)
-        adjSet() {
+        // return the 'actual' set e.g. pullup set 3/3 (instead of "pullup & squat" set 5/6)
+        specificExerciseSet() {
             if (this.currentSection === 'Warmups') return undefined;
             if (this.currentSection === 'Core') {
                 // determine set number
-                if (this.currentSetNum <= 3) return 1;
-                else if (this.currentSetNum >= 7) return 3;
+                if (this.currentSectionSet <= 3) return 1;
+                else if (this.currentSectionSet >= 7) return 3;
                 else return 2;
             } else {
                 // determine set number
-                if (this.currentSetNum <= 2) return 1;
-                else if (this.currentSetNum >= 5) return 3;
+                if (this.currentSectionSet <= 2) return 1;
+                else if (this.currentSectionSet >= 5) return 3;
                 else return 2;
             }
         }
@@ -105,25 +105,25 @@ export default {
         // save and go to next set
         async incrementSetNum() {
             await this.saveSet();
-            ++this.currentSetNum;
+            ++this.currentSectionSet;
             // check if value forces next exercise
-            if (this.currentSetNum > this.currentMaxSets) {
+            if (this.currentSectionSet > this.currentMaxSets) {
                 // if not last exercise, change set number to 1
                 if (!this.skipCurrentSection('next')) {
-                    this.currentSetNum = 1;
-                } else this.currentSetNum = this.currentMaxSets;
+                    this.currentSectionSet = 1;
+                } else this.currentSectionSet = this.currentMaxSets;
             }
         },
         // save and go to previous set
         async decrementSetNum() {
             await this.saveSet();
-            --this.currentSetNum;
+            --this.currentSectionSet;
             // check if value forces previous exercise
-            if (this.currentSetNum < 1) {
+            if (this.currentSectionSet < 1) {
                 // if not first exercise, change set number to max of prev
                 if (!this.skipCurrentSection('prev')) {
-                    this.currentSetNum = this.currentMaxSets;
-                } else this.currentSetNum = 1;
+                    this.currentSectionSet = this.currentMaxSets;
+                } else this.currentSectionSet = 1;
             }
         },
         // skip forward or backward e.g. from 'Warmups' to 'Pullups & Squats'
@@ -143,7 +143,7 @@ export default {
                 else return true;
             }
             // always start at first set
-            this.currentSetNum = 1;
+            this.currentSectionSet = 1;
             return false;
         },
         // go to easier specific exercise variant
@@ -175,13 +175,13 @@ export default {
                 if (!session[this.currentPath]) session[this.currentPath] = [];
                 // create new set or read in existing set
                 let set;
-                if (!session[this.currentPath][this.currentSetNum - 1]) set = {};
-                else set = session[this.currentPath][this.currentSetNum - 1];
+                if (!session[this.currentPath][this.specificExerciseSet - 1]) set = {};
+                else set = session[this.currentPath][this.specificExerciseSet - 1];
                 // if object existed and nothing changed, return
                 if (set['reps'] === this.repsDone && set['progression'] === this.variants[this.currentPath]) return;
                 // change was made (or new set), save current values to set
                 set['reps'] = this.repsDone;
-                set['setNumber'] = this.adjSet;
+                set['setNumber'] = this.specificExerciseSet;
                 set['progression'] = this.variants[this.currentPath];
 
                 // API
@@ -213,18 +213,23 @@ export default {
                     set['hasPosted'] = false;
                 }
                 // update sessionStorage with new/updated set
-                session[this.currentPath][this.currentSetNum - 1] = set;
+                session[this.currentPath][this.specificExerciseSet - 1] = set;
+                console.log(session);
                 window.sessionStorage['workoutSummary'] = JSON.stringify(session);
             }
             // reset that the user entered reps on this particular set, no matter what!
             this.enteredReps = undefined;
+        },
+        async goToPage(page) {
+            await this.saveSet();
+            this.$router.push(page);
         },
     },
     // get current or init new workout status/summary, workout_id and exercise variant values
     async created() {
         try {
             // init sessionStorage if not active
-            if (!window.sessionStorage['workoutSummary']) window.sessionStorage['workoutSummary'] = "{}";
+            if (!window.sessionStorage['workoutSummary']) window.sessionStorage['workoutSummary'] = JSON.stringify({});
             // get a new workout_id (if user is logged in without existing workout_id)
             if (this.$cookies.isKey("user_id") && !this.$cookies.isKey("workout_id")) {
                 let url = "http://localhost:3000/workout";
@@ -256,9 +261,10 @@ export default {
         return {
             // reset after every "previous/next set" change
             enteredReps: undefined,
-            currentSetNum: 1,
+            // cumulative set number per section
+            currentSectionSet: 1,
             currentSection: 'Warmups',
-            // preferences loaded from cookies or defaulted to 0
+            // preferences loaded from cookies or defaulted to 0 if no cookies
             variants: {
                 'pullup': undefined,
                 'squat': undefined,
