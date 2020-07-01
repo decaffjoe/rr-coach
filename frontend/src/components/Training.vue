@@ -1,12 +1,15 @@
 <template>
     <div>
         <!-- HEADER -->
-        <!-- TODO: saveSet before navigating away from the page -->
+        <!-- SPECIAL NAVBAR (SAVE PROGRESS BEFORE LEAVING) -->
         <button @click="goToPage('/')">Home</button>
-        <button @click="skipCurrentSection('prev')">Previous Section</button>
-        <button @click="skipCurrentSection('next')">Next Section</button>
         <button @click="goToPage('/summary')">Workout Summary</button>
-        <h1>{{ currentSection }}</h1>
+        <!-- SECTION CONTROL -->
+        <div id="section">
+            <button @click="skipCurrentSection('prev')">Previous Section</button>
+            <h1>{{ currentSection }}</h1>
+            <button @click="skipCurrentSection('next')">Next Section</button>
+        </div>
         <!-- SET CONTROL -->
         <hr>
         <button @click="decrementSetNum" class="set">Previous set</button>
@@ -390,6 +393,10 @@ export default {
 </script>
 
 <style scoped>
+#section {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
 #completed {
     display: inline;
 }
