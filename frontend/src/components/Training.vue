@@ -57,30 +57,42 @@ export default {
                 else return this.sections[this.currentSection]['path1'];
             }
         },
-        // return which specific exercise is being done (with info, progression int value & progression int max value)
-        currentVariant() {
-            if (this.currentSection === 'Warmups') return { ...this.currentPath };
-            else {
-                // if returning to previous set, check sessionStorage for variant
-                let session = JSON.parse(window.sessionStorage['workoutSummary']);
-                let theOneTrueVariant;
-                if (session[this.currentPath] && session[this.currentPath][this.specificExerciseSet - 1]) {
-                    theOneTrueVariant = session[this.currentPath][this.specificExerciseSet - 1]['progression'];
+        // current specific exercise progression (return info, integer value & max integer value for progression track)
+        currentVariant: {
+            get() {
+                if (this.currentSection === 'Warmups') return { ...this.currentPath };
+                else {
+                    console.log('entered Variant: ' + this.enteredVariant);
+                    // Precedence 1: User changes variant manually on current page
+                    if (this.enteredVariant) return { ...this.$store.getters.progressions[`${this.currentPath}Progression`][this.enteredVariant], num: this.enteredVariant, max: this.$store.getters.progressions[`${this.currentPath}Progression`].length - 1 };
+                    // Precedence 2: User revisits old set (so load the progression saved from that set)
+                    let session = JSON.parse(window.sessionStorage['workoutSummary']);
+                    let variantInteger;
+                    if (session[this.currentPath] && session[this.currentPath][this.specificExerciseSet - 1]) {
+                        variantInteger = session[this.currentPath][this.specificExerciseSet - 1]['progression'];
+                    }
+                    // Precedence 3: Load the variant saved from cookies (load from local data identical to the cookies, though)
+                    else variantInteger = this.variantPreferences[this.currentPath];
+                    console.log('variant integer: ' + variantInteger);
+                    console.log(this.$store.getters.progressions[`${this.currentPath}Progression`][variantInteger]);
+                    // return progression info, integer value and max integer value of generic exercise progression
+                    return { ...this.$store.getters.progressions[`${this.currentPath}Progression`][variantInteger], num: variantInteger, max: this.$store.getters.progressions[`${this.currentPath}Progression`].length - 1 };
                 }
-                // else get variant from cookie (tracked by 'this.variants')
-                else theOneTrueVariant = this.variants[this.currentPath];
-                // return progression info, integer value and max integer value of generic exercise progression
-                return { ...this.$store.getters.progressions[`${this.currentPath}Progression`][theOneTrueVariant], num: theOneTrueVariant, max: this.$store.getters.progressions[`${this.currentPath}Progression`].length - 1 };
+            },
+            set(value) {
+                // when user manually changes variant on current page
+                return this.enteredVariant = value;
             }
         },
         // user reps
         repsDone: {
-            // for when user navigates to previously completed set
             get() {
+                // Precedence 1: User changes reps manually on current page
                 if (this.enteredReps) return this.enteredReps;
+                // Precedence 2: User revisits old set (so load reps saved from that set)
                 let session = JSON.parse(window.sessionStorage['workoutSummary']);
-                if (!session[this.currentPath]) return undefined;
-                if (session[this.currentPath][this.specificExerciseSet - 1]) return session[this.currentPath][this.specificExerciseSet - 1]['reps'];
+                if (session[this.currentPath] && session[this.currentPath][this.specificExerciseSet - 1]) return session[this.currentPath][this.specificExerciseSet - 1]['reps'];
+                // Precedence 3: Default to empty (undefined reps performed)
                 else return undefined;
             },
             // for when user enters reps
@@ -104,7 +116,7 @@ export default {
     },
     watch: {
         // update exercise variant cookies when variant is changed
-        variants: {
+        variantPreferences: {
             handler(value) {
                 if (this.currentSection !== 'Warmups') {
                     this.$cookies.set(`${this.currentPath}Variant`, value[this.currentPath], Infinity, null, null, null, "Strict");
@@ -161,18 +173,24 @@ export default {
         easierVariant() {
             if (this.currentSection === 'Warmups') return;
             // check to make sure we aren't on easiest variant
-            if (this.variants[this.currentPath] > 0) {
+            if (this.currentVariant.num > 0) {
                 // decrement variant integer
-                --this.variants[this.currentPath];
+                this.currentVariant = parseInt(this.currentVariant.num) - 1;
+                // set cookie preference too
+                --this.variantPreferences[this.currentPath];
+                // --this.currentVariant;
             } return;
         },
         // go to tougher specific exercise variant
         tougherVariant() {
+            console.log('tougherVariant entered: ' + this.enteredVariant);
             if (this.currentSection === 'Warmups') return;
             // check to make sure we aren't on toughest variant
-            if (this.variants[this.currentPath] < this.$store.getters.progressions[`${this.currentPath}Progression`].length - 1) {
+            if (this.currentVariant.num < this.$store.getters.progressions[`${this.currentPath}Progression`].length - 1) {
                 // increment variant integer
-                ++this.variants[this.currentPath];
+                this.currentVariant = parseInt(this.currentVariant.num) + 1;
+                // set cookie preference too
+                ++this.variantPreferences[this.currentPath];
             } return;
         },
         // save set data to sessionStorage and API
@@ -190,7 +208,7 @@ export default {
                 else set = session[this.currentPath][this.specificExerciseSet - 1];
                 // if object existed and nothing changed, return
                 if (set['reps'] === this.repsDone && set['progression'] === this.currentVariant.num) return;
-                // change was made (or new set), save current values to set
+                // change was made (or new set), so save current values to set
                 set['reps'] = this.repsDone;
                 set['setNumber'] = this.specificExerciseSet;
                 set['progression'] = this.currentVariant.num;
@@ -201,7 +219,7 @@ export default {
                 // assume logged out, or post failure
                 let dbSaveSuccess = false;
                 // TODO: PUT to db if updating set instead of creating
-                // if (set['hasPosted'] === true) <-- we are updating and need to PUT
+                // if (set['hasPosted']) <-- we are updating and need to PUT
                 // POST to db if user is logged in and this is a new set
                 if (this.$cookies.isKey("workout_id") && !set['hasPosted']) {
                     let body = { ...set['reps'], ...set['setNumber'], ...set['progression'], workout_id: this.$cookies.get("workout_id") };
@@ -225,11 +243,11 @@ export default {
                 }
                 // update sessionStorage with new/updated set
                 session[this.currentPath][this.specificExerciseSet - 1] = set;
-                console.log(session);
                 window.sessionStorage['workoutSummary'] = JSON.stringify(session);
             }
-            // reset that the user entered reps on this particular set, no matter what!
+            // reset that the user entered reps and progression
             this.enteredReps = undefined;
+            this.enteredVariant = undefined;
         },
         async goToPage(page) {
             await this.saveSet();
@@ -256,14 +274,14 @@ export default {
                 //                                  expiry path domain secure sameSite
                 this.$cookies.set("workout_id", res, "12h", null, null, null, "Strict");
             }
-            // use variants from cookies, or default to easiest variant (progression 0)
+            // load variantPreferences from cookies, or default to easiest variant (progression 0)
             let varObj = {};
             for (let ex of this.$store.state.allExercises) {
                 if (this.$cookies.isKey(`${ex}Variant`)) {
                     varObj[ex] = this.$cookies.get(`${ex}Variant`);
                 } else varObj[ex] = 0;
             }
-            this.variants = varObj;
+            this.variantPreferences = varObj;
         } catch (error) {
             console.log(error);
         }
@@ -272,11 +290,13 @@ export default {
         return {
             // reset after every "previous/next set" change
             enteredReps: undefined,
+            // reset after every "previous/next set" change
+            enteredVariant: undefined,
             // cumulative set number per section
             currentSectionSet: 1,
             currentSection: 'Warmups',
             // preferences loaded from cookies or defaulted to 0 if no cookies
-            variants: {
+            variantPreferences: {
                 'pullup': undefined,
                 'squat': undefined,
                 'dip': undefined,

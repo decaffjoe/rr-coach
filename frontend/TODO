@@ -16,6 +16,7 @@ TEST:
 * Training Summary post to db (if not logged in)
 
 FEATURES:
+* Brief intro to training regimen, link to full reddit source
 * Training Summary Page:
     - Sort workouts by date
     - Select today's workout by default
@@ -25,3 +26,4 @@ FEATURES:
         - Present graph of reps over time
 * Rest timer in between each set (too soon <= 90-270s => too long)
 * Add alternate paths for strength exercises
+    - <select> menu dropdown that changes to an alternate progressions object
