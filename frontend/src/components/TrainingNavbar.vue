@@ -9,8 +9,8 @@
 export default {
     name: "TrainingNavbar",
     methods: {
-        goToPage(page) {
-            this.$emit('saveSet');
+        async goToPage(page) {
+            await this.saveSet();
             this.$router.push(page);
         },
     }
