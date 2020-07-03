@@ -1,37 +1,40 @@
 <template>
-    <div id="training">
-        <!-- Special navbar to save progress before navigating away -->
-        <TrainingNavbar id="nav" />
-        <!-- User controls section of the workout e.g. 'Warmups' -->
-        <TrainingSectionControl id="section" :currentSection="currentSection" />
-        <!-- User controls the current set -->
-        <TrainingSetControl id="set" :currentSectionSet="currentSectionSet" :currentMaxSets="currentMaxSets" />
-        <!-- User controls the specific exercise variant -->
-        <TrainingVariantControl id="variant" :currentVariant="currentVariant" />
-        <!-- User enters reps, rep goal is displayed -->
-        <TrainingReps />
-        <!-- Display video demo and helpful tips for the given exercise variant -->
-        <TrainingInfo />
+    <div>
+        <!-- HEADER -->
+        <!-- SPECIAL NAVBAR (SAVE PROGRESS BEFORE LEAVING) -->
+        <button @click="goToPage('/')">Home</button>
+        <button @click="goToPage('/summary')">Workout Summary</button>
+        <!-- SECTION CONTROL -->
+        <div id="section">
+            <button @click="skipCurrentSection('prev')">Previous Section</button>
+            <h1>{{ currentSection }}</h1>
+            <button @click="skipCurrentSection('next')">Next Section</button>
+        </div>
+        <!-- SET CONTROL -->
+        <hr>
+        <button @click="decrementSetNum" class="set">Previous set</button>
+        <p class="set"><span>{{ currentSectionSet }}</span> / <span>{{ currentMaxSets }}</span></p>
+        <button @click="incrementSetNum" class="set">Next set</button>
+        <hr>
+        <!-- EXERCISE NAME AND REPS -->
+        <h2>{{ currentVariant.name }}</h2>
+        <button @click="easierVariant" v-if="currentSection !== 'Warmups' && currentVariant.num > 0">Easier Variant</button>
+        <button @click="tougherVariant" v-if="currentSection !== 'Warmups' && currentVariant.num < currentVariant.max">Tougher Variant</button>
+        <p>Rep Goal: {{ currentRepGoal }}</p>
+        <!-- USER REP INPUT -->
+        <p id="completed" v-if="currentSection !== 'Warmups'">Completed: </p>
+        <input @keypress.enter="incrementSetNum" v-model="repsDone" type="text" v-if="currentSection !== 'Warmups'">
+        <!-- EXERCISE INSTRUCTION -->
+        <iframe width="400" height="200" :src="currentVariant.url" v-if="currentVariant.url"></iframe>
+        <ul v-if="currentVariant.desc">
+            <li v-for="point of currentVariant.desc.split('.')" :key="point.id">{{ point }}</li>
+        </ul>
     </div>
 </template>
 
 <script>
-import TrainingNavbar from "../components/TrainingNavbar.vue";
-import TrainingSectionControl from "../components/TrainingSectionControl.vue";
-import TrainingSetControl from "../components/TrainingSetControl.vue";
-import TrainingVariantControl from "../components/TrainingVariantControl.vue";
-import TrainingReps from "../components/TrainingReps.vue";
-import TrainingInfo from "../components/TrainingInfo.vue";
 export default {
     name: "Training",
-    components: {
-        TrainingNavbar,
-        TrainingSectionControl,
-        TrainingSetControl,
-        TrainingVariantControl,
-        TrainingReps,
-        TrainingInfo
-    },
     computed: {
         // needed for skipping by section
         allSections() { return Object.keys(this.sections) },
@@ -390,27 +393,24 @@ export default {
 </script>
 
 <style scoped>
-#training {
-    text-align: center;
-    display: grid;
-    grid-template-areas: "nav" "section" "set" "variant" "reps" "info";
-}
-#nav {
-    grid-area: nav;
-}
 #section {
-    grid-area: section;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
 }
-#set {
-    grid-area: set;
+#completed {
+    display: inline;
 }
-#variant {
-    grid-area: variant;
+div {
+    text-align: center;
 }
-#reps {
-    grid-area: reps;
+button {
+    background-color: brown;
 }
-#info {
-    grid-area: info;
+.set {
+    display: inline-block;
+}
+iframe {
+    display: block;
+    margin: 0 auto;
 }
 </style>
