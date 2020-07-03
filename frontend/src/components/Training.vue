@@ -1,34 +1,38 @@
 <template>
     <div>
-        <!-- HEADER -->
+
         <!-- SPECIAL NAVBAR (SAVE PROGRESS BEFORE LEAVING) -->
         <button @click="goToPage('/')">Home</button>
         <button @click="goToPage('/summary')">Workout Summary</button>
+
         <!-- SECTION CONTROL -->
         <div id="section">
-            <button @click="skipCurrentSection('prev')">Previous Section</button>
-            <h1>{{ currentSection }}</h1>
-            <button @click="skipCurrentSection('next')">Next Section</button>
+            <button class="iblock" @click="skipCurrentSection('prev')">Previous Section</button>
+            <h1 class="iblock">{{ currentSection }}</h1>
+            <button class="iblock" @click="skipCurrentSection('next')">Next Section</button>
         </div>
+
         <!-- SET CONTROL -->
-        <hr>
-        <button @click="decrementSetNum" class="set">Previous set</button>
-        <p class="set"><span>{{ currentSectionSet }}</span> / <span>{{ currentMaxSets }}</span></p>
-        <button @click="incrementSetNum" class="set">Next set</button>
-        <hr>
+        <button @click="decrementSetNum" class="iblock">Previous set</button>
+        <p class="iblock"><span>{{ currentSectionSet }}</span> / <span>{{ currentMaxSets }}</span></p>
+        <button @click="incrementSetNum" class="iblock">Next set</button>
+
         <!-- EXERCISE NAME AND REPS -->
         <h2>{{ currentVariant.name }}</h2>
         <button @click="easierVariant" v-if="currentSection !== 'Warmups' && currentVariant.num > 0">Easier Variant</button>
         <button @click="tougherVariant" v-if="currentSection !== 'Warmups' && currentVariant.num < currentVariant.max">Tougher Variant</button>
         <p>Rep Goal: {{ currentRepGoal }}</p>
+
         <!-- USER REP INPUT -->
         <p id="completed" v-if="currentSection !== 'Warmups'">Completed: </p>
         <input @keypress.enter="incrementSetNum" v-model="repsDone" type="text" v-if="currentSection !== 'Warmups'">
+
         <!-- EXERCISE INSTRUCTION -->
         <iframe width="400" height="200" :src="currentVariant.url" v-if="currentVariant.url"></iframe>
         <ul v-if="currentVariant.desc">
             <li v-for="point of currentVariant.desc.split('.')" :key="point.id">{{ point }}</li>
         </ul>
+
     </div>
 </template>
 
@@ -65,7 +69,6 @@ export default {
             get() {
                 if (this.currentSection === 'Warmups') return { ...this.currentPath };
                 else {
-                    console.log('entered Variant: ' + this.enteredVariant);
                     // Precedence 1: User changes variant manually on current page
                     if (this.enteredVariant) return { ...this.$store.getters.progressions[`${this.currentPath}Progression`][this.enteredVariant], num: this.enteredVariant, max: this.$store.getters.progressions[`${this.currentPath}Progression`].length - 1 };
                     // Precedence 2: User revisits old set (so load the progression saved from that set)
@@ -76,8 +79,6 @@ export default {
                     }
                     // Precedence 3: Load the variant saved from cookies (load from local data identical to the cookies, though)
                     else variantInteger = this.variantPreferences[this.currentPath];
-                    console.log('variant integer: ' + variantInteger);
-                    console.log(this.$store.getters.progressions[`${this.currentPath}Progression`][variantInteger]);
                     // return progression info, integer value and max integer value of generic exercise progression
                     return { ...this.$store.getters.progressions[`${this.currentPath}Progression`][variantInteger], num: variantInteger, max: this.$store.getters.progressions[`${this.currentPath}Progression`].length - 1 };
                 }
@@ -186,7 +187,6 @@ export default {
         },
         // go to tougher specific exercise variant
         tougherVariant() {
-            console.log('tougherVariant entered: ' + this.enteredVariant);
             if (this.currentSection === 'Warmups') return;
             // check to make sure we aren't on toughest variant
             if (this.currentVariant.num < this.$store.getters.progressions[`${this.currentPath}Progression`].length - 1) {
@@ -393,10 +393,6 @@ export default {
 </script>
 
 <style scoped>
-#section {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-}
 #completed {
     display: inline;
 }
@@ -406,7 +402,7 @@ div {
 button {
     background-color: brown;
 }
-.set {
+.iblock {
     display: inline-block;
 }
 iframe {
