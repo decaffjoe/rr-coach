@@ -20,27 +20,29 @@ export default {
     methods: {
         // save and go to next set
         async incrementSetNum() {
-            await this.saveSet();
-            ++this.currentSectionSet;
-            // check if value forces next exercise
-            if (this.currentSectionSet > this.currentMaxSets) {
-                // if not last exercise, change set number to 1
-                if (!this.skipCurrentSection('next')) {
-                    this.currentSectionSet = 1;
-                } else this.currentSectionSet = this.currentMaxSets;
-            }
+            this.$emit('incrementSetNum');
+            // await this.saveSet();
+            // ++this.currentSectionSet;
+            // // check if value forces next exercise
+            // if (this.currentSectionSet > this.currentMaxSets) {
+            //     // if not last exercise, change set number to 1
+            //     if (!this.skipCurrentSection('next')) {
+            //         this.currentSectionSet = 1;
+            //     } else this.currentSectionSet = this.currentMaxSets;
+            // }
         },
         // save and go to previous set
         async decrementSetNum() {
-            await this.saveSet();
-            --this.currentSectionSet;
-            // check if value forces previous exercise
-            if (this.currentSectionSet < 1) {
-                // if not first exercise, change set number to max of prev
-                if (!this.skipCurrentSection('prev')) {
-                    this.currentSectionSet = this.currentMaxSets;
-                } else this.currentSectionSet = 1;
-            }
+            this.$emit('decrementSetNum');
+            // await this.saveSet();
+            // --this.currentSectionSet;
+            // // check if value forces previous exercise
+            // if (this.currentSectionSet < 1) {
+            //     // if not first exercise, change set number to max of prev
+            //     if (!this.skipCurrentSection('prev')) {
+            //         this.currentSectionSet = this.currentMaxSets;
+            //     } else this.currentSectionSet = 1;
+            // }
         },
     }
 }

@@ -12,11 +12,20 @@ export default {
     props: {
         currentVariant: {
             type: Object
+        },
+        currentSection: {
+            type: String
         }
+    },
+    methods: {
+        easierVariant() { this.$emit('easierVariant') },
+        tougherVariant() { this.$emit('tougherVariant') }
     }
 }
 </script>
 
 <style scoped>
-
+div>* {
+    display: inline-block;
+}
 </style>

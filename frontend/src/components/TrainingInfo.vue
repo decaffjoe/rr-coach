@@ -10,6 +10,11 @@
 <script>
 export default {
     name: "TrainingInfo",
+    props: {
+        currentVariant: {
+            type: Object
+        }
+    }
 }
 </script>
 

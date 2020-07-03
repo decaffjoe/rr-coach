@@ -1,17 +1,17 @@
 <template>
     <div id="training">
         <!-- Special navbar to save progress before navigating away -->
-        <TrainingNavbar id="nav" />
+        <TrainingNavbar id="nav" v-on:saveSet="saveSet" />
         <!-- User controls section of the workout e.g. 'Warmups' -->
-        <TrainingSectionControl id="section" :currentSection="currentSection" />
+        <TrainingSectionControl id="section" :currentSection="currentSection" v-on:skipCurrentSection="skipCurrentSection($event)" />
         <!-- User controls the current set -->
-        <TrainingSetControl id="set" :currentSectionSet="currentSectionSet" :currentMaxSets="currentMaxSets" />
+        <TrainingSetControl id="set" :currentSectionSet="currentSectionSet" :currentMaxSets="currentMaxSets" v-on:incrementSetNum="incrementSetNum" v-on:decrementSetNum="decrementSetNum" />
         <!-- User controls the specific exercise variant -->
-        <TrainingVariantControl id="variant" :currentVariant="currentVariant" />
+        <TrainingVariantControl id="variant" :currentVariant="currentVariant" :currentSection="currentSection" v-on:easierVariant="easierVariant" v-on:tougherVariant="tougherVariant" />
         <!-- User enters reps, rep goal is displayed -->
-        <TrainingReps />
+        <TrainingReps :repsDone="repsDone" :currentRepGoal="currentRepGoal" :currentSection="currentSection" v-on:updateRepsDone="updateRepsDone($event)" v-on:incrementSetNum="incrementSetNum" />
         <!-- Display video demo and helpful tips for the given exercise variant -->
-        <TrainingInfo />
+        <TrainingInfo :currentVariant="currentVariant" />
     </div>
 </template>
 
@@ -62,7 +62,6 @@ export default {
             get() {
                 if (this.currentSection === 'Warmups') return { ...this.currentPath };
                 else {
-                    console.log('entered Variant: ' + this.enteredVariant);
                     // Precedence 1: User changes variant manually on current page
                     if (this.enteredVariant) return { ...this.$store.getters.progressions[`${this.currentPath}Progression`][this.enteredVariant], num: this.enteredVariant, max: this.$store.getters.progressions[`${this.currentPath}Progression`].length - 1 };
                     // Precedence 2: User revisits old set (so load the progression saved from that set)
@@ -73,8 +72,6 @@ export default {
                     }
                     // Precedence 3: Load the variant saved from cookies (load from local data identical to the cookies, though)
                     else variantInteger = this.variantPreferences[this.currentPath];
-                    console.log('variant integer: ' + variantInteger);
-                    console.log(this.$store.getters.progressions[`${this.currentPath}Progression`][variantInteger]);
                     // return progression info, integer value and max integer value of generic exercise progression
                     return { ...this.$store.getters.progressions[`${this.currentPath}Progression`][variantInteger], num: variantInteger, max: this.$store.getters.progressions[`${this.currentPath}Progression`].length - 1 };
                 }
@@ -85,18 +82,14 @@ export default {
             }
         },
         // user reps
-        repsDone: {
-            get() {
-                // Precedence 1: User changes reps manually on current page
-                if (this.enteredReps) return this.enteredReps;
-                // Precedence 2: User revisits old set (so load reps saved from that set)
-                let session = JSON.parse(window.sessionStorage['workoutSummary']);
-                if (session[this.currentPath] && session[this.currentPath][this.specificExerciseSet - 1]) return session[this.currentPath][this.specificExerciseSet - 1]['reps'];
-                // Precedence 3: Default to empty (undefined reps performed)
-                else return undefined;
-            },
-            // for when user enters reps
-            set(value) { return this.enteredReps = value; }
+        repsDone() {
+            // Precedence 1: User changes reps manually on current page
+            if (this.enteredReps) return this.enteredReps;
+            // Precedence 2: User revisits old set (so load reps saved from that set)
+            let session = JSON.parse(window.sessionStorage['workoutSummary']);
+            if (session[this.currentPath] && session[this.currentPath][this.specificExerciseSet - 1]) return session[this.currentPath][this.specificExerciseSet - 1]['reps'];
+            // Precedence 3: Default to empty (undefined reps performed)
+            return undefined;
         },
         // return the 'actual' set e.g. pullup set 3/3 (instead of "pullup & squat" set 5/6)
         specificExerciseSet() {
@@ -125,6 +118,10 @@ export default {
         }
     },
     methods: {
+        // when input from TrainingReps emits event with user rep input
+        updateRepsDone(e) {
+            this.enteredReps = e;
+        },
         // save and go to next set
         async incrementSetNum() {
             await this.saveSet();
@@ -183,7 +180,6 @@ export default {
         },
         // go to tougher specific exercise variant
         tougherVariant() {
-            console.log('tougherVariant entered: ' + this.enteredVariant);
             if (this.currentSection === 'Warmups') return;
             // check to make sure we aren't on toughest variant
             if (this.currentVariant.num < this.$store.getters.progressions[`${this.currentPath}Progression`].length - 1) {
@@ -195,9 +191,8 @@ export default {
         },
         // save set data to sessionStorage and API
         async saveSet() {
-            // reps gotta be inputted first eh
+            console.log('saveSet()');
             if (this.repsDone) {
-
                 // SESSION STORAGE
                 // read workout summary from sessionStorage
                 let session = JSON.parse(window.sessionStorage['workoutSummary']);
