@@ -1,5 +1,4 @@
 INFRA:
-* Component-ize the views
 * Style the views
 * Error handling for all user inputs
 * Pre-load & cache iframes?

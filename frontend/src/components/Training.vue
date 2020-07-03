@@ -17,17 +17,17 @@
         <p class="iblock"><span>{{ currentSectionSet }}</span> / <span>{{ currentMaxSets }}</span></p>
         <button @click="incrementSetNum" class="iblock">Next set</button>
 
-        <!-- EXERCISE NAME AND REPS -->
+        <!-- EXERCISE VARIANT CONTROL -->
         <h2>{{ currentVariant.name }}</h2>
         <button @click="easierVariant" v-if="currentSection !== 'Warmups' && currentVariant.num > 0">Easier Variant</button>
         <button @click="tougherVariant" v-if="currentSection !== 'Warmups' && currentVariant.num < currentVariant.max">Tougher Variant</button>
-        <p>Rep Goal: {{ currentRepGoal }}</p>
 
         <!-- USER REP INPUT -->
+        <p>Rep Goal: {{ currentRepGoal }}</p>
         <p id="completed" v-if="currentSection !== 'Warmups'">Completed: </p>
         <input @keypress.enter="incrementSetNum" v-model="repsDone" type="text" v-if="currentSection !== 'Warmups'">
 
-        <!-- EXERCISE INSTRUCTION -->
+        <!-- EXERCISE INSTRUCTIONS -->
         <iframe width="400" height="200" :src="currentVariant.url" v-if="currentVariant.url"></iframe>
         <ul v-if="currentVariant.desc">
             <li v-for="point of currentVariant.desc.split('.')" :key="point.id">{{ point }}</li>
@@ -126,6 +126,16 @@ export default {
                     this.$cookies.set(`${this.currentPath}Variant`, value[this.currentPath], Infinity, null, null, null, "Strict");
                 }
             }, deep: true
+        },
+        currentSection: {
+            handler(value) {
+                window.sessionStorage['currentSection'] = value;
+            }
+        },
+        currentSectionSet: {
+            handler(value) {
+                window.sessionStorage['currentSectionSet'] = value;
+            }
         }
     },
     methods: {
@@ -260,6 +270,9 @@ export default {
     // get current or init new workout status/summary, workout_id and exercise variant values
     async created() {
         try {
+            // remember section and set (if refreshing during a workout)
+            if (window.sessionStorage['currentSection']) this.currentSection = window.sessionStorage['currentSection'];
+            if (window.sessionStorage['currentSectionSet']) this.currentSectionSet = window.sessionStorage['currentSectionSet'];
             // init sessionStorage if not active
             if (!window.sessionStorage['workoutSummary']) window.sessionStorage['workoutSummary'] = JSON.stringify({});
             // get a new workout_id (if user is logged in without existing workout_id)
