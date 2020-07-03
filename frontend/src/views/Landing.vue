@@ -7,7 +7,7 @@
             <li>View a full history of your training sessions</li>
             <li>See video demonstrations and form tips</li>
         </ul>
-        <router-link to="/train" id="train-link"><button>Train now!</button></router-link>
+        <button id="train-link" @click="goToTrain">Train now!</button>
         <a href="https://www.reddit.com/r/bodyweightfitness/wiki/kb/recommended_routine"><button>Full training guide</button></a>
         <a href="https://thefitness.wiki/improving-your-diet/"><button>Nutrition guide</button></a>
     </div>
@@ -18,7 +18,14 @@ import Navbar from "../components/Navbar.vue";
 export default {
     name: "Landing",
     components: { Navbar },
-    methods: { },
+    methods: {
+        goToTrain() {
+            // Always start at Warmups
+            if (window.sessionStorage['currentSection']) delete window.sessionStorage['currentSection'];
+            if (window.sessionStorage['currentSectionSet']) delete window.sessionStorage['currentSectionSet'];
+            this.$router.push('/train');
+        }
+    },
     data() {
         return { }
     }
@@ -34,6 +41,6 @@ h1 {
 }
 #train-link {
     display: block;
-    margin-bottom: 1.0em;
+    margin: 0 auto 1.0em;
 }
 </style>
