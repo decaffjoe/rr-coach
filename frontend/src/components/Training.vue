@@ -240,24 +240,32 @@ export default {
                 let url = `http://localhost:3000/exercise/${this.currentPath}Set`;
                 // assume logged out, or post failure
                 let dbSaveSuccess = false;
-                // TODO: PUT to db if updating set instead of creating
-                // if (set['hasPosted']) <-- we are updating and need to PUT
-                // POST to db if user is logged in and this is a new set
-                if (this.$cookies.isKey("workout_id") && !set['hasPosted']) {
+                if (this.$cookies.isKey("workout_id")) {
                     let body = {
                         reps: set['reps'],
-                        setNumber: set['setNumber'],
                         progression: set['progression'],
-                        workout_id: this.$cookies.get("workout_id")
                     };
-                    console.log(body);
+                    let method;
+                    // updating an existing set
+                    if (set['hasPosted']) {
+                        method = 'PUT';
+                        body['db_id'] = set['db_id'];
+                    } else {
+                        // posting a new set
+                        method = 'POST';
+                        body['workout_id'] = this.$cookies.get("workout_id");
+                        body['setNumber'] = set['setNumber'];
+                    }
+                    body = JSON.stringify(body);
                     let res = await fetch(url, {
-                        method: 'POST',
+                        method,
+                        body,
                         mode: 'cors',
                         headers: { "Content-Type": "application/json; charset=utf-8" },
-                        body: JSON.stringify(body)
                     });
                     if (res.status === 200) {
+                        // save for future PUT request if user updates
+                        if (method === 'POST') set['db_id'] = await res.json();
                         dbSaveSuccess = true;
                         set['hasPosted'] = true;
                     }

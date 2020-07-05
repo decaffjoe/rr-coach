@@ -4,8 +4,6 @@ INFRA:
 * Write docs for the frontend logic
 
 BUGS:
-* saveSet():
-    - PUT to db if a set is updated (reps and/or progression)
 * Need info for Warmups -> Support Hold | Easier Squat Progression | Easier Hinge Progression
 
 TEST:

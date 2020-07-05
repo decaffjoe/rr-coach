@@ -27,14 +27,31 @@ for (let [key, val] of Object.entries(allExercises)) {
     // Route name example '/pullupSet'
     router.post(`/${key.toLowerCase()}Set`, async function (req, res) {
         try {
-            await val.create(req.body, {
+            let set = await val.create(req.body, {
                 fields: ['workout_id', 'progression', 'reps', 'setNumber']
+            });
+            return res.status(200).json(set['id']);
+
+        } catch (error) {
+
+            return res.status(400).json('Bad POST request!');
+
+        }
+    });
+
+    // Update an existing set (progression, reps, workout_id, setNumber)
+    // Route name example '/pullupSet'
+    router.put(`/${key.toLowerCase()}Set`, async function (req, res) {
+        try {
+            await val.update(req.body, {
+                where: { id: req.body['db_id'] },
+                fields: ['progression', 'reps']
             });
             return res.status(200).json('Success');
 
         } catch (error) {
 
-            return res.status(400).json('Bad POST request!');
+            return res.status(400).json('Bad PUT request!');
 
         }
     });
