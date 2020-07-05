@@ -35,4 +35,22 @@ router.post('/', async function (req, res) {
 
 });
 
+// Update user nickname
+router.put('/', async function (req, res) {
+    try {
+
+        await User.update(req.body, {
+            where: { user_id: req.body['user_id'] },
+            fields: ['nickname'],
+        });
+        return res.status(200).json('Success');
+
+    } catch (error) {
+
+        return res.status(400).json('Bad POST request!');
+
+    }
+
+});
+
 module.exports = router;

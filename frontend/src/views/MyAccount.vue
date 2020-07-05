@@ -1,12 +1,17 @@
 <template>
   <section>
-      <Navbar />
+      <Navbar :logoutReq="logoutReq" :key="updated" />
       <p v-if="error">{{ errorMsg }}</p>
       <div v-if="!error">
-          <h1 v-if="nickname !== null && nickname !== 'null'">Hi, {{ nickname }}</h1>
+          <router-link class="iblock" to="/summary"><button>Go to my Training History</button></router-link>
+          <button class="iblock" @click="logout">Logout</button>
+          <br>
           <h1 id="yourID">Your id:</h1>
-          <input type="text" :value="id">
-          <router-link id="summary-link" to="/summary"><button>Go to my Training History</button></router-link>
+          <input type="text" id="idInput" :value="id">
+          <br>
+          <h2 class="iblock">Update nickname:</h2>
+          <input @keypress.enter="updateNickname" type="text" v-model="nickname">
+          <button @click="updateNickname">Save</button>
       </div>
   </section>
 </template>
@@ -19,14 +24,47 @@ export default {
     created() {
         if (!this.$cookies.isKey("user_id")) return this.error = true;
         if (this.$cookies.isKey("user_nickname")) this.nickname = this.$cookies.get("user_nickname");
+        // if user did not set a nickname (db stores 'null' as string)
+        if (this.nickname === 'null') this.nickname = null;
         this.id = this.$cookies.get("user_id");
+    },
+    methods: {
+        logout() {
+            // reset cookies
+            this.$cookies.remove("user_id");
+            this.$cookies.remove("user_nickname");
+            this.$cookies.remove("workout_id");
+            // logout of navbar
+            this.logoutReq = true;
+            // reset sessionStorage and go back to homepage
+            window.sessionStorage.clear();
+            this.$router.push('/');
+        },
+        async updateNickname() {
+            let url = "http://localhost:3000/user";
+            let res = await fetch(url, {
+                method: 'PUT',
+                mode: 'cors',
+                headers: { "Content-Type": "application/json; charset=utf-8" },
+                body: JSON.stringify({
+                    user_id: this.id,
+                    nickname: this.nickname
+                }),
+            });
+            if (res.status === 200) {
+                this.$cookies.set("user_nickname", this.nickname, Infinity, null, null, null, "Strict");
+                this.updated++;
+            }
+        }
     },
     data() {
         return {
             id: undefined,
             nickname: undefined,
+            logoutReq: false,
+            updated: 0,
             error: false,
-            errorMsg: 'uh ohhh',
+            errorMsg: 'Please login before trying to access your account!',
         }
     }
 }
@@ -36,14 +74,14 @@ export default {
 section {
     text-align: center;
 }
+.iblock {
+    display: inline-block;
+}
 #yourID {
     display: inline-block;
 }
-input {
+#idInput {
     width: 320px;
     padding: 0.2em 0.3em;
-}
-#summary-link {
-    display: block;
 }
 </style>

@@ -12,13 +12,11 @@ TEST:
 * Training Summary post to db (if not logged in)
 
 FEATURES:
-* "My Account" page, show id and number of workouts/workouts by date
-* Options to clear a current workout by set, section or total clear
-* Brief intro to training regimen, link to full reddit source
+* Brief intro to training regimen, req'd equipment, link to full reddit source
+* Add general form cues slide-out/dropdown to description section
+* Start new workout? prompt, if sessionStorage contains currentSection/Set && >1hr since workout creation
 * Training Summary Page:
     - Sort workouts by date
-    - Select today's workout by default
-    - Change the titles to reflect date chosen
     - Comparison tool between any two workouts
         - Latest session is standard by default (but is changeable)
         - Present graph of reps over time

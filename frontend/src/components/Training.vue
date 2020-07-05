@@ -3,7 +3,7 @@
 
         <!-- SPECIAL NAVBAR (SAVE PROGRESS BEFORE LEAVING) -->
         <button @click="goToPage('/')">Home</button>
-        <button @click="goToPage('/summary')">Your Workout Summary</button>
+        <button @click="goToPage('/summary')">Your Training Summary</button>
 
         <!-- SECTION CONTROL -->
         <div id="section">

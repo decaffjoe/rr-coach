@@ -2,11 +2,13 @@
     <div>
         <p v-if="!this.$cookies.isKey('user_id')">Want to save these stats for the future? Create an account or login using the button above.</p>
         <!-- SELECT TRAINING SESSION DATA TO DISPLAY -->
-        <p v-if="this.$cookies.isKey('user_id')">Workout from:</p>
-        <select v-model="selectedWorkoutId" v-if="this.$cookies.isKey('user_id')">
-            <option v-for="workout of workoutHistory" :key="workout.createdAt" :value="workout.workout_id">{{ new Date(workout.createdAt).toDateString() }}</option>
+        <select v-model="selectedWorkout" v-if="this.$cookies.isKey('user_id')">
+            <option :value="undefined">Today</option>
+            <option v-for="workout of workoutHistory" :key="workout.createdAt" :value="workout">{{ new Date(workout.createdAt).toDateString() }}</option>
         </select>
         <button @click="getWorkoutSummary" v-if="this.$cookies.isKey('user_id')">Get Summary</button>
+        <p v-show="!selectedWorkout">Today's workout</p>
+        <p v-if="selectedWorkout">{{  new Date(selectedWorkout.createdAt).toDateString() }}'s workout</p>
         <!-- SUMMARY -->
         <table>
             <div v-for="ex in Object.keys(summary)" :key="ex">
@@ -40,12 +42,16 @@ export default {
                 console.log(error);
             }
         }
+        // load today's workout by default
         if (window.sessionStorage['workoutSummary']) this.summary = JSON.parse(window.sessionStorage['workoutSummary']);
     },
     methods: {
         // name says it all
         async getWorkoutSummary() {
-            let url = `http://localhost:3000/exercise/allSummary?workout_id=${this.selectedWorkoutId}`;
+            // user asks for today's workout
+            if (!this.selectedWorkout) return this.summary = JSON.parse(window.sessionStorage['workoutSummary']);
+            // else, user wants historical workout
+            let url = `http://localhost:3000/exercise/allSummary?workout_id=${this.selectedWorkout.workout_id}`;
             try {
                 let res = await fetch(url);
                 if (res.status === 200) {
@@ -59,7 +65,7 @@ export default {
     },
     data() {
         return {
-            selectedWorkoutId: undefined,
+            selectedWorkout: undefined,
             workoutHistory: undefined,
             summary: {},
             progressions: this.$store.getters.progressions,
