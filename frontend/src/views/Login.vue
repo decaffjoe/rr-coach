@@ -5,15 +5,15 @@
         <p id="nickname">(Optional) nickname: </p>
         <input v-model="newUserNickname" type="text">
         <button @click="createUser" id="createID">Create id</button>
-        <p v-show="createError">{{ createError }}</p>
+        <p v-show="createError" class="error">{{ createError }}</p>
         <p>*No passwords, email, or anything else- so hold on to your id somewhere safe!</p>
-        <p id="yourID">Your ID:</p>
-        <input v-model="newUserId" type="text">
-        <router-link to="/train"><button>Got it, let's train</button></router-link>
+        <p id="yourID" :class="{ success: isSuccessful }">Your ID:</p>
+        <input v-model="newUserId" class="idField" :class="{ successInput: isSuccessful }" type="text">
+        <router-link to="/train"><button :class="{ success: isSuccessful }">Got it, let's train</button></router-link>
         <h2>Returning users please login here</h2>
-        <input @keypress.enter="logInUser" v-model="loginString" type="text">
+        <input @keypress.enter="logInUser" v-model="loginString" class="idField" type="text">
         <button @click="logInUser">Login</button>
-        <p v-show="loginError">{{ loginError }}</p>
+        <p v-show="loginError" class="error">{{ loginError }}</p>
         <p>If you just finished your workout, your stats will be saved automatically once you sign up or login</p>
         <p>Head over to "My Account" to see them</p>
     </div>
@@ -41,12 +41,13 @@ export default {
                     let nickname = await fetch(`http://localhost:3000/user?user_id=${this.loginString}`);
                     // save user_id & nickname as cookies
                     if (nickname.status === 200) {
+                        this.loginError = undefined;
                         nickname = await nickname.json();
                         this.makeCookies(this.loginString, nickname);
                         // redirect to home page
                         this.$router.push('/');
                     } else {
-                        this.loginError = "Uh oh, that didn't work";
+                        this.loginError = "Uh oh, that didn't work. Try copy & pasting directly.";
                     }
                 } else this.loginError = "Please enter an id";
                 // post existing workout data (if they worked out first)
@@ -56,8 +57,9 @@ export default {
             }
         },
         async createUser() {
-            if (this.newUserId) return this.createError = "You've already created an id!";
-            if (this.loginString) return this.createError = "It looks like you might be trying to login";
+            if (this.newUserId) return this.createError = "It looks like you've already created an id!";
+            if (this.loginString) return this.createError = "Trying to login? Please see the returning users field below.";
+            this.createError = undefined;
             try {
                 // create user in db
                 let res;
@@ -73,6 +75,7 @@ export default {
                 } else res = await fetch('http://localhost:3000/user', { method: 'POST', mode: 'cors', });
                 // create cookie in client with user info
                 if (res.status === 200) {
+                    this.isSuccessful = true;
                     this.newUserId = await res.json();
                     this.makeCookies(this.newUserId, this.newUserNickname);
                 }
@@ -138,6 +141,7 @@ export default {
             loginString: undefined,
             loginError: undefined,
             createError: undefined,
+            isSuccessful: undefined,
         }
     }
 }
@@ -152,5 +156,17 @@ div {
 }
 #yourID {
     display: inline-block;
+}
+.idField {
+    width: 320px;
+}
+.error {
+    color: red;
+}
+.success {
+    background-color: green;
+}
+.successInput {
+    background-color: green;
 }
 </style>

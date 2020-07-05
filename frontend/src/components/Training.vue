@@ -105,6 +105,7 @@ export default {
             // for when user enters reps
             set(value) {
                 let numValue = parseInt(value);
+                // check to make sure it's a number
                 if (value !== '' && isNaN(numValue)) this.error = 'Please enter a number';
                 else this.error = undefined;
                 return this.enteredReps = numValue;

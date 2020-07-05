@@ -1,6 +1,5 @@
 INFRA:
 * Style the views
-* Error handling for all user inputs
 * Pre-load & cache iframes?
 * Write docs for the frontend logic
 
