@@ -1,7 +1,7 @@
 <template>
     <div>
         <Navbar />
-        <h1>Training Summary</h1>
+        <h1>Workout Summary</h1>
         <Summary />
     </div>
 </template>
@@ -10,7 +10,7 @@
 import Navbar from "../components/Navbar.vue";
 import Summary from "../components/Summary.vue";
 export default {
-    name: "TrainingSummary",
+    name: "WorkoutSummary",
     components: { Navbar, Summary, },
 }
 </script>

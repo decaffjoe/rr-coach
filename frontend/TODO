@@ -15,6 +15,7 @@ TEST:
 * Training Summary post to db (if not logged in)
 
 FEATURES:
+* "My Account" page, show id and number of workouts/workouts by date
 * Options to clear a current workout by set, section or total clear
 * Brief intro to training regimen, link to full reddit source
 * Training Summary Page:

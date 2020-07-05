@@ -27,6 +27,9 @@
         <p id="completed" v-if="currentSection !== 'Warmups'">Completed: </p>
         <input @keypress.enter="incrementSetNum" v-model="repsDone" type="text" v-if="currentSection !== 'Warmups'">
 
+        <!-- ERROR ON INPUT HANDLING -->
+        <p v-show="error">{{ error }}</p>
+
         <!-- EXERCISE INSTRUCTIONS -->
         <iframe width="400" height="200" :src="currentVariant.url" v-if="currentVariant.url"></iframe>
         <ul v-if="currentVariant.desc">
@@ -100,7 +103,12 @@ export default {
                 else return undefined;
             },
             // for when user enters reps
-            set(value) { return this.enteredReps = value; }
+            set(value) {
+                let numValue = parseInt(value);
+                if (value !== '' && isNaN(numValue)) this.error = 'Please enter a number';
+                else this.error = undefined;
+                return this.enteredReps = numValue;
+            }
         },
         // return the 'actual' set e.g. pullup set 3/3 (instead of "pullup & squat" set 5/6)
         specificExerciseSet() {
@@ -235,7 +243,13 @@ export default {
                 // if (set['hasPosted']) <-- we are updating and need to PUT
                 // POST to db if user is logged in and this is a new set
                 if (this.$cookies.isKey("workout_id") && !set['hasPosted']) {
-                    let body = { ...set['reps'], ...set['setNumber'], ...set['progression'], workout_id: this.$cookies.get("workout_id") };
+                    let body = {
+                        reps: set['reps'],
+                        setNumber: set['setNumber'],
+                        progression: set['progression'],
+                        workout_id: this.$cookies.get("workout_id")
+                    };
+                    console.log(body);
                     let res = await fetch(url, {
                         method: 'POST',
                         mode: 'cors',
@@ -304,6 +318,8 @@ export default {
     },
     data() {
         return {
+            // error message for if user botches reps input
+            error: undefined,
             // reset after every "previous/next set" change
             enteredReps: undefined,
             // reset after every "previous/next set" change

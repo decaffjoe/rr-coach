@@ -3,7 +3,8 @@ import VueRouter from 'vue-router';
 import Landing from '../views/Landing.vue';
 import Login from '../views/Login.vue';
 import TrainNow from '../views/TrainNow.vue';
-import TrainingSummary from '../views/TrainingSummary.vue';
+import WorkoutSummary from '../views/WorkoutSummary.vue';
+import MyAccount from '../views/MyAccount.vue';
 
 // Load Vue Router
 Vue.use(VueRouter);
@@ -26,8 +27,13 @@ const routes = [
     },
     {
         path: '/summary',
-        name: 'TrainingSummary',
-        component: TrainingSummary
+        name: 'WorkoutSummary',
+        component: WorkoutSummary
+    },
+    {
+        path: '/account',
+        name: 'MyAccount',
+        component: MyAccount
     },
 ];
 

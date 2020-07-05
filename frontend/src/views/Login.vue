@@ -6,10 +6,10 @@
         <input v-model="newUserNickname" type="text">
         <button @click="createUser" id="createID">Create id</button>
         <p v-show="createError">{{ createError }}</p>
-        <p>*No passwords, email, or anything else- so hold on to this somewhere safe!</p>
+        <p>*No passwords, email, or anything else- so hold on to your id somewhere safe!</p>
         <p id="yourID">Your ID:</p>
         <input v-model="newUserId" type="text">
-        <router-link to="/pairs"><button>Got it, let's train</button></router-link>
+        <router-link to="/train"><button>Got it, let's train</button></router-link>
         <h2>Returning users please login here</h2>
         <input @keypress.enter="logInUser" v-model="loginString" type="text">
         <button @click="logInUser">Login</button>
@@ -83,6 +83,7 @@ export default {
         // post existing workout data (if they worked out first, then logged in/created account)
         async postExistingWorkout() {
             if (window.sessionStorage['workoutSummary']) {
+                console.log('step 1');
                 let session = JSON.parse(window.sessionStorage['workoutSummary']);
                 // if no pullups/squats/dips/hinges were done, assume empty/user didn't workout
                 if (!(session['pullup'] || session['squat'] || session['dip'] || session['hinge'])) return;
@@ -115,7 +116,7 @@ export default {
                                 headers: { "Content-Type": "application/json; charset=utf-8" },
                                 body: JSON.stringify({
                                     reps: set['reps'],
-                                    setNumber: set['adjSet'],
+                                    setNumber: set['setNumber'],
                                     progression: set['progression'],
                                     workout_id: this.$cookies.get("workout_id")
                                 })

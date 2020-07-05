@@ -3,10 +3,10 @@
         <p v-if="!this.$cookies.isKey('user_id')">Want to save these stats for the future? Create an account or login using the button above.</p>
         <!-- SELECT TRAINING SESSION DATA TO DISPLAY -->
         <p v-if="this.$cookies.isKey('user_id')">Workout from:</p>
-        <select v-model="oldWorkoutId" v-if="this.$cookies.isKey('user_id')">
+        <select v-model="selectedWorkoutId" v-if="this.$cookies.isKey('user_id')">
             <option v-for="workout of workoutHistory" :key="workout.createdAt" :value="workout.workout_id">{{ new Date(workout.createdAt).toDateString() }}</option>
         </select>
-        <button @click="getOldWorkoutSummary" v-if="this.$cookies.isKey('user_id')">Get Summary</button>
+        <button @click="getWorkoutSummary" v-if="this.$cookies.isKey('user_id')">Get Summary</button>
         <!-- SUMMARY -->
         <table>
             <div v-for="ex in Object.keys(summary)" :key="ex">
@@ -40,11 +40,12 @@ export default {
                 console.log(error);
             }
         }
+        if (window.sessionStorage['workoutHistory']) this.summary = JSON.parse(window.sessionStorage['workoutSummary']);
     },
     methods: {
         // name says it all
-        async getOldWorkoutSummary() {
-            let url = `http://localhost:3000/exercise/allSummary?workout_id=${this.oldWorkoutId}`;
+        async getWorkoutSummary() {
+            let url = `http://localhost:3000/exercise/allSummary?workout_id=${this.selectedWorkoutId}`;
             try {
                 let res = await fetch(url);
                 if (res.status === 200) {
@@ -58,9 +59,9 @@ export default {
     },
     data() {
         return {
-            oldWorkoutId: undefined,
+            selectedWorkoutId: undefined,
             workoutHistory: undefined,
-            summary: JSON.parse(window.sessionStorage['workoutSummary']),
+            summary: {},
             progressions: this.$store.getters.progressions,
         }
     }
