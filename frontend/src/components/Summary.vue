@@ -40,7 +40,7 @@ export default {
                 console.log(error);
             }
         }
-        if (window.sessionStorage['workoutHistory']) this.summary = JSON.parse(window.sessionStorage['workoutSummary']);
+        if (window.sessionStorage['workoutSummary']) this.summary = JSON.parse(window.sessionStorage['workoutSummary']);
     },
     methods: {
         // name says it all

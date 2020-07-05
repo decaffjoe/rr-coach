@@ -3,9 +3,9 @@
         <Navbar />
         <h1>Welcome to the r/bodyweight fitness Recommended Routine (RR) Training Tracker!</h1>
         <ul>
-            <li>Pick a progression for each exercise and keep track of your reps</li>
-            <li>View a full history of your training sessions</li>
-            <li>See video demonstrations and form tips</li>
+            <li>Track your reps</li>
+            <li>Built-in videos and tips to improve your form</li>
+            <li>Keep tabs on your progress with a full history of your training sessions</li>
         </ul>
         <button id="train-link" @click="goToTrain">Train now!</button>
         <a href="https://www.reddit.com/r/bodyweightfitness/wiki/kb/recommended_routine"><button>Full training guide</button></a>

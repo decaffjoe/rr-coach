@@ -1,7 +1,7 @@
 <template>
     <div>
         <Navbar />
-        <h1>Workout Summary</h1>
+        <h1>Your Workout Summary</h1>
         <Summary />
     </div>
 </template>

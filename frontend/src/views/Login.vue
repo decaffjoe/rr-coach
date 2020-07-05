@@ -1,6 +1,7 @@
 <template>
     <div>
         <router-link to="/"><button>Back to Home</button></router-link>
+        <p>If you just finished your workout, your stats will be saved automatically once you sign up or login!</p>
         <h1>New? All you need is an id</h1>
         <p id="nickname">(Optional) nickname: </p>
         <input v-model="newUserNickname" type="text">
@@ -9,13 +10,11 @@
         <p>*No passwords, email, or anything else- so hold on to your id somewhere safe!</p>
         <p id="yourID" :class="{ success: isSuccessful }">Your ID:</p>
         <input v-model="newUserId" class="idField" :class="{ successInput: isSuccessful }" type="text">
-        <router-link to="/train"><button :class="{ success: isSuccessful }">Got it, let's train</button></router-link>
+        <router-link to="/"><button :class="{ success: isSuccessful }">Got it</button></router-link>
         <h2>Returning users please login here</h2>
         <input @keypress.enter="logInUser" v-model="loginString" class="idField" type="text">
         <button @click="logInUser">Login</button>
         <p v-show="loginError" class="error">{{ loginError }}</p>
-        <p>If you just finished your workout, your stats will be saved automatically once you sign up or login</p>
-        <p>Head over to "My Account" to see them</p>
     </div>
 </template>
 
