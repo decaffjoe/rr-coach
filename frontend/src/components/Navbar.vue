@@ -1,8 +1,8 @@
 <template>
     <div>
-        <p v-if="loggedIn && user_nickname">Hi, {{ user_nickname }}</p>
-        <p v-else-if="loggedIn && user_id">Hi, {{ user_id.slice(0, 12) }}...</p>
         <router-link to="/" v-if="this.$route.name !== 'Landing'"><button>Home</button></router-link>
+        <p v-if="loggedIn && user_nickname">Hey there, {{ user_nickname }}</p>
+        <p v-else-if="loggedIn && user_id">Hi, {{ user_id.slice(0, 12) }}...</p>
         <button @click="goToLogin" v-if="!loggedIn">Create Account / Login</button>
         <button @click="goToAccount" v-if="loggedIn && this.$route.name !== 'MyAccount'">My Account</button>
         <router-link to="/train" v-if="this.$route.name === 'WorkoutSummary'"><button>Train Now</button></router-link>

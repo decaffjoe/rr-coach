@@ -3,8 +3,8 @@
         <p v-if="!this.$cookies.isKey('user_id')">Want to save these stats for the future? Create an account or login using the button above.</p>
         <!-- SELECT TRAINING SESSION DATA TO DISPLAY -->
         <select v-model="selectedWorkout" v-if="this.$cookies.isKey('user_id')">
-            <option :value="undefined">Today</option>
             <option v-for="workout of workoutHistory" :key="workout.createdAt" :value="workout">{{ new Date(workout.createdAt).toDateString() }}</option>
+            <option :value="undefined">Today</option>
         </select>
         <button @click="getWorkoutSummary" v-if="this.$cookies.isKey('user_id')">Get Summary</button>
         <p v-show="!selectedWorkout">Today's workout</p>

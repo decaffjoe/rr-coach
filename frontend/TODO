@@ -5,6 +5,9 @@ INFRA:
 
 BUGS:
 * Need info for Warmups -> Support Hold | Easier Squat Progression | Easier Hinge Progression
+* End workout detection -> send to workout summary
+* If workout_id exists but sessionStorage is empty, ask user to repopulate sessionStorage with that workout_id or start a new workout?
+    - (If user was in progress of workout but closed & re-opened tab, before workout_id cookie expired)
 
 TEST:
 * Like everything haha (write some unit/integration/etc... tests too)
@@ -12,11 +15,9 @@ TEST:
 * Training Summary post to db (if not logged in)
 
 FEATURES:
-* Brief intro to training regimen, req'd equipment, link to full reddit source
 * Add general form cues slide-out/dropdown to description section
-* Start new workout? prompt, if sessionStorage contains currentSection/Set && >1hr since workout creation
 * Training Summary Page:
-    - Sort workouts by date
+    - Reverse the default sort of workouts by date (we want most recent at top, oldest at bottom)
     - Comparison tool between any two workouts
         - Latest session is standard by default (but is changeable)
         - Present graph of reps over time

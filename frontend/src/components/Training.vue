@@ -309,9 +309,11 @@ export default {
                         user_id: this.$cookies.get("user_id")
                     })
                 });
-                res = await res.json();
-                //                                  expiry path domain secure sameSite
-                this.$cookies.set("workout_id", res, "12h", null, null, null, "Strict");
+                if (res.status === 200) {
+                    res = await res.json();
+                    //                                  expiry path domain secure sameSite
+                    this.$cookies.set("workout_id", res, "6h", null, null, null, "Strict");
+                }
             }
             // load variantPreferences from cookies, or default to easiest variant (progression 0)
             let varObj = {};
