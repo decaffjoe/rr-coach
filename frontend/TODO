@@ -5,7 +5,6 @@ INFRA:
 
 BUGS:
 * Need info for Warmups -> Support Hold | Easier Squat Progression | Easier Hinge Progression
-* End workout detection -> send to workout summary
 * If workout_id exists but sessionStorage is empty, ask user to repopulate sessionStorage with that workout_id or start a new workout?
     - (If user was in progress of workout but closed & re-opened tab, before workout_id cookie expired)
 

@@ -26,11 +26,13 @@
         <p>Rep Goal: {{ currentRepGoal }}</p>
         <p id="completed" v-if="currentSection !== 'Warmups'">Completed: </p>
         <input @keypress.enter="incrementSetNum" v-model="repsDone" type="text" v-if="currentSection !== 'Warmups'">
+        <button @click="goToPage('/summary')" v-if="endOfTraining">Finish workout</button>
 
         <!-- ERROR ON INPUT HANDLING -->
         <p v-show="error">{{ error }}</p>
 
         <!-- EXERCISE INSTRUCTIONS -->
+        <p>Rest 90 seconds to 3 minutes after each set</p>
         <iframe width="400" height="200" :src="currentVariant.url" v-if="currentVariant.url"></iframe>
         <ul v-if="currentVariant.desc">
             <li v-for="point of currentVariant.desc.split('.')" :key="point.id">{{ point }}</li>
@@ -43,6 +45,8 @@
 export default {
     name: "Training",
     computed: {
+        // for the 'Finish workout' button @ last set of 'Core'
+        endOfTraining() { if(this.currentSection === 'Core' && this.currentSectionSet === 9) return true; return false; },
         // needed for skipping by section
         allSections() { return Object.keys(this.sections) },
         // keep set control in bounds

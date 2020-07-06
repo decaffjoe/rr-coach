@@ -4,7 +4,6 @@
       <p v-if="error">{{ errorMsg }}</p>
       <div v-if="!error">
           <router-link class="iblock" to="/summary"><button>Go to my Training History</button></router-link>
-          <button class="iblock" @click="logout">Logout</button>
           <br>
           <h1 id="yourID">Your id:</h1>
           <input type="text" id="idInput" :value="id">
@@ -12,6 +11,7 @@
           <h2 class="iblock">Update nickname:</h2>
           <input @keypress.enter="updateNickname" type="text" v-model="nickname">
           <button @click="updateNickname">Save</button>
+          <button class="block" @click="logout">Logout</button>
       </div>
   </section>
 </template>
@@ -76,6 +76,10 @@ section {
 }
 .iblock {
     display: inline-block;
+}
+.block {
+    display: block;
+    margin: 0 auto;
 }
 #yourID {
     display: inline-block;
