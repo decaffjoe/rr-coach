@@ -4,8 +4,6 @@ INFRA:
 * Write docs for the frontend logic
 
 BUGS:
-* If workout_id exists but sessionStorage is empty, ask user to repopulate sessionStorage with that workout_id or start a new workout?
-    - (If user was in progress of workout but closed & re-opened tab, before workout_id cookie expired)
 
 TEST:
 * Like everything haha (write some unit/integration/etc... tests too)
