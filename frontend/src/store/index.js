@@ -204,12 +204,51 @@ const state = {
             desc: "Keep your butt tucked"
         },
     ],
+    pullupForm: [
+        "Body slightly hollow with straight legs throughout the whole exercise. Don't cross your legs.",
+        "If you cannot get straight legs, it's preferable to keep the feet in front of the body rather than behind.",
+        "Arms straight at the bottom. Don't think about anything else, just straight arms. The rest will happen automatically.",
+        "Strive for chest to bar at the top. For this the forearms have to deviate from vertical, which may be a bit hard on the elbows, so build up to it slowly.",
+        "Keep the neck in a neutral position: avoid craning it to get your chin over the bar.",
+        "It's natural for your legs to come forward: this keeps your center of mass under the bar. Just make sure you're not violently swinging them upwards."
+    ],
+    squatForm: [
+        "Stand up straight at the top",
+        "Go as low as you can, preferably until the hips are below the knees",
+        "Dig your big toe and heel into the ground",
+        "Keep your knee in-line with your toes",
+        "Don't let the knees come inward on either the descend or the ascend; think about pushing the knees out"
+    ],
+    dipForm: [
+        "Straight or slightly hollow body. No bending at the hips!",
+        "Lock out the arms and depress the shoulder blades at the top",
+        "Go as far down as you can",
+        "Elbows in"
+    ],
+    hingeForm: [],
+    rowForm: [
+        "Straight body",
+        "Elbows in",
+        "Arms straight at the bottom",
+        "Rings/bar to chest and shoulder blades fully retracted (pinched together) at the top",
+        "Don't let your shoulders shrug up"
+    ],
+    pushupForm: [
+        "Body in a straight line from head to toe: don't let the hips sag!",
+        "Lock out the arms and protract the shoulderblades at the top",
+        "Go down until chest nearly touches the ground",
+        "Keep the elbows in, don't let them flare out",
+        "Don't shrug up your shoulders to your ears, focus on depressing the shoulderblades"
+    ],
+    antiextensionForm: [],
+    antirotationForm: [],
+    extensionForm: [],
 };
 
 // // update components with ui state
 // // using local computed arrow funcs for now...
 const getters = {
-   newUserId: state => state.newUserId,
+    newUserId: state => state.newUserId,
     progressions: state => {
         return {
             'pullupProgression': state.pullupProgression,
@@ -223,7 +262,20 @@ const getters = {
             'extensionProgression': state.extensionProgression,
         }
 
-   },
+    },
+    generalFormCues: state => {
+        return {
+            'pullupForm': state.pullupForm,
+            'squatForm': state.squatForm,
+            'dipForm': state.dipForm,
+            'hingeForm': state.hingeForm,
+            'rowForm': state.rowForm,
+            'pushupForm': state.pushupForm,
+            'antiextensionForm': state.antiextensionForm,
+            'antirotationForm': state.antirotationForm,
+            'extensionForm': state.extensionForm,
+        }
+    }
 };
 
 // // get/modify backend state

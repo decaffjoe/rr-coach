@@ -37,6 +37,10 @@
         <ul v-if="currentVariant.desc">
             <li v-for="point of currentVariant.desc.split('.')" :key="point.id">{{ point }}</li>
         </ul>
+        <p>General Form Cues</p>
+        <ul v-if="currentSection !== 'Warmups'">
+            <li v-for="cue of currentFormCues" :key="cue.id">{{ cue }}</li>
+        </ul>
 
     </div>
 </template>
@@ -45,6 +49,12 @@
 export default {
     name: "Training",
     computed: {
+        currentFormCues() {
+            if(this.currentSection !== 'Warmups')  {
+                return this.$store.getters.generalFormCues[`${this.currentPath}Form`];
+            }
+            return [];
+        },
         // for the 'Finish workout' button @ last set of 'Core'
         endOfTraining() { if(this.currentSection === 'Core' && this.currentSectionSet === 9) return true; return false; },
         // needed for skipping by section
@@ -398,13 +408,13 @@ export default {
                         {
                             name: "Easier Squat Progression",
                             url: "",
-                            desc: "Add these after you reach Bulgarian Split Squats",
+                            desc: "Add these after you reach Bulgarian Split Squats.Choices: Assisted Squat, Squat, Split Squat",
                             reps: "10"
                         },
                         {
                             name: "Easier Hinge Progression",
                             url: "",
-                            desc: "Add these after you reach Banded Nordic Curls",
+                            desc: "Add these after you reach Banded Nordic Curls.Choices: Romanian Deadlift, Single Legged Deadlift, Banded Nordic Curl Negatives",
                             reps: "10"
                         },
                     ],

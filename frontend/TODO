@@ -4,7 +4,6 @@ INFRA:
 * Write docs for the frontend logic
 
 BUGS:
-* Need info for Warmups -> Support Hold | Easier Squat Progression | Easier Hinge Progression
 * If workout_id exists but sessionStorage is empty, ask user to repopulate sessionStorage with that workout_id or start a new workout?
     - (If user was in progress of workout but closed & re-opened tab, before workout_id cookie expired)
 
@@ -14,7 +13,6 @@ TEST:
 * Training Summary post to db (if not logged in)
 
 FEATURES:
-* Add general form cues slide-out/dropdown to description section
 * Training Summary Page:
     - Reverse the default sort of workouts by date (we want most recent at top, oldest at bottom)
     - Comparison tool between any two workouts
