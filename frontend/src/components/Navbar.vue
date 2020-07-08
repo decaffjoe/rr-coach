@@ -1,15 +1,16 @@
 <template>
     <div>
-        <router-link to="/" v-if="this.$route.name !== 'Landing'"><button>Home</button></router-link>
+        <router-link to="/" v-if="this.$route.name !== 'Landing'"><BaseButton :text="'Home'" /></router-link>
         <p v-if="loggedIn && user_nickname">Hey there, {{ user_nickname }}</p>
         <p v-else-if="loggedIn && user_id">Hi, {{ user_id.slice(0, 12) }}...</p>
-        <button @click="goToLogin" v-if="!loggedIn">Create Account / Login</button>
-        <button @click="goToAccount" v-if="loggedIn && this.$route.name !== 'MyAccount'">My Account</button>
-        <router-link to="/train" v-if="this.$route.name === 'WorkoutSummary'"><button>Train Now</button></router-link>
+        <BaseButton v-on:click="goToLogin" v-if="!loggedIn" :text="'Create Account / Login'" />
+        <BaseButton v-on:click="goToAccount" v-if="loggedIn && this.$route.name !== 'MyAccount'" :text="'My Account'" />
+        <router-link to="/train" v-if="this.$route.name === 'WorkoutSummary'"><BaseButton :text="'Train Now'" /></router-link>
     </div>
 </template>
 
 <script>
+import BaseButton from "../components/BaseButton.vue";
 export default {
     name: "Navbar",
     props: {
@@ -17,6 +18,7 @@ export default {
             type: Boolean
         }
     },
+    components: { BaseButton, },
     created() {
         // if user just logged out
         if (this.logoutReq) {
