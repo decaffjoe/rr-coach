@@ -1,40 +1,38 @@
 <template>
     <div id="main">
         <Navbar />
-        <div class="container">
-            <section id="welcome">
-                <h1>Welcome to the <a href="https://www.reddit.com/r/bodyweightfitness/">r/bodyweightfitness</a> Recommended Routine (RR) Training Tracker (TT)</h1>
+        <section id="welcome">
+            <h1>Welcome to the <a href="https://www.reddit.com/r/bodyweightfitness/">r/bodyweightfitness</a> Recommended Routine (RR) Training Tracker (TT)</h1>
+            <ul>
+                <li>Track your reps</li>
+                <li>Built-in videos and tips to improve your form</li>
+                <li>Keep tabs on your progress with a full history of your training sessions</li>
+            </ul>
+            <BaseButton id="train-link" v-on:click="goToTrain" :text="'Train now!'" :style="trainNowStyles" />
+        </section>
+        <div class="grid">
+            <section>
+                <h2>How does it work?</h2>
                 <ul>
-                    <li>Track your reps</li>
-                    <li>Built-in videos and tips to improve your form</li>
-                    <li>Keep tabs on your progress with a full history of your training sessions</li>
+                    <li>Warmup</li>
+                    <li>6 strength exercises, performed in pairs (set of pullups, set of squats, set of pullups...)</li>
+                    <li>3 core strength exercises performed, in a triplet</li>
+                    <li>90 seconds to 3 minutes of rest between every set</li>
                 </ul>
-                <BaseButton id="train-link" v-on:click="goToTrain" :text="'Train now!'" />
+                <div id="reddit-links">
+                    <a href="https://www.reddit.com/r/bodyweightfitness/wiki/kb/recommended_routine"><BaseButton :text="'Full training guide'" :style="redditStyles" /></a>
+                    <a href="https://thefitness.wiki/improving-your-diet/"><BaseButton :text="'Nutrition guide'" :style="redditStyles" /></a>
+                </div>
             </section>
-            <div class="grid">
-                <section>
-                    <h2>How does it work?</h2>
-                    <ul>
-                        <li>Warmup</li>
-                        <li>6 strength exercises, performed in pairs (set of pullups, set of squats, set of pullups...)</li>
-                        <li>3 core strength exercises performed, in a triplet</li>
-                        <li>90 seconds to 3 minutes of rest between every set</li>
-                    </ul>
-                    <div id="reddit-links">
-                        <a href="https://www.reddit.com/r/bodyweightfitness/wiki/kb/recommended_routine"><BaseButton :text="'Full training guide'" /></a>
-                        <a href="https://thefitness.wiki/improving-your-diet/"><BaseButton :text="'Nutrition guide'" /></a>
-                    </div>
-                </section>
-                <section>
-                    <h2>What do I need?</h2>
-                    <ul>
-                        <li>Time: ~1 hour, 3x per week</li>
-                        <li>A place to do <a href="https://www.youtube.com/watch?v=rloXYB8M3vU&feature=youtu.be">Rows</a> (Low Bar, or Gymnastics Rings, a Sturdy Table)</li>
-                        <li>A place to do pull ups, if you are at the point in the program where you add pull-ups (monkey bars, Pull-up bar, rings, etc)</li>
-                        <li>Recommended: <a href="https://antranik.org/wp-content/uploads/2014/01/antranik-holding-support-hold-on-parallel-bars.jpg">Parallel Bars</a> (corner of a kitchen counter, two sturdy chairs, or anything like that)</li>
-                    </ul>
-                </section>
-            </div>
+            <section>
+                <h2>What do I need?</h2>
+                <ul>
+                    <li>Time: ~1 hour, 3x per week</li>
+                    <li>A place to do <a href="https://www.youtube.com/watch?v=rloXYB8M3vU&feature=youtu.be">Rows</a> (Low Bar, or Gymnastics Rings, a Sturdy Table)</li>
+                    <li>A place to do pullups, if you are at the point in the program where you add pullups (monkey bars, pullup bar, rings, etc)</li>
+                    <li>Recommended: <a href="https://antranik.org/wp-content/uploads/2014/01/antranik-holding-support-hold-on-parallel-bars.jpg">Parallel Bars</a> (corner of a kitchen counter, two sturdy chairs, or anything like that)</li>
+                </ul>
+            </section>
         </div>
     </div>
 </template>
@@ -54,7 +52,18 @@ export default {
         }
     },
     data() {
-        return { }
+        return {
+            trainNowStyles: {
+                'font-size': '1.5rem',
+                'border-radius': '0',
+                'color': 'white',
+                'background-color': 'var(--main)',
+            },
+            redditStyles: {
+                'color': 'white',
+                'border-color': 'white',
+            },
+        }
     }
 };
 </script>
@@ -65,14 +74,20 @@ export default {
     min-height: 100vh;
 }
 #welcome {
-    margin: 7vh auto 2vh;
-    border: 5px dotted gray;
-    border-radius: 80px;
-    padding: 1em 3em;
+    margin: 7vh auto 0;
+    padding: 0 15vw;
+}
+#welcome ul {
+    padding-left: 20vw;
+}
+section ul {
+    padding-left: 7vw;
+    text-align: left;
 }
 li {
     list-style: none;
     margin: 1em 0;
+    margin-left: -50px;
 }
 li::before {
     --size: 20px;
@@ -97,7 +112,9 @@ h1 a:hover {
 .grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    padding: 2vh 0;
+    background-color: var(--main);
+    color: white;
+    padding: 0 20vw 2vh;
 }
 .grid section:first-of-type {
     margin-right: 1.0em;
@@ -110,6 +127,6 @@ h1 a:hover {
 }
 #train-link {
     display: block;
-    margin: 0 auto 1.0em;
+    margin: 1.5em auto;
 }
 </style>
