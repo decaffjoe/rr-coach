@@ -1,26 +1,28 @@
 <template>
     <div>
-        <router-link to="/"><button>Back to Home</button></router-link>
+        <router-link to="/"><BaseButton :text="'Back to Home'"/></router-link>
         <p>If you just finished your workout, your stats will be saved automatically once you sign up or login!</p>
         <h1>New? All you need is an id</h1>
         <p id="nickname">(Optional) nickname: </p>
         <input v-model="newUserNickname" type="text">
-        <button @click="createUser" id="createID">Create id</button>
+        <BaseButton @click="createUser" id="createID" :text="'Create id'" />
         <p v-show="createError" class="error">{{ createError }}</p>
         <p>*No passwords, email, or anything else- so hold on to your id somewhere safe!</p>
         <p id="yourID" :class="{ success: isSuccessful }">Your ID:</p>
         <input v-model="newUserId" class="idField" :class="{ successInput: isSuccessful }" type="text">
-        <router-link to="/"><button :class="{ success: isSuccessful }">Got it</button></router-link>
+        <router-link to="/"><BaseButton :class="{ success: isSuccessful }" :text="'Got it'" /></router-link>
         <h2>Returning users please login here</h2>
         <input @keypress.enter="logInUser" v-model="loginString" class="idField" type="text">
-        <button @click="logInUser">Login</button>
+        <BaseButton @click="logInUser" :text="'Login'" />
         <p v-show="loginError" class="error">{{ loginError }}</p>
     </div>
 </template>
 
 <script>
+import BaseButton from "../components/BaseButton.vue";
 export default {
     name: "Login",
+    components: { BaseButton },
     methods: {
         makeCookies(user_id, user_nickname="") {
             //                                    expiry   path  domain secure sameSite
@@ -149,6 +151,14 @@ export default {
 <style scoped>
 div {
     text-align: center;
+}
+input {
+    border-radius: 50px;
+    border: 2px solid black;
+    padding: 0.3em 0.6em;
+    font-size: 1.2em;
+    outline: none;
+    margin: 0 0.3em;
 }
 #nickname {
     display: inline-block;

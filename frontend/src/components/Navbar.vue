@@ -57,7 +57,6 @@ export default {
 <style scoped>
 div {
     padding-left: 60vw;
-    /* background-color: #2f4858; */
 }
 p {
     display: inline-block;
