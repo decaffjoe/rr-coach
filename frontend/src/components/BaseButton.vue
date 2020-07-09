@@ -20,16 +20,18 @@ export default {
 
 <style scoped>
 button {
-    color: #eee;
     font-weight: bold;
-    background-color: #fb525d;
-    border: none;
-    border-radius: 10px;
-    padding: 0.3em 1em 0.4em;
+    font-size: 0.9em;
+    color: var(--main);
+    background-color: transparent;
+    border: 3px solid var(--main);
+    border-radius: 80px;
+    padding: 0.5em 1.2em;
     transition: 0.2s;
     outline: none;
 }
 button:hover {
     color: white;
+    background-color: var(--main);
 }
 </style>

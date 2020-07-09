@@ -1,8 +1,8 @@
 <template>
     <div>
-        <router-link to="/" v-if="this.$route.name !== 'Landing'"><BaseButton :text="'Home'" /></router-link>
         <p v-if="loggedIn && user_nickname">Hey there, {{ user_nickname }}</p>
         <p v-else-if="loggedIn && user_id">Hi, {{ user_id.slice(0, 12) }}...</p>
+        <router-link to="/" v-if="this.$route.name !== 'Landing'"><BaseButton :text="'Home'" /></router-link>
         <BaseButton v-on:click="goToLogin" v-if="!loggedIn" :text="'Create Account / Login'" />
         <BaseButton v-on:click="goToAccount" v-if="loggedIn && this.$route.name !== 'MyAccount'" :text="'My Account'" />
         <router-link to="/train" v-if="this.$route.name === 'WorkoutSummary'"><BaseButton :text="'Train Now'" /></router-link>
@@ -55,7 +55,12 @@ export default {
 </script>
 
 <style scoped>
+div {
+    padding-left: 60vw;
+    /* background-color: #2f4858; */
+}
 p {
     display: inline-block;
+    margin-right: 0.5em;
 }
 </style>
