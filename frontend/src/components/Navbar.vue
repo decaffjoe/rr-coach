@@ -1,11 +1,11 @@
 <template>
-    <div>
+    <div id="top">
         <p v-if="loggedIn && user_nickname">Hey there, {{ user_nickname }}</p>
         <p v-else-if="loggedIn && user_id">Hi, {{ user_id.slice(0, 12) }}...</p>
-        <router-link to="/" v-if="this.$route.name !== 'Landing'"><BaseButton :text="'Home'" /></router-link>
-        <BaseButton v-on:click="goToLogin" v-if="!loggedIn" :text="'Create Account / Login'" />
-        <BaseButton v-on:click="goToAccount" v-if="loggedIn && this.$route.name !== 'MyAccount'" :text="'My Account'" />
-        <router-link to="/train" v-if="this.$route.name === 'WorkoutSummary'"><BaseButton :text="'Train Now'" /></router-link>
+        <router-link to="/" v-if="this.$route.name !== 'Landing'"><BaseButton class="btn" :text="'Home'" /></router-link>
+        <BaseButton class="btn" v-on:click="goToLogin" v-if="!loggedIn && this.$route.name !== 'Login'" :text="'Create Account / Login'" />
+        <BaseButton class="btn" v-on:click="goToAccount" v-if="loggedIn && this.$route.name !== 'MyAccount'" :text="'My Account'" />
+        <router-link to="/train" v-if="this.$route.name === 'WorkoutSummary'"><BaseButton class="btn" :text="'Train Now'" /></router-link>
     </div>
 </template>
 
@@ -55,11 +55,23 @@ export default {
 </script>
 
 <style scoped>
-div {
-    padding-left: 60vw;
+#top {
+    padding: 0.5vh 0 0.5vh 50vw;
+    background-color: bisque;
+    color: black;
+}
+.btn {
+    background-color: black;
+    border: 3px solid black;
+    color: white;
+    margin: 0 0.3em;
+}
+.btn:hover {
+    color: white;
+    background-color: black;
 }
 p {
-    display: inline-block;
     margin-right: 0.5em;
+    display: inline;
 }
 </style>

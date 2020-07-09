@@ -120,23 +120,15 @@ h1 a:hover {
 }
 #reddit-links a>* {
     margin: 0.5em 0.6em;
-    color: white;
-    border: 3px solid white;
-}
-#reddit-links a>*:hover {
     color: var(--main);
     background-color: white;
+    border: 3px solid white;
 }
 #train-link {
     display: block;
     margin: 1.5em auto;
     font-size: 1.5rem;
     border-radius: 0;
-    color: white;
-    background-color: var(--main);
-}
-#train-link:hover {
-    padding: 0.5em 0.9em 0.5em 1.5em;
 }
 a {
     color: white;

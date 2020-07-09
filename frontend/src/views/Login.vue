@@ -1,6 +1,7 @@
 <template>
     <div>
-        <router-link id="back2home" to="/"><BaseButton  :text="'Back to Home'"/></router-link>
+        <Navbar />
+        <p id="justFinished">If you just finished your workout, your stats will be saved automatically once you sign up or login!</p>
         <h1>New? All you need is an id</h1>
         <p id="nickname">(Optional) nickname: </p>
         <input v-model="newUserNickname" type="text">
@@ -16,16 +17,16 @@
             <input @keypress.enter="logInUser" v-model="loginString" class="idField" type="text">
             <BaseButton v-on:click="logInUser" id="loginBtn" :text="'Login'" />
             <p v-show="loginError" class="error">{{ loginError }}</p>
-            <p>If you just finished your workout, your stats will be saved automatically once you sign up or login!</p>
         </section>
     </div>
 </template>
 
 <script>
+import Navbar from "../components/Navbar.vue";
 import BaseButton from "../components/BaseButton.vue";
 export default {
     name: "Login",
-    components: { BaseButton },
+    components: { Navbar, BaseButton },
     methods: {
         makeCookies(user_id, user_nickname="") {
             //                                    expiry   path  domain secure sameSite
@@ -152,11 +153,14 @@ export default {
 </script>
 
 <style scoped>
-#back2home {
-    padding-left: 60vw;
-}
 div {
     text-align: center;
+}
+#justFinished {
+    color: white;
+    background-color: darkolivegreen;
+    margin: 0;
+    padding: 0.7vh 0;
 }
 h1,h2 {
     margin-top: 2em;
@@ -181,7 +185,7 @@ input {
     color: white;
 }
 .idField {
-    width: 320px;
+    width: 400px;
 }
 .error {
     color: red;
@@ -198,11 +202,8 @@ h2 {
     border-color: var(--accent);
 }
 #loginBtn {
-    color: white;
-    border: 3px solid white;
-}
-#loginBtn:hover {
-    background-color: white;
     color: var(--main);
+    background-color: white;
+    border: 3px solid white;
 }
 </style>

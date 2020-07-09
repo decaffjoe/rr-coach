@@ -28,16 +28,12 @@ export default {
 button {
     font-weight: bold;
     font-size: 0.9em;
-    color: var(--main);
-    background-color: transparent;
+    color: white;
+    background-color: var(--main);
     border: 3px solid var(--main);
     border-radius: 80px;
     padding: 0.5em 1.2em;
     transition: 0.2s;
     outline: none;
-}
-button:hover {
-    color: white;
-    background-color: var(--main);
 }
 </style>
