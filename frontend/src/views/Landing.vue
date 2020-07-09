@@ -8,7 +8,7 @@
                 <li>Built-in videos and tips to improve your form</li>
                 <li>Keep tabs on your progress with a full history of your training sessions</li>
             </ul>
-            <BaseButton id="train-link" v-on:click="goToTrain" :text="'Train now!'" :style="trainNowStyles" />
+            <BaseButton id="train-link" v-on:click="goToTrain" :text="'Train now!'" />
         </section>
         <div class="grid">
             <section>
@@ -20,8 +20,8 @@
                     <li>90 seconds to 3 minutes of rest between every set</li>
                 </ul>
                 <div id="reddit-links">
-                    <a href="https://www.reddit.com/r/bodyweightfitness/wiki/kb/recommended_routine"><BaseButton :text="'Full training guide'" :style="redditStyles" /></a>
-                    <a href="https://thefitness.wiki/improving-your-diet/"><BaseButton :text="'Nutrition guide'" :style="redditStyles" /></a>
+                    <a href="https://www.reddit.com/r/bodyweightfitness/wiki/kb/recommended_routine"><BaseButton :text="'Full training guide'" /></a>
+                    <a href="https://thefitness.wiki/improving-your-diet/"><BaseButton :text="'Nutrition guide'" /></a>
                 </div>
             </section>
             <section>
@@ -58,10 +58,6 @@ export default {
                 'border-radius': '0',
                 'color': 'white',
                 'background-color': 'var(--main)',
-            },
-            redditStyles: {
-                'color': 'white',
-                'border-color': 'white',
             },
         }
     }
@@ -124,9 +120,25 @@ h1 a:hover {
 }
 #reddit-links a>* {
     margin: 0.5em 0.6em;
+    color: white;
+    border: 3px solid white;
+}
+#reddit-links a>*:hover {
+    color: var(--main);
+    background-color: white;
 }
 #train-link {
     display: block;
     margin: 1.5em auto;
+    font-size: 1.5rem;
+    border-radius: 0;
+    color: white;
+    background-color: var(--main);
+}
+#train-link:hover {
+    padding: 0.5em 0.9em 0.5em 1.5em;
+}
+a {
+    color: white;
 }
 </style>

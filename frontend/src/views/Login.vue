@@ -1,20 +1,23 @@
 <template>
     <div>
-        <router-link to="/"><BaseButton :text="'Back to Home'"/></router-link>
-        <p>If you just finished your workout, your stats will be saved automatically once you sign up or login!</p>
+        <router-link id="back2home" to="/"><BaseButton  :text="'Back to Home'"/></router-link>
         <h1>New? All you need is an id</h1>
         <p id="nickname">(Optional) nickname: </p>
         <input v-model="newUserNickname" type="text">
         <BaseButton @click="createUser" id="createID" :text="'Create id'" />
         <p v-show="createError" class="error">{{ createError }}</p>
+        <br>
+        <p id="yourID">Your ID:</p>
+        <input v-model="newUserId" class="idField" type="text">
+        <router-link to="/"><BaseButton v-show="isSuccessful" :text="'Got it'" /></router-link>
         <p>*No passwords, email, or anything else- so hold on to your id somewhere safe!</p>
-        <p id="yourID" :class="{ success: isSuccessful }">Your ID:</p>
-        <input v-model="newUserId" class="idField" :class="{ successInput: isSuccessful }" type="text">
-        <router-link to="/"><BaseButton :class="{ success: isSuccessful }" :text="'Got it'" /></router-link>
-        <h2>Returning users please login here</h2>
-        <input @keypress.enter="logInUser" v-model="loginString" class="idField" type="text">
-        <BaseButton @click="logInUser" :text="'Login'" />
-        <p v-show="loginError" class="error">{{ loginError }}</p>
+        <section id="login">
+            <h2>Returning users please login here</h2>
+            <input @keypress.enter="logInUser" v-model="loginString" class="idField" type="text">
+            <BaseButton v-on:click="logInUser" id="loginBtn" :text="'Login'" />
+            <p v-show="loginError" class="error">{{ loginError }}</p>
+            <p>If you just finished your workout, your stats will be saved automatically once you sign up or login!</p>
+        </section>
     </div>
 </template>
 
@@ -149,8 +152,14 @@ export default {
 </script>
 
 <style scoped>
+#back2home {
+    padding-left: 60vw;
+}
 div {
     text-align: center;
+}
+h1,h2 {
+    margin-top: 2em;
 }
 input {
     border-radius: 50px;
@@ -166,16 +175,34 @@ input {
 #yourID {
     display: inline-block;
 }
+#yourID + .idField {
+    border-color: var(--main);
+    background-color: var(--main);
+    color: white;
+}
 .idField {
     width: 320px;
 }
 .error {
     color: red;
 }
-.success {
-    background-color: green;
+#login {
+    color: white;
+    background-color: var(--main);
+    padding-top: 2vh;
 }
-.successInput {
-    background-color: green;
+h2 {
+    margin: 0 auto;
+}
+#login input {
+    border-color: var(--accent);
+}
+#loginBtn {
+    color: white;
+    border: 3px solid white;
+}
+#loginBtn:hover {
+    background-color: white;
+    color: var(--main);
 }
 </style>
