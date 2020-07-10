@@ -1,7 +1,7 @@
 <template>
     <button
         @click="onClick"
-        :style=style
+        :style=styles
         >{{ text }}</button>
 </template>
 
@@ -12,7 +12,7 @@ export default {
         text: {
             type: String
         },
-        style: {
+        styles: {
             type: Object
         }
     },

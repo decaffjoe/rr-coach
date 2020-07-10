@@ -1,17 +1,19 @@
 <template>
-    <div>
+    <div id="top">
         <Navbar />
         <p id="justFinished">If you just finished your workout, your stats will be saved automatically once you sign up or login!</p>
-        <h1>New? All you need is an id</h1>
-        <p id="nickname">(Optional) nickname: </p>
-        <input v-model="newUserNickname" type="text">
-        <BaseButton @click="createUser" id="createID" :text="'Create id'" />
-        <p v-show="createError" class="error">{{ createError }}</p>
-        <br>
-        <p id="yourID">Your ID:</p>
-        <input v-model="newUserId" class="idField" type="text">
-        <router-link to="/"><BaseButton v-show="isSuccessful" :text="'Got it'" /></router-link>
-        <p>*No passwords, email, or anything else- so hold on to your id somewhere safe!</p>
+        <div>
+            <h1>New? All you need is an id</h1>
+            <p id="nickname">(Optional) nickname: </p>
+            <input v-model="newUserNickname" type="text">
+            <BaseButton v-on:click="createUser" id="createID" :text="'Create id'" />
+            <p v-show="createError" class="error">{{ createError }}</p>
+            <br>
+            <input v-model="newUserId" class="idField" type="text">
+            <p id="yourID">Your ID</p>
+            <p>*No passwords, email, or anything else- so hold on to your id somewhere safe!</p>
+            <router-link class="router-link" to="/"><BaseButton id="gotIt" v-show="isSuccessful" :text="'Got it!'" /></router-link>
+        </div>
         <section id="login">
             <h2>Returning users please login here</h2>
             <input @keypress.enter="logInUser" v-model="loginString" class="idField" type="text">
@@ -153,7 +155,7 @@ export default {
 </script>
 
 <style scoped>
-div {
+#top {
     text-align: center;
 }
 #justFinished {
@@ -163,42 +165,70 @@ div {
     margin: 0;
     padding: 0.7vh 0;
 }
-h1,h2 {
-    margin-top: 2em;
+h1 {
+    font-size: 1.8em;
+    margin: 3vh auto 1vh;
 }
 input {
     border-radius: 50px;
-    border: 2px solid black;
-    padding: 0.3em 0.6em;
-    font-size: 1.2em;
+    border: none;
+    padding: 0.5em 1.0em;
+    font-size: 1.0em;
     outline: none;
-    margin: 0 0.3em;
+    margin: 0 auto;
+    display: block;
+}
+#createID {
+    display: block;
+    margin: 2vh auto 0;
+    color: black;
+    background-color: yellow;
+    border: 3px solid yellow;
 }
 #nickname {
     display: inline-block;
 }
-#yourID {
-    display: inline-block;
-}
-#yourID + .idField {
-    border-color: var(--main);
-    background-color: white;
-    color: var(--main);
-}
 .idField {
-    width: 400px;
+    width: 75%;
+    font-size: 0.9em;
+    font-weight: bold;
+}
+br + .idField {
+    border-color: white;
+    background-color: var(--main);
+    color: white;
+    border: 2px solid white;
+    border-radius: 0;
+}
+#yourID {
+    margin-top: 0.2em;
 }
 .error {
     color: red;
 }
+.router-link {
+    text-decoration: none;
+}
+#gotIt {
+    display: block;
+    margin: 5vh auto 0;
+    font-size: 1.5rem;
+}
 #login {
     color: var(--main);
     background-color: white;
-    padding-top: 2vh;
+    padding: 2vh 0;
     margin-top: 8vh;
 }
 h2 {
     margin: 0 auto;
+}
+#login input {
+    color: var(--main);
+    background-color: white;
+    border: 2px solid var(--main);
+    border-radius: 0;
+    margin: 2vh auto;
 }
 #loginBtn {
     color: white;

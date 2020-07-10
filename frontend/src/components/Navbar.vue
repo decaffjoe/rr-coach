@@ -11,6 +11,7 @@
             <p @click="goToPage('/summmary')" v-if="this.$route.name === 'TrainNow'">Summary</p>
             <p @click="goToPage('/login')" v-else-if="!loggedIn && this.$route.name !== 'Login'">Signup / Login</p>
             <p @click="goToPage('/account')" v-else-if="loggedIn && this.$route.name !== 'MyAccount'">My Account</p>
+            <p @click="logout" v-else-if="loggedIn && this.$route.name === 'MyAccount'">Logout</p>
         </section>
     </div>
 </template>
@@ -18,19 +19,7 @@
 <script>
 export default {
     name: "Navbar",
-    props: {
-        logoutReq: {
-            type: Boolean
-        }
-    },
     created() {
-        // if user just logged out
-        if (this.logoutReq) {
-            this.loggedIn = false;
-            this.user_id = undefined;
-            this.user_nickname = undefined;
-            return;
-        }
         // if user is logged in
         if (this.$cookies.isKey("user_id")) {
             this.loggedIn = true;
@@ -44,6 +33,17 @@ export default {
         goToPage(page) {
             this.$emit('click');
             this.$router.push(page);
+        },
+        logout() {
+            // reset cookies
+            this.$cookies.remove("user_id");
+            this.$cookies.remove("user_nickname");
+            this.$cookies.remove("workout_id");
+            // logout of navbar
+            this.logoutReq = true;
+            // reset sessionStorage and go back to homepage
+            window.sessionStorage.clear();
+            this.$router.push('/');
         },
     },
     data() {
