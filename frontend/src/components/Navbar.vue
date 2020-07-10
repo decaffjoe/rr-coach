@@ -66,10 +66,6 @@ export default {
     color: white;
     margin: 0 0.3em;
 }
-.btn:hover {
-    color: white;
-    background-color: black;
-}
 p {
     margin-right: 0.5em;
     display: inline;

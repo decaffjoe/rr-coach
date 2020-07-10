@@ -1,53 +1,66 @@
 <template>
-    <div>
+    <div id="top">
 
         <!-- SPECIAL NAVBAR (SAVE PROGRESS BEFORE LEAVING) -->
-        <button @click="goToPage('/')">Home</button>
-        <button @click="goToPage('/summary')">Your Training Summary</button>
+        <section id="nav">
+            <BaseButton v-on:click="goToPage('/')" :text="'Home'" />
+            <BaseButton v-on:click="goToPage('/summary')" :text="'Your Training Summary'" />
+        </section>
 
         <!-- SECTION CONTROL -->
-        <div id="section">
-            <button class="iblock" @click="skipCurrentSection('prev')">Previous Section</button>
+        <section id="section">
+            <BaseButton class="iblock" v-on:click="skipCurrentSection('prev')" :text="'Previous Section'" />
             <h1 class="iblock">{{ currentSection }}</h1>
-            <button class="iblock" @click="skipCurrentSection('next')">Next Section</button>
-        </div>
+            <BaseButton class="iblock" v-on:click="skipCurrentSection('next')" :text="'Next Section'" />
+        </section>
 
         <!-- SET CONTROL -->
-        <button @click="decrementSetNum" class="iblock">Previous set</button>
-        <p class="iblock"><span>{{ currentSectionSet }}</span> / <span>{{ currentMaxSets }}</span></p>
-        <button @click="incrementSetNum" class="iblock">Next set</button>
+        <section id="set">
+            <BaseButton v-on:click="decrementSetNum" class="iblock" :text="'Previous set'" />
+            <p class="iblock"><span>{{ currentSectionSet }}</span> / <span>{{ currentMaxSets }}</span></p>
+            <BaseButton v-on:click="incrementSetNum" class="iblock" :text="'Next set'" />
+        </section>
 
         <!-- EXERCISE VARIANT CONTROL -->
-        <h2>{{ currentVariant.name }}</h2>
-        <button @click="easierVariant" v-if="currentSection !== 'Warmups' && currentVariant.num > 0">Easier Variant</button>
-        <button @click="tougherVariant" v-if="currentSection !== 'Warmups' && currentVariant.num < currentVariant.max">Tougher Variant</button>
+        <section id="variant">
+            <h2>{{ currentVariant.name }}</h2>
+            <BaseButton v-on:click="easierVariant" v-if="currentSection !== 'Warmups' && currentVariant.num > 0" :text="'Easier Variant'" />
+            <BaseButton v-on:click="tougherVariant" v-if="currentSection !== 'Warmups' && currentVariant.num < currentVariant.max" :text="'Tougher Variant'" />
+        </section>
 
         <!-- USER REP INPUT -->
-        <p>Rep Goal: {{ currentRepGoal }}</p>
-        <p id="completed" v-if="currentSection !== 'Warmups'">Completed: </p>
-        <input @keypress.enter="incrementSetNum" v-model="repsDone" type="text" v-if="currentSection !== 'Warmups'">
-        <button @click="goToPage('/summary')" v-if="endOfTraining">Finish workout</button>
+        <section id="rep">
+            <p>Rep Goal: {{ currentRepGoal }}</p>
+            <p id="completed" v-if="currentSection !== 'Warmups'">Completed: </p>
+            <input @keypress.enter="incrementSetNum" v-model="repsDone" type="text" v-if="currentSection !== 'Warmups'">
+            <BaseButton v-on:click="goToPage('/summary')" v-if="endOfTraining" :text="'Finish workout'" />
+            <!-- ERROR ON INPUT HANDLING -->
+            <p v-show="error">{{ error }}</p>
+            <p>Rest 90 seconds to 3 minutes after each set</p>
+        </section>
 
-        <!-- ERROR ON INPUT HANDLING -->
-        <p v-show="error">{{ error }}</p>
 
         <!-- EXERCISE INSTRUCTIONS -->
-        <p>Rest 90 seconds to 3 minutes after each set</p>
-        <iframe width="400" height="200" :src="currentVariant.url" v-if="currentVariant.url"></iframe>
-        <ul v-if="currentVariant.desc">
-            <li v-for="point of currentVariant.desc.split('.')" :key="point.id">{{ point }}</li>
-        </ul>
-        <p>General Form Cues</p>
-        <ul v-if="currentSection !== 'Warmups'">
-            <li v-for="cue of currentFormCues" :key="cue.id">{{ cue }}</li>
-        </ul>
+        <section id="info">
+            <iframe width="400" height="200" :src="currentVariant.url" v-if="currentVariant.url"></iframe>
+            <p v-show="currentVariant.desc">Exercise Tips</p>
+            <ul v-show="currentVariant.desc">
+                <li v-for="point of currentVariant.desc.split('.')" :key="point.id">{{ point }}</li>
+            </ul>
+            <p v-show="currentFormCues.length > 0">General Form Cues</p>
+            <ul v-show="currentSection !== 'Warmups'">
+                <li v-for="cue of currentFormCues" :key="cue.id">{{ cue }}</li>
+            </ul>
+        </section>
 
     </div>
 </template>
 
 <script>
+import BaseButton from "../components/BaseButton";
 export default {
     name: "Training",
+    components: { BaseButton },
     computed: {
         currentFormCues() {
             if(this.currentSection !== 'Warmups')  {
@@ -473,14 +486,37 @@ export default {
 </script>
 
 <style scoped>
+#top {
+    text-align: center;
+}
+#nav {
+    padding: 0.5vh 0 0.5vh 50vw;
+    background-color: bisque;
+    color: black;
+}
+#nav>* {
+    background-color: black;
+    border: 3px solid black;
+    color: white;
+    margin: 0 0.3em;
+}
+#section>* {
+    margin: 4vh 1em;
+}
+h1 {
+    text-transform: uppercase;
+    font-size: 2em;
+}
+#set>* {
+    margin: 0 1em 2vh;
+}
 #completed {
     display: inline;
 }
-div {
-    text-align: center;
-}
-button {
-    background-color: brown;
+#info {
+    padding: 2vh 0;
+    color: white;
+    background-color: var(--main);
 }
 .iblock {
     display: inline-block;

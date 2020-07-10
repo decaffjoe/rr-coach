@@ -194,6 +194,7 @@ input {
     color: white;
     background-color: var(--main);
     padding-top: 2vh;
+    margin-top: 8vh;
 }
 h2 {
     margin: 0 auto;
