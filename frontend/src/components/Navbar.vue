@@ -8,7 +8,7 @@
             <p v-else-if="loggedIn && user_id">Hi, {{ user_id.slice(0, 6) }}...</p>
         </section>
         <section>
-            <p @click="goToPage('/summmary')" v-if="this.$route.name === 'TrainNow'">Summary</p>
+            <p @click="goToPage('/summary')" v-if="this.$route.name === 'TrainNow'">Summary</p>
             <p @click="goToPage('/login')" v-else-if="!loggedIn && this.$route.name !== 'Login'">Signup / Login</p>
             <p @click="goToPage('/account')" v-else-if="loggedIn && this.$route.name !== 'MyAccount'">My Account</p>
             <p @click="logout" v-else-if="loggedIn && this.$route.name === 'MyAccount'">Logout</p>

@@ -1,28 +1,27 @@
 <template>
     <div id="top">
-
         <Navbar v-on:click="leavePage" />
 
         <!-- SECTION CONTROL -->
         <section id="section">
-            <BaseButton class="iblock" v-on:click="skipCurrentSection('prev')" :text="'Previous Section'" />
+            <i class="arrow bk-arrow" @click="skipCurrentSection('prev')"></i>
             <h1 class="iblock">{{ currentSection }}</h1>
-            <BaseButton class="iblock" v-on:click="skipCurrentSection('next')" :text="'Next Section'" />
+            <i class="arrow fw-arrow" @click="skipCurrentSection('next')"></i>
         </section>
 
         <!-- EXERCISE VARIANT CONTROL -->
         <section id="variant">
-            <BaseButton class="btn" v-on:click="easierVariant" v-if="currentSection !== 'Warmups' && currentVariant.num > 0" :text="'Easier Variant'" />
+            <i class="arrow bk-arrow" @click="easierVariant" v-if="currentSection !== 'Warmups' && currentVariant.num > 0"></i>
             <h2>{{ currentVariant.name }}</h2>
-            <BaseButton class="btn" v-on:click="tougherVariant" v-if="currentSection !== 'Warmups' && currentVariant.num < currentVariant.max" :text="'Tougher Variant'" />
+            <i class="arrow fw-arrow" @click="tougherVariant" v-if="currentSection !== 'Warmups' && currentVariant.num < currentVariant.max"></i>
         </section>
 
         <!-- SET CONTROL -->
         <section id="set">
             <p>Set</p>
-            <BaseButton v-on:click="decrementSetNum" class="iblock btn" :text="'Previous set'" />
+            <i @click="decrementSetNum" class="arrow bk-arrow"></i>
             <p class="iblock"><span>{{ currentSectionSet }}</span> / <span>{{ currentMaxSets }}</span></p>
-            <BaseButton v-on:click="incrementSetNum" class="iblock btn" :text="'Next set'" />
+            <i @click="incrementSetNum" class="arrow fw-arrow"></i>
         </section>
 
         <!-- USER REP INPUT -->
@@ -509,13 +508,14 @@ export default {
 }
 h1 {
     text-transform: uppercase;
-    font-size: 2em;
+    font-size: 1.2em;
 }
 #completed {
     display: inline;
 }
 #variant {
     margin: 2vh 0;
+    font-size: 0.8em;
 }
 #variant>* {
     display: inline-block;
@@ -530,6 +530,9 @@ h1 {
 }
 #set p {
     font-size: 1.5em;
+}
+#set p:first-of-type {
+    margin: 0 auto 2vh;
 }
 #set .btn {
     color: white;
@@ -568,6 +571,12 @@ iframe {
 }
 #info ul {
     list-style-position: inside;
+    text-align: left;
+    margin: 2vh auto;
+    padding: 0 10vw;
+}
+#info ul li {
+    margin: 1vh 0;
 }
 #info p {
     border: 2px solid white;
@@ -575,7 +584,23 @@ iframe {
     margin: 0 auto;
     padding: 1vh 1vw;
 }
+#info p:nth-of-type(2) {
+    margin-top: 5vh;
+}
 .iblock {
     display: inline-block;
+}
+.arrow {
+    --size: 40px;
+    display: inline-block;
+    height: calc(var(--size) - 4px);
+    width: var(--size);
+    background-size: var(--size);
+}
+.fw-arrow {
+    background-image: url('../assets/right_arrow.svg');
+}
+.bk-arrow {
+    background-image: url('../assets/left_arrow.svg');
 }
 </style>
