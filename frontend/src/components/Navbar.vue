@@ -4,11 +4,11 @@
             <router-link id="rrtt" to="/">Home</router-link>
         </section>
         <section>
-            <p v-if="loggedIn && user_nickname">Hey there, {{ user_nickname }}</p>
+            <p v-if="loggedIn && user_nickname">Hey {{ user_nickname }}!</p>
             <p v-else-if="loggedIn && user_id">Hi, {{ user_id.slice(0, 6) }}...</p>
         </section>
         <section>
-            <p @click="goToLogin" v-if="!loggedIn && this.$route.name !== 'Login'">Create Account / Login</p>
+            <p @click="goToLogin" v-if="!loggedIn && this.$route.name !== 'Login'">Signup / Login</p>
             <p @click="goToAccount" v-if="loggedIn && this.$route.name !== 'MyAccount'">My Account</p>
         </section>
     </div>
@@ -61,13 +61,13 @@ export default {
 div {
     background-color: black;
     color: white;
-    padding: 1.0vh 0;
+    padding: 2.0vh 0;
     margin: 0;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     justify-items: center;
     align-items: center;
-    font-size: 1.1em;
+    font-size: 1.0em;
 }
 #rrtt {
     color: white;

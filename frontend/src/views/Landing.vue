@@ -31,19 +31,17 @@
                 </ul>
             </section>
         </div>
-        <div id="reddit-links">
-            <a href="https://www.reddit.com/r/bodyweightfitness/wiki/kb/recommended_routine">Full training guide</a>
-            <a href="https://thefitness.wiki/improving-your-diet/">Nutrition guide</a>
-        </div>
+        <Footer />
     </div>
 </template>
 
 <script>
 import Navbar from "../components/Navbar.vue";
 import BaseButton from "../components/BaseButton.vue";
+import Footer from "../components/Footer.vue";
 export default {
     name: "Landing",
-    components: { Navbar, BaseButton },
+    components: { Navbar, BaseButton, Footer },
     methods: {
         goToTrain() {
             // Always start at Warmups
@@ -112,8 +110,9 @@ li::before {
     display: block;
     margin: 7vh auto;
     font-size: 1.5rem;
-    border: 5px solid black;
+    border: 5px solid yellow;
     color: black;
+    background-color: yellow;
 }
 .grid {
     display: grid;
@@ -133,20 +132,6 @@ li::before {
 .grid section:nth-of-type(2) {
     color: white;
     background-color: var(--main);
-}
-#reddit-links {
-    background-color: black;
-    padding: 1vh 0;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    justify-items: center;
-    align-items: center;
-
-}
-#reddit-links a {
-    color: white;
-    font-size: 1.1em;
-    text-decoration: none;
 }
 a {
     color: white;

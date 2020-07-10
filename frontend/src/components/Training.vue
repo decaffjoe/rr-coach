@@ -3,8 +3,9 @@
 
         <!-- SPECIAL NAVBAR (SAVE PROGRESS BEFORE LEAVING) -->
         <section id="nav">
-            <BaseButton v-on:click="goToPage('/')" :text="'Home'" />
-            <BaseButton v-on:click="goToPage('/summary')" :text="'Your Training Summary'" />
+            <p @click="goToPage('/')">Home</p>
+            <div></div>
+            <p @click="goToPage('/summary')">Summary</p>
         </section>
 
         <!-- SECTION CONTROL -->
@@ -53,14 +54,16 @@
             </ul>
         </section>
 
+        <Footer />
     </div>
 </template>
 
 <script>
-import BaseButton from "../components/BaseButton";
+import BaseButton from "../components/BaseButton.vue";
+import Footer from "../components/Footer.vue";
 export default {
     name: "Training",
-    components: { BaseButton },
+    components: { BaseButton, Footer },
     computed: {
         currentFormCues() {
             if(this.currentSection !== 'Warmups')  {
@@ -492,18 +495,12 @@ export default {
 #nav {
     background-color: black;
     color: white;
-    padding: 1.0vh 0;
     margin: 0;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     justify-items: center;
     align-items: center;
-}
-#nav>* {
-    background-color: black;
-    border: 3px solid black;
-    color: white;
-    margin: 0 0.2em;
+    font-size: 1.0em;
 }
 #section {
     margin: 4vh 0 3vh;
