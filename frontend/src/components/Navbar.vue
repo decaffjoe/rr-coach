@@ -1,15 +1,16 @@
 <template>
     <div>
         <section>
-            <router-link id="rrtt" to="/">Home</router-link>
+            <p id="rrtt" @click="goToPage('/')">Home</p>
         </section>
         <section>
             <p v-if="loggedIn && user_nickname">Hey {{ user_nickname }}!</p>
             <p v-else-if="loggedIn && user_id">Hi, {{ user_id.slice(0, 6) }}...</p>
         </section>
         <section>
-            <p @click="goToLogin" v-if="!loggedIn && this.$route.name !== 'Login'">Signup / Login</p>
-            <p @click="goToAccount" v-if="loggedIn && this.$route.name !== 'MyAccount'">My Account</p>
+            <p @click="goToPage('/summmary')" v-if="this.$route.name === 'TrainNow'">Summary</p>
+            <p @click="goToPage('/login')" v-else-if="!loggedIn && this.$route.name !== 'Login'">Signup / Login</p>
+            <p @click="goToPage('/account')" v-else-if="loggedIn && this.$route.name !== 'MyAccount'">My Account</p>
         </section>
     </div>
 </template>
@@ -40,11 +41,9 @@ export default {
         }
     },
     methods: {
-        goToLogin() {
-            this.$router.push('/login');
-        },
-        goToAccount() {
-            this.$router.push('/account');
+        goToPage(page) {
+            this.$emit('click');
+            this.$router.push(page);
         },
     },
     data() {

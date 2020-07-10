@@ -1,12 +1,7 @@
 <template>
     <div id="top">
 
-        <!-- SPECIAL NAVBAR (SAVE PROGRESS BEFORE LEAVING) -->
-        <section id="nav">
-            <p @click="goToPage('/')">Home</p>
-            <div></div>
-            <p @click="goToPage('/summary')">Summary</p>
-        </section>
+        <Navbar v-on:click="leavePage" />
 
         <!-- SECTION CONTROL -->
         <section id="section">
@@ -59,11 +54,12 @@
 </template>
 
 <script>
+import Navbar from "../components/Navbar.vue";
 import BaseButton from "../components/BaseButton.vue";
 import Footer from "../components/Footer.vue";
 export default {
     name: "Training",
-    components: { BaseButton, Footer },
+    components: { Navbar, BaseButton, Footer },
     computed: {
         currentFormCues() {
             if(this.currentSection !== 'Warmups')  {
@@ -318,6 +314,9 @@ export default {
         async goToPage(page) {
             await this.saveSet();
             this.$router.push(page);
+        },
+        async leavePage() {
+            await this.saveSet();
         },
     },
     // get current or init new workout status/summary, workout_id and exercise variant values
