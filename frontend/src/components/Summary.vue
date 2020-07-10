@@ -1,6 +1,5 @@
 <template>
     <div>
-        <p v-if="!this.$cookies.isKey('user_id')">Want to save these stats for the future? Create an account or login using the button above.</p>
         <!-- SELECT TRAINING SESSION DATA TO DISPLAY -->
         <select v-model="selectedWorkout" v-if="this.$cookies.isKey('user_id')">
             <option v-for="workout of workoutHistory" :key="workout.createdAt" :value="workout">{{ new Date(workout.createdAt).toDateString() }}</option>
@@ -88,5 +87,8 @@ th {
     text-align: left;
     font-size: 0.9em;
     font-weight: normal;
+}
+table div {
+    margin-bottom: 3vh;
 }
 </style>

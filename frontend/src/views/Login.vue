@@ -5,7 +5,7 @@
         <div>
             <h1>New? All you need is an id</h1>
             <p id="nickname">(Optional) nickname: </p>
-            <input v-model="newUserNickname" type="text">
+            <input @keypress.enter="createUser" v-model="newUserNickname" type="text">
             <BaseButton v-on:click="createUser" id="createID" :text="'Create id'" />
             <p v-show="createError" class="error">{{ createError }}</p>
             <br>

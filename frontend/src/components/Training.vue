@@ -29,10 +29,10 @@
             <p>Rep Goal: {{ currentRepGoal }}</p>
             <p id="completed" v-if="currentSection !== 'Warmups'">Completed: </p>
             <input @keypress.enter="incrementSetNum" v-model="repsDone" type="text" v-if="currentSection !== 'Warmups'">
-            <BaseButton v-on:click="goToPage('/summary')" v-if="endOfTraining" :text="'Finish workout'" />
+            <BaseButton id="endOfTrainingMsg" v-on:click="goToPage('/summary')" v-if="endOfTraining" :text="'See your Summary'" />
             <!-- ERROR ON INPUT HANDLING -->
             <p v-show="error">{{ error }}</p>
-            <p>Rest 90 seconds to 3 minutes after each set</p>
+            <p v-if="!endOfTraining">Rest 90 seconds to 3 minutes after each set</p>
         </section>
 
         <!-- EXERCISE INSTRUCTIONS -->
@@ -529,10 +529,11 @@ h1 {
     padding: 2vh 0 0;
 }
 #set p {
+    color: black;
     font-size: 1.5em;
 }
 #set p:first-of-type {
-    margin: 0 auto 2vh;
+    margin: 0 auto 1vh;
 }
 #set .btn {
     color: white;
@@ -602,5 +603,12 @@ iframe {
 }
 .bk-arrow {
     background-image: url('../assets/left_arrow.svg');
+}
+#endOfTrainingMsg {
+    border: 3px solid var(--main);
+    color: white;
+    background-color: var(--main);
+    display: block;
+    margin: 2vh auto 0;
 }
 </style>
