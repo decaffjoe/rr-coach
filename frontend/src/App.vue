@@ -15,10 +15,10 @@ export default {
     --main: #ff8e30;
 }
 html,body {
-    background-color: white;
-    color: var(--main);
+    background-color: var(--main);
+    color: white;
     font-family: 'Oxygen', sans-serif;
-    font-size: 1.05rem;
+    font-size: 1.0rem;
     font-weight: 700;
     margin: 0;
     padding: 0;

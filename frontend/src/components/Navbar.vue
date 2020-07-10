@@ -1,16 +1,20 @@
 <template>
-    <div id="top">
-        <p v-if="loggedIn && user_nickname">Hey there, {{ user_nickname }}</p>
-        <p v-else-if="loggedIn && user_id">Hi, {{ user_id.slice(0, 12) }}...</p>
-        <router-link to="/" v-if="this.$route.name !== 'Landing'"><BaseButton class="btn" :text="'Home'" /></router-link>
-        <BaseButton class="btn" v-on:click="goToLogin" v-if="!loggedIn && this.$route.name !== 'Login'" :text="'Create Account / Login'" />
-        <BaseButton class="btn" v-on:click="goToAccount" v-if="loggedIn && this.$route.name !== 'MyAccount'" :text="'My Account'" />
-        <router-link to="/train" v-if="this.$route.name === 'WorkoutSummary'"><BaseButton class="btn" :text="'Train Now'" /></router-link>
+    <div>
+        <section>
+            <router-link id="rrtt" to="/">Home</router-link>
+        </section>
+        <section>
+            <p v-if="loggedIn && user_nickname">Hey there, {{ user_nickname }}</p>
+            <p v-else-if="loggedIn && user_id">Hi, {{ user_id.slice(0, 6) }}...</p>
+        </section>
+        <section>
+            <p @click="goToLogin" v-if="!loggedIn && this.$route.name !== 'Login'">Create Account / Login</p>
+            <p @click="goToAccount" v-if="loggedIn && this.$route.name !== 'MyAccount'">My Account</p>
+        </section>
     </div>
 </template>
 
 <script>
-import BaseButton from "../components/BaseButton.vue";
 export default {
     name: "Navbar",
     props: {
@@ -18,7 +22,6 @@ export default {
             type: Boolean
         }
     },
-    components: { BaseButton, },
     created() {
         // if user just logged out
         if (this.logoutReq) {
@@ -55,16 +58,26 @@ export default {
 </script>
 
 <style scoped>
-#top {
-    padding: 0.5vh 0 0.5vh 50vw;
-    background-color: bisque;
-    color: black;
+div {
+    background-color: black;
+    color: white;
+    padding: 1.0vh 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-items: center;
+    align-items: center;
+    font-size: 1.1em;
+}
+#rrtt {
+    color: white;
+    text-decoration: none;
 }
 .btn {
     background-color: black;
-    border: 3px solid black;
+    border: 2px solid white;
     color: white;
-    margin: 0 0.3em;
+    margin: 0 0.2em;
 }
 p {
     margin-right: 0.5em;

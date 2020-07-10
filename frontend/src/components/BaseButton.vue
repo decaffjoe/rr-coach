@@ -28,12 +28,11 @@ export default {
 button {
     font-weight: bold;
     font-size: 0.9em;
-    color: white;
-    background-color: var(--main);
-    border: 3px solid var(--main);
-    border-radius: 80px;
-    padding: 0.5em 1.2em;
-    transition: 0.2s;
+    color: var(--main);
+    background-color: white;
+    border: 3px solid white;
+    border-radius: 10px;
+    padding: 0.5em;
     outline: none;
 }
 </style>

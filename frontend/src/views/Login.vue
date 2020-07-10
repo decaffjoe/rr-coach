@@ -159,6 +159,7 @@ div {
 #justFinished {
     color: white;
     background-color: darkolivegreen;
+    font-size: 0.9em;
     margin: 0;
     padding: 0.7vh 0;
 }
@@ -181,8 +182,8 @@ input {
 }
 #yourID + .idField {
     border-color: var(--main);
-    background-color: var(--main);
-    color: white;
+    background-color: white;
+    color: var(--main);
 }
 .idField {
     width: 400px;
@@ -191,20 +192,17 @@ input {
     color: red;
 }
 #login {
-    color: white;
-    background-color: var(--main);
+    color: var(--main);
+    background-color: white;
     padding-top: 2vh;
     margin-top: 8vh;
 }
 h2 {
     margin: 0 auto;
 }
-#login input {
-    border-color: var(--accent);
-}
 #loginBtn {
-    color: var(--main);
-    background-color: white;
-    border: 3px solid white;
+    color: white;
+    background-color: var(--main);
+    border: 3px solid var(--main);
 }
 </style>

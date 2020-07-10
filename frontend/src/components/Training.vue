@@ -14,18 +14,19 @@
             <BaseButton class="iblock" v-on:click="skipCurrentSection('next')" :text="'Next Section'" />
         </section>
 
-        <!-- SET CONTROL -->
-        <section id="set">
-            <BaseButton v-on:click="decrementSetNum" class="iblock" :text="'Previous set'" />
-            <p class="iblock"><span>{{ currentSectionSet }}</span> / <span>{{ currentMaxSets }}</span></p>
-            <BaseButton v-on:click="incrementSetNum" class="iblock" :text="'Next set'" />
-        </section>
-
         <!-- EXERCISE VARIANT CONTROL -->
         <section id="variant">
+            <BaseButton class="btn" v-on:click="easierVariant" v-if="currentSection !== 'Warmups' && currentVariant.num > 0" :text="'Easier Variant'" />
             <h2>{{ currentVariant.name }}</h2>
-            <BaseButton v-on:click="easierVariant" v-if="currentSection !== 'Warmups' && currentVariant.num > 0" :text="'Easier Variant'" />
-            <BaseButton v-on:click="tougherVariant" v-if="currentSection !== 'Warmups' && currentVariant.num < currentVariant.max" :text="'Tougher Variant'" />
+            <BaseButton class="btn" v-on:click="tougherVariant" v-if="currentSection !== 'Warmups' && currentVariant.num < currentVariant.max" :text="'Tougher Variant'" />
+        </section>
+
+        <!-- SET CONTROL -->
+        <section id="set">
+            <p>Set</p>
+            <BaseButton v-on:click="decrementSetNum" class="iblock btn" :text="'Previous set'" />
+            <p class="iblock"><span>{{ currentSectionSet }}</span> / <span>{{ currentMaxSets }}</span></p>
+            <BaseButton v-on:click="incrementSetNum" class="iblock btn" :text="'Next set'" />
         </section>
 
         <!-- USER REP INPUT -->
@@ -39,10 +40,9 @@
             <p>Rest 90 seconds to 3 minutes after each set</p>
         </section>
 
-
         <!-- EXERCISE INSTRUCTIONS -->
         <section id="info">
-            <iframe width="400" height="200" :src="currentVariant.url" v-if="currentVariant.url"></iframe>
+            <iframe :src="currentVariant.url" v-if="currentVariant.url"></iframe>
             <p v-show="currentVariant.desc">Exercise Tips</p>
             <ul v-show="currentVariant.desc">
                 <li v-for="point of currentVariant.desc.split('.')" :key="point.id">{{ point }}</li>
@@ -490,39 +490,96 @@ export default {
     text-align: center;
 }
 #nav {
-    padding: 0.5vh 0 0.5vh 50vw;
-    background-color: bisque;
-    color: black;
+    background-color: black;
+    color: white;
+    padding: 1.0vh 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    justify-items: center;
+    align-items: center;
 }
 #nav>* {
     background-color: black;
     border: 3px solid black;
     color: white;
-    margin: 0 0.3em;
+    margin: 0 0.2em;
+}
+#section {
+    margin: 4vh 0 3vh;
 }
 #section>* {
-    margin: 4vh 1em;
+    margin: 0 1em;
 }
 h1 {
     text-transform: uppercase;
     font-size: 2em;
 }
-#set>* {
-    margin: 0 1em 2vh;
-}
 #completed {
     display: inline;
 }
-#info {
-    padding: 2vh 0;
+#variant {
+    margin: 2vh 0;
+}
+#variant>* {
+    display: inline-block;
+    margin: 0 1em;
+}
+#set,#rep {
+    color: var(--main);
+    background-color: white;
+}
+#set {
+    padding: 2vh 0 0;
+}
+#set p {
+    font-size: 1.5em;
+}
+#set .btn {
     color: white;
     background-color: var(--main);
 }
-.iblock {
-    display: inline-block;
+#set>* {
+    margin: 0 0.5em;
+}
+#rep {
+    padding-bottom: 1vh;
+}
+#rep p {
+    margin: 0;
+    padding: 1.5vh;
+    font-size: 1.1em;
+}
+#completed {
+    color: red;
+}
+#rep input {
+    border: 3px solid red;
+    font-size: 1.3em;
+    outline: none;
+    padding: 0.1em 0.5em;
+    width: 30px;
+}
+#info {
+    margin-top: 3vh;
 }
 iframe {
     display: block;
+    margin: 0 auto 2vh;
+    border: 2px solid white;
+    width: 95%;
+    height: 25vh;
+}
+#info ul {
+    list-style-position: inside;
+}
+#info p {
+    border: 2px solid white;
+    width: fit-content;
     margin: 0 auto;
+    padding: 1vh 1vw;
+}
+.iblock {
+    display: inline-block;
 }
 </style>

@@ -2,7 +2,8 @@
     <div id="main">
         <Navbar />
         <section id="welcome">
-            <h1>Welcome to the <a href="https://www.reddit.com/r/bodyweightfitness/">r/bodyweightfitness</a> Recommended Routine (RR) Training Tracker (TT)</h1>
+            <h1>Welcome to the Recommended Routine (RR) Training Tracker (TT)</h1>
+            <h2>From <a href="https://www.reddit.com/r/bodyweightfitness/">r/bodyweightfitness</a></h2>
             <ul>
                 <li>Track your reps</li>
                 <li>Built-in videos and tips to improve your form</li>
@@ -19,10 +20,6 @@
                     <li>3 core strength exercises performed, in a triplet</li>
                     <li>90 seconds to 3 minutes of rest between every set</li>
                 </ul>
-                <div id="reddit-links">
-                    <a href="https://www.reddit.com/r/bodyweightfitness/wiki/kb/recommended_routine"><BaseButton :text="'Full training guide'" /></a>
-                    <a href="https://thefitness.wiki/improving-your-diet/"><BaseButton :text="'Nutrition guide'" /></a>
-                </div>
             </section>
             <section>
                 <h2>What do I need?</h2>
@@ -33,6 +30,10 @@
                     <li>Recommended: <a href="https://antranik.org/wp-content/uploads/2014/01/antranik-holding-support-hold-on-parallel-bars.jpg">Parallel Bars</a> (corner of a kitchen counter, two sturdy chairs, or anything like that)</li>
                 </ul>
             </section>
+        </div>
+        <div id="reddit-links">
+            <a href="https://www.reddit.com/r/bodyweightfitness/wiki/kb/recommended_routine">Full training guide</a>
+            <a href="https://thefitness.wiki/improving-your-diet/">Nutrition guide</a>
         </div>
     </div>
 </template>
@@ -70,11 +71,11 @@ export default {
     min-height: 100vh;
 }
 #welcome {
-    margin: 7vh auto 0;
+    margin: 2vh auto 0;
     padding: 0 15vw;
 }
 #welcome ul {
-    padding-left: 20vw;
+    padding-left: 10vw;
 }
 section ul {
     padding-left: 7vw;
@@ -94,41 +95,58 @@ li::before {
     background-image: url('../assets/arrow.svg');
     background-size: var(--size);
 }
-h1 {
-    text-transform: uppercase;
-    font-size: 2.0em;
+#welcome h1 {
+    font-size: 1.6em;
+    margin: 7vh 0 2vh;
 }
-h1 a {
-    text-decoration: none;
-    color: var(--main);
+#welcome h2 {
+    color: red;
+    text-transform: lowercase;
+    font-size: 1.1em;
+    margin: 0 0 7vh;
 }
-h1 a:hover {
-    text-decoration: underline;
-}
-.grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    background-color: var(--main);
-    color: white;
-    padding: 0 20vw 2vh;
-}
-.grid section:first-of-type {
-    margin-right: 1.0em;
-}
-.grid section:nth-of-type(2) {
-    margin-left: 1.0em;
-}
-#reddit-links a>* {
-    margin: 0.5em 0.6em;
-    color: var(--main);
-    background-color: white;
-    border: 3px solid white;
+#welcome h2 a {
+    color: red;
 }
 #train-link {
     display: block;
-    margin: 1.5em auto;
+    margin: 7vh auto;
     font-size: 1.5rem;
-    border-radius: 0;
+    border: 5px solid black;
+    color: black;
+}
+.grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    background-color: white;
+    color: var(--main);
+}
+.grid section {
+    padding: 0 5vw 2vh 10vw;
+}
+.grid section ul {
+    margin: 0 0 0 5vw;
+}
+.grid section:first-of-type {
+    margin-bottom: 1vh;
+}
+.grid section:nth-of-type(2) {
+    color: white;
+    background-color: var(--main);
+}
+#reddit-links {
+    background-color: black;
+    padding: 1vh 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+    align-items: center;
+
+}
+#reddit-links a {
+    color: white;
+    font-size: 1.1em;
+    text-decoration: none;
 }
 a {
     color: white;
