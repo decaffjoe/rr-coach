@@ -4,6 +4,7 @@ INFRA:
 * Write docs for the frontend logic
 
 BUGS:
+* No left arrow on Warmups section & Yuri's Bands set, no right arrow on Core section & last set of Core
 
 TEST:
 * Like everything haha (write some unit/integration/etc... tests too)

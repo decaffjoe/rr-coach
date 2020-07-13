@@ -11,9 +11,9 @@
 
         <!-- EXERCISE VARIANT CONTROL -->
         <section id="variant">
-            <i class="arrow bk-arrow" @click="easierVariant" v-if="currentSection !== 'Warmups' && currentVariant.num > 0"></i>
+            <i class="arrow bk-arrow" @click="easierVariant" v-show="currentSection !== 'Warmups' && currentVariant.num > 0"></i>
             <h2>{{ currentVariant.name }}</h2>
-            <i class="arrow fw-arrow" @click="tougherVariant" v-if="currentSection !== 'Warmups' && currentVariant.num < currentVariant.max"></i>
+            <i class="arrow fw-arrow" @click="tougherVariant" v-show="currentSection !== 'Warmups' && currentVariant.num < currentVariant.max"></i>
         </section>
 
         <!-- SET CONTROL -->
@@ -27,17 +27,17 @@
         <!-- USER REP INPUT -->
         <section id="rep">
             <p>Rep Goal: {{ currentRepGoal }}</p>
-            <p id="completed" v-if="currentSection !== 'Warmups'">Completed: </p>
-            <input @keypress.enter="incrementSetNum" v-model="repsDone" type="text" v-if="currentSection !== 'Warmups'">
-            <BaseButton id="endOfTrainingMsg" v-on:click="goToPage('/summary')" v-if="endOfTraining" :text="'See your Summary'" />
+            <p id="completed" v-show="currentSection !== 'Warmups'">Completed: </p>
+            <input @keypress.enter="incrementSetNum" v-model="repsDone" type="text" v-show="currentSection !== 'Warmups'">
+            <BaseButton id="endOfTrainingMsg" v-on:click="goToPage('/summary')" v-show="endOfTraining" :text="'See your Summary'" />
             <!-- ERROR ON INPUT HANDLING -->
             <p v-show="error">{{ error }}</p>
-            <p v-if="!endOfTraining">Rest 90 seconds to 3 minutes after each set</p>
+            <p v-show="!endOfTraining">Rest 90 seconds to 3 minutes after each set</p>
         </section>
 
         <!-- EXERCISE INSTRUCTIONS -->
         <section id="info">
-            <iframe :src="currentVariant.url" v-if="currentVariant.url"></iframe>
+            <iframe :src="currentVariant.url" v-show="currentVariant.url"></iframe>
             <p v-show="currentVariant.desc">Exercise Tips</p>
             <ul v-show="currentVariant.desc">
                 <li v-for="point of currentVariant.desc.split('.')" :key="point.id">{{ point }}</li>
@@ -501,7 +501,11 @@ export default {
     font-size: 1.0em;
 }
 #section {
-    margin: 4vh 0 3vh;
+    margin: 3vh 0 4vh;
+    display: grid;
+    grid-template-areas: "left-arrow text right-arrow";
+    align-items: center;
+    justify-items: center;
 }
 #section>* {
     margin: 0 1em;
@@ -509,17 +513,39 @@ export default {
 h1 {
     text-transform: uppercase;
     font-size: 1.2em;
+    grid-area: text;
+}
+#section i:first-of-type {
+    grid-area: left-arrow;
+}
+#section i:nth-last-of-type(1) {
+    grid-area: right-arrow;
 }
 #completed {
     display: inline;
 }
 #variant {
-    margin: 2vh 0;
+    margin: 4vh 0 5vh;
     font-size: 0.8em;
+    display: grid;
+    grid-template-areas: "left-arrow text right-arrow";
+    align-items: center;
+    justify-items: center;
 }
 #variant>* {
     display: inline-block;
     margin: 0 1em;
+}
+h2 {
+    text-transform: uppercase;
+    font-size: 1.2em;
+    grid-area: text;
+}
+#variant i:first-of-type {
+    grid-area: left-arrow;
+}
+#variant i:nth-last-of-type(1) {
+    grid-area: right-arrow;
 }
 #set,#rep {
     color: var(--main);
@@ -527,20 +553,31 @@ h1 {
 }
 #set {
     padding: 2vh 0 0;
+    display: grid;
+    grid-template-areas: "set set set" "left-arrow text right-arrow";
+    align-items: center;
+    justify-items: center;
+}
+#set>* {
+    margin: 0 0.5em;
 }
 #set p {
     color: black;
     font-size: 1.5em;
 }
 #set p:first-of-type {
-    margin: 0 auto 1vh;
+    margin: 0 auto;
+    padding: 0;
+    grid-area: set;
 }
-#set .btn {
-    color: white;
-    background-color: var(--main);
+#set p:nth-last-of-type(1) {
+    grid-area: text;
 }
-#set>* {
-    margin: 0 0.5em;
+#section i:first-of-type {
+    grid-area: left-arrow;
+}
+#section i:nth-last-of-type(1) {
+    grid-area: right-arrow;
 }
 #rep {
     padding-bottom: 1vh;
@@ -561,7 +598,7 @@ h1 {
     width: 30px;
 }
 #info {
-    margin-top: 3vh;
+    margin-top: 1vh;
 }
 iframe {
     display: block;
@@ -577,7 +614,18 @@ iframe {
     padding: 0 10vw;
 }
 #info ul li {
-    margin: 1vh 0;
+    list-style: none;
+    margin: 1em 0;
+    margin-left: -10px;
+}
+#info ul li::before {
+    --size: 20px;
+    content: '';
+    display: inline-block;
+    height: calc(var(--size) - 4px);
+    width: var(--size);
+    background-image: url('../assets/arrow.svg');
+    background-size: var(--size);
 }
 #info p {
     border: 2px solid white;
@@ -594,7 +642,7 @@ iframe {
 .arrow {
     --size: 40px;
     display: inline-block;
-    height: calc(var(--size) - 4px);
+    height: calc(var(--size) - 5px);
     width: var(--size);
     background-size: var(--size);
 }

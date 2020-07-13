@@ -40,8 +40,9 @@ export default {
                 console.log(error);
             }
         }
-        // load today's workout by default
-        if (window.sessionStorage['workoutSummary']) this.summary = JSON.parse(window.sessionStorage['workoutSummary']);
+        // load today's workout by default, init workoutSummary if user does not go to training first
+        if (!window.sessionStorage['workoutSummary']) window.sessionStorage['workoutSummary'] = JSON.stringify({});
+        this.summary = JSON.parse(window.sessionStorage['workoutSummary']);
     },
     methods: {
         // name says it all

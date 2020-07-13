@@ -66,7 +66,7 @@ export default {
         async createUser() {
             if (this.newUserId) return this.createError = "It looks like you've already created an id!";
             if (this.loginString) return this.createError = "Trying to login? Please see the returning users field below.";
-            if (this.newUserNickname.length > 6) return this.createError = "Nickname must be 6 characters or less.";
+            if (this.newUserNickname && this.newUserNickname.length > 6) return this.createError = "Nickname must be 6 characters or less.";
             this.createError = undefined;
             try {
                 // create user in db
@@ -94,7 +94,6 @@ export default {
         // post existing workout data (if they worked out first, then logged in/created account)
         async postExistingWorkout() {
             if (window.sessionStorage['workoutSummary']) {
-                console.log('step 1');
                 let session = JSON.parse(window.sessionStorage['workoutSummary']);
                 // if no pullups/squats/dips/hinges were done, assume empty/user didn't workout
                 if (!(session['pullup'] || session['squat'] || session['dip'] || session['hinge'])) return;
