@@ -1,13 +1,10 @@
 <template>
     <div>
         <!-- SELECT TRAINING SESSION DATA TO DISPLAY -->
-        <select v-model="selectedWorkout" v-if="this.$cookies.isKey('user_id')">
-            <option v-for="workout of workoutHistory" :key="workout.createdAt" :value="workout">{{ new Date(workout.createdAt).toDateString() }}</option>
+        <select @change="getWorkoutSummary" v-model="selectedWorkout" v-if="this.$cookies.isKey('user_id')">
+            <option v-for="workout of workoutHistory" :key="workout.workout_id" :value="workout">{{ new Date(workout.createdAt).toDateString() }}</option>
             <option :value="undefined">Today</option>
         </select>
-        <button @click="getWorkoutSummary" v-if="this.$cookies.isKey('user_id')">Get Summary</button>
-        <p v-show="!selectedWorkout">Today's workout</p>
-        <p v-if="selectedWorkout">{{  new Date(selectedWorkout.createdAt).toDateString() }}'s workout</p>
         <!-- SUMMARY -->
         <table>
             <div v-for="ex in Object.keys(summary)" :key="ex">
@@ -37,6 +34,8 @@ export default {
             try {
                 let res = await fetch(url);
                 this.workoutHistory = await res.json();
+                // filter out the browser workout_id to avoid duplicate entry loading from db
+                this.workoutHistory = this.workoutHistory.filter(workout => workout['workout_id'] !== parseInt(this.$cookies.get("workout_id")));
             } catch (error) {
                 console.log(error);
             }

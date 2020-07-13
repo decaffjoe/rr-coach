@@ -4,7 +4,6 @@ INFRA:
 * Write docs for the frontend logic
 
 BUGS:
-* Nickname max length of 6
 
 TEST:
 * Like everything haha (write some unit/integration/etc... tests too)

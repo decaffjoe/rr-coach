@@ -4,7 +4,7 @@
         <p id="justFinished">If you just finished your workout, your stats will be saved automatically once you sign up or login!</p>
         <div>
             <h1>New? All you need is an id</h1>
-            <p id="nickname">(Optional) nickname: </p>
+            <p id="nickname">(Optional) nickname:</p>
             <input @keypress.enter="createUser" v-model="newUserNickname" type="text">
             <BaseButton v-on:click="createUser" id="createID" :text="'Create id'" />
             <p v-show="createError" class="error">{{ createError }}</p>
@@ -66,6 +66,7 @@ export default {
         async createUser() {
             if (this.newUserId) return this.createError = "It looks like you've already created an id!";
             if (this.loginString) return this.createError = "Trying to login? Please see the returning users field below.";
+            if (this.newUserNickname.length > 6) return this.createError = "Nickname must be 6 characters or less.";
             this.createError = undefined;
             try {
                 // create user in db

@@ -21,9 +21,11 @@ router.get('/', async function (req, res) {
 router.post('/', async function (req, res) {
     try {
 
+        // no nicknames longer than 6 characters
+        if (req.body['nickname'] && req.body['nickname'].length > 6) return res.status(400).json('Invalid nickname');
         let newUser = await User.create(req.body, { fields: ['nickname'] });
         newUser = newUser.toJSON();
-        // no need to return timestamp information (timestamps still in db anyways)
+        // only need to send back user_id (not deleted from db, only the response)
         delete newUser.updatedAt, delete newUser.createdAt, delete newUser.nickname;
         return res.json(newUser.user_id);
 
