@@ -3,6 +3,7 @@
       <Navbar :key="updated" />
       <p v-if="error">{{ errorMsg }}</p>
       <div v-if="!error">
+          <router-link to="/summary"><BaseButton id="summaryBtn" :text="'My Training Summary'" /></router-link>
           <h1>Your id:</h1>
           <input type="text" id="idInput" :value="id">
           <br>
@@ -60,6 +61,10 @@ export default {
 <style scoped>
 section {
     text-align: center;
+}
+#summaryBtn {
+    margin: 4vh auto 2vh;
+    font-size: 1.3em;
 }
 .block {
     display: block;
