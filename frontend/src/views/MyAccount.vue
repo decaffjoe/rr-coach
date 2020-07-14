@@ -20,7 +20,7 @@ import Navbar from "../components/Navbar.vue";
 import BaseButton from "../components/BaseButton.vue";
 export default {
     name: "MyAccount",
-    components: { Navbar, BaseButton },
+    components: { Navbar, BaseButton, },
     created() {
         if (!this.$cookies.isKey("user_id")) return this.error = true;
         if (this.$cookies.isKey("user_nickname")) this.nickname = this.$cookies.get("user_nickname");
@@ -61,6 +61,7 @@ export default {
 <style scoped>
 section {
     text-align: center;
+    position: relative;
 }
 #summaryBtn {
     margin: 4vh auto 2vh;

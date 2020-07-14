@@ -1,7 +1,7 @@
 <template>
     <div>
         <Navbar />
-        <p v-if="!this.$cookies.isKey('user_id')">Want to save these stats for the future? Create an account or login using the button above.</p>
+        <p v-if="!this.$cookies.isKey('user_id')">Want to save these stats for the future? Create an account or login from the homepage.</p>
         <h1>Your Training Summary</h1>
         <Summary />
     </div>

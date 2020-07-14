@@ -1,5 +1,4 @@
 INFRA:
-* Style the views
 * Pre-load & cache iframes?
 * Write docs for the frontend logic
 
@@ -7,13 +6,11 @@ BUGS:
 
 TEST:
 * Like everything haha (write some unit/integration/etc... tests too)
-* Persistent workout state tracking
-* Training Summary post to db (if not logged in)
 
 FEATURES:
 * Dropdown Navbar with all routes as options
 * Training Summary Page:
-    - Reverse the default sort of workouts by date (we want most recent at top, oldest at bottom)
+    - Reverse the default sort of workouts by date (want most recent at top, oldest at bottom)
     - Comparison tool between any two workouts
         - Latest session is standard by default (but is changeable)
         - Present graph of reps over time

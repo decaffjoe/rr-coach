@@ -54,11 +54,11 @@ export default {
                         // redirect to home page
                         this.$router.push('/');
                     } else {
-                        this.loginError = "Uh oh, that didn't work. Try copy & pasting directly.";
+                        this.loginError = "Uh oh, that didn't work. Try copy & pasting your id directly.";
                     }
                 } else this.loginError = "Please enter an id";
                 // post existing workout data (if they worked out first)
-                this.postExistingWorkout();
+                await this.postExistingWorkout();
             } catch (error) {
                 console.log(error);
             }
@@ -83,15 +83,16 @@ export default {
                 } else res = await fetch('http://localhost:3000/user', { method: 'POST', mode: 'cors', });
                 // create cookie in client with user info
                 if (res.status === 200) {
+                    console.log('user created');
                     this.isSuccessful = true;
                     this.newUserId = await res.json();
                     this.makeCookies(this.newUserId, this.newUserNickname);
                 }
                 // post existing workout data (if they worked out first)
-                this.postExistingWorkout();
+                await this.postExistingWorkout();
             } catch(error) { console.log(error); }
         },
-        // post existing workout data (if they worked out first, then logged in/created account)
+        // post existing workout data (if user worked out first, then logged in/created account)
         async postExistingWorkout() {
             if (window.sessionStorage['workoutSummary']) {
                 let session = JSON.parse(window.sessionStorage['workoutSummary']);
@@ -101,7 +102,7 @@ export default {
                 // iterate over exercise categories
                 for (section in session) {
                     // iterate over the sets in each category
-                    for (set of section) {
+                    for (set of session[section]) {
                         // if set hasn't been posted yet
                         if (set['postPath']) {
                             // get a workout_id the first time we find a set that needs to be posted
@@ -157,6 +158,9 @@ export default {
 <style scoped>
 #top {
     text-align: center;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 #justFinished {
     color: white;
@@ -217,17 +221,17 @@ br + .idField {
 #login {
     color: var(--main);
     background-color: white;
-    padding: 2vh 0;
+    padding: 3vh 0;
     margin-top: 8vh;
+    flex-grow: 1;
 }
 h2 {
     margin: 0 auto;
 }
 #login input {
-    color: var(--main);
-    background-color: white;
+    color: white;
+    background-color: var(--main);
     border: 2px solid var(--main);
-    border-radius: 0;
     margin: 2vh auto;
 }
 #loginBtn {

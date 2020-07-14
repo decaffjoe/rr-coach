@@ -15,13 +15,17 @@ export default {
     --main: #ff8e30;
 }
 html,body {
-    background-color: var(--main);
     color: white;
+    background-color: var(--main);
     font-family: 'Oxygen', sans-serif;
     font-size: 1.0rem;
     font-weight: 700;
     margin: 0;
     padding: 0;
+    min-height: 100vh;
+}
+#app {
+    min-height: 100vh;
 }
 .container {
     padding: 0 25vw;

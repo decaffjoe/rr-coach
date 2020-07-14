@@ -50,17 +50,15 @@
             </ul>
         </section>
 
-        <Footer />
     </div>
 </template>
 
 <script>
 import Navbar from "../components/Navbar.vue";
 import BaseButton from "../components/BaseButton.vue";
-import Footer from "../components/Footer.vue";
 export default {
     name: "Training",
-    components: { Navbar, BaseButton, Footer },
+    components: { Navbar, BaseButton, },
     computed: {
         currentFormCues() {
             if(this.currentSection !== 'Warmups')  {

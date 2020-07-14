@@ -19,7 +19,6 @@ export default {
     grid-template-columns: 1fr 1fr;
     justify-items: center;
     align-items: center;
-
 }
 #reddit-links a {
     color: white;

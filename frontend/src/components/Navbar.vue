@@ -9,8 +9,9 @@
         </section>
         <section>
             <p @click="goToPage('/summary')" v-if="this.$route.name === 'TrainNow'">Summary</p>
+            <p @click="goToPage('/train')" v-else-if="this.$route.name === 'WorkoutSummary'">Train</p>
             <p @click="goToPage('/login')" v-else-if="!loggedIn && this.$route.name !== 'Login'">Signup / Login</p>
-            <p @click="goToPage('/account')" v-else-if="loggedIn && this.$route.name !== 'MyAccount'">My Account</p>
+            <p @click="goToPage('/account')" v-else-if="loggedIn && this.$route.name === 'Landing'">My Account</p>
             <p @click="logout" v-else-if="loggedIn && this.$route.name === 'MyAccount'">Logout</p>
         </section>
     </div>
