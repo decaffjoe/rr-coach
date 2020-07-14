@@ -7,35 +7,19 @@
         </select>
         <!-- SUMMARY -->
         <table>
-            <div v-for="ex in Object.keys(summary)" :key="ex">
-                <!-- e.g. "Pullups" -->
-                <tr><th colspan="2">{{ `${ex[0].toUpperCase()}${ex.slice(1)}s` }}</th></tr>
-                <tr id="legend">
-                    <td>Progression</td>
-                    <td>Reps</td>
-                </tr>
-                <tr v-for="set of summary[ex]" :key="set.id">
-                    <!-- e.g. "Pullup Negatives" -->
-                    <td>{{ progressions[`${ex}Progression`][set.progression].name }}</td>
-                    <td>{{ set.reps }}</td>
-                </tr>
-            </div>
-        </table>
-
-        <!-- NEW SUMMARY WITH ROWS BY VARIANT (INSTEAD OF SET) -->
-        <h1>TEST</h1>
-        <table>
             <div v-for="section of Object.keys(uniqueExercises)" :key="section">
                 <!-- e.g. "PULLUPS" -->
-                <tr><th colspan="4">{{ `${section[0].toUpperCase()}${section.slice(1)}s` }}</th></tr>
+                <tr>
+                    <th colspan="4">{{ `${section[0].toUpperCase()}${section.slice(1)}s` }}</th>
+                </tr>
                 <tr id="legend">
                     <td>Progression</td>
-                    <td colspan="3">Reps</td>
+                    <td class="reps" colspan="3">Reps</td>
                 </tr>
                 <tr v-for="variant of Object.keys(uniqueExercises[section])" :key="variant.id">
                     <!-- e.g. "Pullup Negatives" -->
                     <td class="variant-name">{{ variant }}</td>
-                    <td v-for="reps of uniqueExercises[section][variant]" :key="reps.id">{{ reps }}</td>
+                    <td class="reps" v-for="reps of uniqueExercises[section][variant]" :key="reps.id">{{ reps }}</td>
                 </tr>
             </div>
         </table>
@@ -113,11 +97,16 @@ div {
     text-align: center;
 }
 table {
+    border-collapse: collapse;
     margin: 0 auto;
+    text-align: left;
+    table-layout: fixed;
 }
 th {
-    text-align: left;
+    text-align: center;
     text-transform: uppercase;
+    height: 3vh;
+    font-size: 1.1em;
 }
 #legend {
     text-align: left;
@@ -126,8 +115,18 @@ th {
 }
 table div {
     margin-bottom: 3vh;
+    background-color: red;
+    border-radius: 20px;
+    padding: 1vh 3vw;
 }
 .variant-name {
     text-align: left;
+    width: 250px;
+}
+td {
+    margin-right: 2em;
+}
+.reps {
+    padding: 0 1vw;
 }
 </style>
