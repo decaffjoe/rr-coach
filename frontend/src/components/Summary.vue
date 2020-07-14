@@ -25,19 +25,17 @@
         <!-- NEW SUMMARY WITH ROWS BY VARIANT (INSTEAD OF SET) -->
         <h1>TEST</h1>
         <table>
-            <div v-for="ex of Object.keys(uniqueExercises)" :key="ex">
-                <!-- e.g. "Pullups" -->
-                <tr><th colspan="4">{{ `${ex[0].toUpperCase()}${ex.slice(1)}s` }}</th></tr>
+            <div v-for="section of Object.keys(uniqueExercises)" :key="section">
+                <!-- e.g. "PULLUPS" -->
+                <tr><th colspan="4">{{ `${section[0].toUpperCase()}${section.slice(1)}s` }}</th></tr>
                 <tr id="legend">
                     <td>Progression</td>
                     <td colspan="3">Reps</td>
                 </tr>
-                <tr v-for="variant of uniqueExercises[ex]" :key="variant.id">
+                <tr v-for="variant of Object.keys(uniqueExercises[section])" :key="variant.id">
                     <!-- e.g. "Pullup Negatives" -->
                     <td class="variant-name">{{ variant }}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td v-for="reps of uniqueExercises[section][variant]" :key="reps.id">{{ reps }}</td>
                 </tr>
             </div>
         </table>
@@ -49,16 +47,19 @@ export default {
     name: "Summary",
     computed: {
         uniqueExercises() {
-            let obj = {}, exercises = Object.keys(this.summary), ex, set;
-            for (ex of exercises) {
-                obj[ex] = [];
-                for (set of this.summary[ex]) {
-                    obj[ex].push(this.progressions[`${ex}Progression`][set.progression].name);
+            let exercises = {}, obj, section, set;
+            for (section of Object.keys(this.summary)) {
+                obj = {};
+                for (set of this.summary[section]) {
+                    if (!obj[this.progressions[`${section}Progression`][set.progression].name]) {
+                        obj[this.progressions[`${section}Progression`][set.progression].name] = [];
+                    }
+                    obj[this.progressions[`${section}Progression`][set.progression].name].push(set.reps);
                 }
-                obj[ex] = new Set(obj[ex]);
+                exercises[section] = obj;
             }
-            console.log(obj);
-            return obj;
+            console.log(exercises);
+            return exercises;
         },
     },
     // get user's previous workouts by date, if logged in
