@@ -4,24 +4,18 @@
 
         <!-- SECTION CONTROL -->
         <section id="section">
-            <i class="arrow bk-arrow" @click="skipCurrentSection('prev')"></i>
+            <p>Section</p>
+            <i class="arrow bk-arrow" @click="skipCurrentSection('prev')" v-show="currentSection !== 'Warmups'"></i>
             <h1 class="iblock">{{ currentSection }}</h1>
-            <i class="arrow fw-arrow" @click="skipCurrentSection('next')"></i>
-        </section>
-
-        <!-- EXERCISE VARIANT CONTROL -->
-        <section id="variant">
-            <i class="arrow bk-arrow" @click="easierVariant" v-show="currentSection !== 'Warmups' && currentVariant.num > 0"></i>
-            <h2>{{ currentVariant.name }}</h2>
-            <i class="arrow fw-arrow" @click="tougherVariant" v-show="currentSection !== 'Warmups' && currentVariant.num < currentVariant.max"></i>
+            <i class="arrow fw-arrow" @click="skipCurrentSection('next')" v-show="currentSection !== 'Core'"></i>
         </section>
 
         <!-- SET CONTROL -->
         <section id="set">
             <p>Set</p>
-            <i @click="decrementSetNum" class="arrow bk-arrow"></i>
+            <i @click="decrementSetNum" class="arrow bk-arrow" v-show="currentSection !== 'Warmups' || currentSectionSet !== 1"></i>
             <p class="iblock"><span>{{ currentSectionSet }}</span> / <span>{{ currentMaxSets }}</span></p>
-            <i @click="incrementSetNum" class="arrow fw-arrow"></i>
+            <i @click="incrementSetNum" class="arrow fw-arrow" v-show="currentSection !== 'Core' || currentSectionSet !== 9"></i>
         </section>
 
         <!-- USER REP INPUT -->
@@ -32,7 +26,15 @@
             <BaseButton id="endOfTrainingMsg" v-on:click="goToPage('/summary')" v-show="endOfTraining" :text="'See your Summary'" />
             <!-- ERROR ON INPUT HANDLING -->
             <p v-show="error">{{ error }}</p>
-            <p v-show="!endOfTraining">Rest 90 seconds to 3 minutes after each set</p>
+            <p v-show="!endOfTraining">90 second to 3 minute rest between sets</p>
+        </section>
+
+        <!-- EXERCISE VARIANT CONTROL -->
+        <section id="variant">
+            <p>Exercise</p>
+            <i class="arrow bk-arrow" @click="easierVariant" v-show="currentSection !== 'Warmups' && currentVariant.num > 0"></i>
+            <h2>{{ currentVariant.name }}</h2>
+            <i class="arrow fw-arrow" @click="tougherVariant" v-show="currentSection !== 'Warmups' && currentVariant.num < currentVariant.max"></i>
         </section>
 
         <!-- EXERCISE INSTRUCTIONS -->
@@ -448,13 +450,13 @@ export default {
                         {
                             name: "Easier Squat Progression",
                             url: "",
-                            desc: "Add these after you reach Bulgarian Split Squats.Choices: Assisted Squat, Squat, Split Squat",
+                            desc: "Add these after you reach Bulgarian Split Squats.Progression: Assisted Squat, Squat, Split Squat",
                             reps: "10"
                         },
                         {
                             name: "Easier Hinge Progression",
                             url: "",
-                            desc: "Add these after you reach Banded Nordic Curls.Choices: Romanian Deadlift, Single Legged Deadlift, Banded Nordic Curl Negatives",
+                            desc: "Add these after you reach Banded Nordic Curls.Progression: Romanian Deadlift, Single Legged Deadlift, Banded Nordic Curl Negatives",
                             reps: "10"
                         },
                     ],
@@ -501,51 +503,31 @@ export default {
     font-size: 1.0em;
 }
 #section {
-    margin: 3vh 0 4vh;
+    margin: 4vh 0;
     display: grid;
-    grid-template-areas: "left-arrow text right-arrow";
+    grid-template-areas: "sec sec sec" "bk-arrow text fw-arrow";
     align-items: center;
     justify-items: center;
 }
 #section>* {
     margin: 0 1em;
 }
+#section p:first-of-type {
+    grid-area: sec;
+}
 h1 {
     text-transform: uppercase;
     font-size: 1.2em;
     grid-area: text;
 }
-#section i:first-of-type {
-    grid-area: left-arrow;
+#section .bk-arrow {
+    grid-area: bk-arrow;
 }
-#section i:nth-last-of-type(1) {
-    grid-area: right-arrow;
+#section .fw-arrow {
+    grid-area: fw-arrow;
 }
 #completed {
     display: inline;
-}
-#variant {
-    margin: 4vh 0 5vh;
-    font-size: 0.8em;
-    display: grid;
-    grid-template-areas: "left-arrow text right-arrow";
-    align-items: center;
-    justify-items: center;
-}
-#variant>* {
-    display: inline-block;
-    margin: 0 1em;
-}
-h2 {
-    text-transform: uppercase;
-    font-size: 1.2em;
-    grid-area: text;
-}
-#variant i:first-of-type {
-    grid-area: left-arrow;
-}
-#variant i:nth-last-of-type(1) {
-    grid-area: right-arrow;
 }
 #set,#rep {
     color: var(--main);
@@ -554,7 +536,7 @@ h2 {
 #set {
     padding: 2vh 0 0;
     display: grid;
-    grid-template-areas: "set set set" "left-arrow text right-arrow";
+    grid-template-areas: "set set set" "bk-arrow text fw-arrow";
     align-items: center;
     justify-items: center;
 }
@@ -563,7 +545,6 @@ h2 {
 }
 #set p {
     color: black;
-    font-size: 1.5em;
 }
 #set p:first-of-type {
     margin: 0 auto;
@@ -571,13 +552,14 @@ h2 {
     grid-area: set;
 }
 #set p:nth-last-of-type(1) {
+    font-size: 1.5em;
     grid-area: text;
 }
-#section i:first-of-type {
-    grid-area: left-arrow;
+#set .bk-arrow {
+    grid-area: bk-arrow;
 }
-#section i:nth-last-of-type(1) {
-    grid-area: right-arrow;
+#set .fw-arrow {
+    grid-area: fw-arrow;
 }
 #rep {
     padding-bottom: 1vh;
@@ -597,8 +579,31 @@ h2 {
     padding: 0.1em 0.5em;
     width: 30px;
 }
-#info {
-    margin-top: 1vh;
+#variant {
+    margin: 3vh 0;
+    font-size: 0.8em;
+    display: grid;
+    grid-template-areas:"var var var" "bk-arrow text fw-arrow";
+    align-items: center;
+    justify-items: center;
+}
+#variant p:first-of-type {
+    grid-area: var;
+}
+#variant>* {
+    display: inline-block;
+    margin: 0 1em;
+}
+h2 {
+    text-transform: uppercase;
+    font-size: 1.2em;
+    grid-area: text;
+}
+#variant .bk-arrow {
+    grid-area: bk-arrow;
+}
+#variant .fw-arrow {
+    grid-area: fw-arrow;
 }
 iframe {
     display: block;
