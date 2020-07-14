@@ -503,9 +503,10 @@ export default {
     font-size: 1.0em;
 }
 #section {
-    margin: 4vh 0;
+    margin: 3vh 0 4vh;
     display: grid;
     grid-template-areas: "sec sec sec" "bk-arrow text fw-arrow";
+    grid-template-columns: 25% 50% 25%;
     align-items: center;
     justify-items: center;
 }
@@ -537,6 +538,7 @@ h1 {
     padding: 2vh 0 0;
     display: grid;
     grid-template-areas: "set set set" "bk-arrow text fw-arrow";
+    grid-template-columns: 25% 50% 25%;
     align-items: center;
     justify-items: center;
 }
@@ -580,10 +582,11 @@ h1 {
     width: 30px;
 }
 #variant {
-    margin: 3vh 0;
+    margin: 2vh 0 3vh;
     font-size: 0.8em;
     display: grid;
     grid-template-areas:"var var var" "bk-arrow text fw-arrow";
+    grid-template-columns: 25% 50% 25%;
     align-items: center;
     justify-items: center;
 }

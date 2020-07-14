@@ -4,7 +4,6 @@ INFRA:
 * Write docs for the frontend logic
 
 BUGS:
-* Fixed position for arrows in grid (don't move other stuff when v-show triggers hidden)
 
 TEST:
 * Like everything haha (write some unit/integration/etc... tests too)
