@@ -30,6 +30,8 @@
 export default {
     name: "Summary",
     computed: {
+        // sort workoutSummary by variant
+        // return { $section: { $variant: { $reps } } }
         uniqueExercises() {
             let exercises = {}, obj, section, set;
             for (section of Object.keys(this.summary)) {
@@ -42,7 +44,6 @@ export default {
                 }
                 exercises[section] = obj;
             }
-            console.log(exercises);
             return exercises;
         },
     },
@@ -107,6 +108,7 @@ th {
     text-transform: uppercase;
     height: 3vh;
     font-size: 1.1em;
+    padding-bottom: 1vh;
 }
 #legend {
     text-align: left;
@@ -115,7 +117,7 @@ th {
 }
 table div {
     margin-bottom: 3vh;
-    background-color: red;
+    background-color: #ff7320;
     border-radius: 20px;
     padding: 1vh 3vw;
 }
