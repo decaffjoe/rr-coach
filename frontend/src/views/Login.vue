@@ -45,7 +45,7 @@ export default {
             try {
                 if (this.loginString) {
                     // verify entered user id exists
-                    let nickname = await fetch(`http://localhost:3000/user?user_id=${this.loginString}`);
+                    let nickname = await fetch(`${process.env.VUE_APP_API}/user?user_id=${this.loginString}`);
                     // save user_id & nickname as cookies
                     if (nickname.status === 200) {
                         this.loginError = undefined;
@@ -72,7 +72,7 @@ export default {
                 // create user in db
                 let res;
                 if (this.newUserNickname) {
-                    res = await fetch('http://localhost:3000/user', {
+                    res = await fetch(`${process.env.VUE_APP_API}/user`, {
                         method: 'POST',
                         mode: 'cors',
                         headers: { "Content-Type": "application/json; charset=utf-8" },
@@ -80,10 +80,9 @@ export default {
                             nickname: this.newUserNickname,
                         }),
                     });
-                } else res = await fetch('http://localhost:3000/user', { method: 'POST', mode: 'cors', });
+                } else res = await fetch(`${process.env.VUE_APP_API}/user`, { method: 'POST', mode: 'cors', });
                 // create cookie in client with user info
                 if (res.status === 200) {
-                    console.log('user created');
                     this.isSuccessful = true;
                     this.newUserId = await res.json();
                     this.makeCookies(this.newUserId, this.newUserNickname);
@@ -107,7 +106,7 @@ export default {
                         if (set['postPath']) {
                             // get a workout_id the first time we find a set that needs to be posted
                             if (firstPost) {
-                                let res = await fetch("http://localhost:3000/workout", {
+                                let res = await fetch(`${process.env.VUE_APP_API}/workout`, {
                                     method: 'POST',
                                     mode: 'cors',
                                     headers: { "Content-Type": "application/json; charset=utf-8" },

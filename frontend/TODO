@@ -1,6 +1,4 @@
 INFRA:
-* No commits to master
-* Backend API env variables for local/prod deployment
 * Styling for desktop
 * Pre-load & cache iframes?
 * Write docs for the frontend logic
