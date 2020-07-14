@@ -21,12 +21,46 @@
                 </tr>
             </div>
         </table>
+
+        <!-- NEW SUMMARY WITH ROWS BY VARIANT (INSTEAD OF SET) -->
+        <h1>TEST</h1>
+        <table>
+            <div v-for="ex of Object.keys(uniqueExercises)" :key="ex">
+                <!-- e.g. "Pullups" -->
+                <tr><th colspan="4">{{ `${ex[0].toUpperCase()}${ex.slice(1)}s` }}</th></tr>
+                <tr id="legend">
+                    <td>Progression</td>
+                    <td colspan="3">Reps</td>
+                </tr>
+                <tr v-for="variant of uniqueExercises[ex]" :key="variant.id">
+                    <!-- e.g. "Pullup Negatives" -->
+                    <td class="variant-name">{{ variant }}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </div>
+        </table>
     </div>
 </template>
 
 <script>
 export default {
     name: "Summary",
+    computed: {
+        uniqueExercises() {
+            let obj = {}, exercises = Object.keys(this.summary), ex, set;
+            for (ex of exercises) {
+                obj[ex] = [];
+                for (set of this.summary[ex]) {
+                    obj[ex].push(this.progressions[`${ex}Progression`][set.progression].name);
+                }
+                obj[ex] = new Set(obj[ex]);
+            }
+            console.log(obj);
+            return obj;
+        },
+    },
     // get user's previous workouts by date, if logged in
     async created() {
         if (this.$cookies.isKey("user_id")) {
@@ -82,6 +116,7 @@ table {
 }
 th {
     text-align: left;
+    text-transform: uppercase;
 }
 #legend {
     text-align: left;
@@ -90,5 +125,8 @@ th {
 }
 table div {
     margin-bottom: 3vh;
+}
+.variant-name {
+    text-align: left;
 }
 </style>
