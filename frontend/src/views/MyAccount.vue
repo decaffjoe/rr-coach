@@ -30,7 +30,7 @@ export default {
     },
     methods: {
         async updateNickname() {
-            let url = "http://localhost:3000/user";
+            let url = `${process.env.VUE_APP_API}/user`;
             let res = await fetch(url, {
                 method: 'PUT',
                 mode: 'cors',

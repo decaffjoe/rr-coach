@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 // IMPORTS
 const express = require('express');
 const app = express();
@@ -7,10 +9,14 @@ const cors = require('cors');
 app.use(express.json());
 app.use(cors());
 
-// DATABASE TESTING
+// DATABASE CONNECTION
 const { resetDB, connectDB } = require('./models/seed');
-resetDB().then(() => console.log('seeding done!'))
-    .catch(err => console.log(err));
+if (process.env.RESET_DB) {
+    resetDB().then(() => console.log('seeding done!'))
+        .catch(err => console.log(err));
+} else {
+    connectDB().catch(err => console.log(err));
+}
 
 // RPC API ROUTES
 const userRoutes = require('./routes/user'),
@@ -26,4 +32,4 @@ app.get('/', (req, res) => {
 });
 
 // SERVER START
-app.listen(3000, () => console.log('server started on http://localhost:3000/'));
+app.listen(process.env.PORT, () => console.log(`server started at ${process.env.DOMAIN}:${process.env.PORT}/`));

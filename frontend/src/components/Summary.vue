@@ -37,10 +37,13 @@ export default {
             for (section of Object.keys(this.summary)) {
                 obj = {};
                 for (set of this.summary[section]) {
-                    if (!obj[this.progressions[`${section}Progression`][set.progression].name]) {
-                        obj[this.progressions[`${section}Progression`][set.progression].name] = [];
+                    // set will be null if user skips it (goes out of order)
+                    if (set !== null && set !== 'null') {
+                        if (!obj[this.progressions[`${section}Progression`][set.progression].name]) {
+                            obj[this.progressions[`${section}Progression`][set.progression].name] = [];
+                        }
+                        obj[this.progressions[`${section}Progression`][set.progression].name].push(set.reps);
                     }
-                    obj[this.progressions[`${section}Progression`][set.progression].name].push(set.reps);
                 }
                 exercises[section] = obj;
             }
@@ -50,7 +53,7 @@ export default {
     // get user's previous workouts by date, if logged in
     async created() {
         if (this.$cookies.isKey("user_id")) {
-            let url = `http://localhost:3000/workout?user_id=${this.$cookies.get("user_id")}`;
+            let url = `${process.env.VUE_APP_API}/workout?user_id=${this.$cookies.get("user_id")}`;
             try {
                 let res = await fetch(url);
                 this.workoutHistory = await res.json();
@@ -70,7 +73,7 @@ export default {
             // user asks for today's workout
             if (!this.selectedWorkout) return this.summary = JSON.parse(window.sessionStorage['workoutSummary']);
             // else, user wants historical workout
-            let url = `http://localhost:3000/exercise/allSummary?workout_id=${this.selectedWorkout.workout_id}`;
+            let url = `${process.env.VUE_APP_API}/exercise/allSummary?workout_id=${this.selectedWorkout.workout_id}`;
             try {
                 let res = await fetch(url);
                 if (res.status === 200) {

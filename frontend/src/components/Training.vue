@@ -262,7 +262,7 @@ export default {
 
                 // API
                 // set url to post
-                let url = `http://localhost:3000/exercise/${this.currentPath}Set`;
+                let url = `${process.env.VUE_APP_API}/exercise/${this.currentPath}Set`;
                 // assume logged out, or post failure
                 let dbSaveSuccess = false;
                 if (this.$cookies.isKey("workout_id")) {
@@ -333,7 +333,7 @@ export default {
                 // user decides to continue old workout
                 if (conf) {
                     // get workout from db
-                    let url = `http://localhost:3000/exercise/allSummary?workout_id=${this.$cookies.get("workout_id")}`;
+                    let url = `${process.env.VUE_APP_API}/exercise/allSummary?workout_id=${this.$cookies.get("workout_id")}`;
                     console.log('fetching...');
                     let res = await fetch(url, {
                         method: 'GET',
@@ -353,7 +353,7 @@ export default {
 
             // get a new workout_id (if user is logged in without existing workout_id)
             if ((this.$cookies.isKey("user_id") && !this.$cookies.isKey("workout_id")) || getNewWorkoutId) {
-                let url = "http://localhost:3000/workout";
+                let url = `${process.env.VUE_APP_API}/workout`;
                 let res = await fetch(url, {
                     method: 'POST',
                     mode: 'cors',

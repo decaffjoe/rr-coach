@@ -2,7 +2,7 @@
     <div id="main">
         <Navbar />
         <section id="welcome">
-            <h1>Welcome to the Recommended Routine (RR) Training Tracker (TT)</h1>
+            <h1>Welcome to the Recommended Routine (RR) Coach</h1>
             <h2>From <a href="https://www.reddit.com/r/bodyweightfitness/">r/bodyweightfitness</a></h2>
             <ul>
                 <li>Track your reps</li>
