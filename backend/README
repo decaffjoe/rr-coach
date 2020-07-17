@@ -1,9 +1,0 @@
-Getting started quickly:
-
-[1] git clone git@gitlab.com:spongechameleon/recommended-routine.git
-[2] cd recommended-routine/backend
-
-[3] In server.js, change "connectDB()" to "resetDB()" (the lines under "DATABASE TESTING")
-[4] In models/dbconfig.js, comment out the postgres connection and uncomment the sqlite connection (the "new Sequelize" lines)
-
-[5] node server.js

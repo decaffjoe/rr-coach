@@ -29,7 +29,7 @@ Workout.init({
     }
 }, {
     sequelize: db,
-    modelName: 'Workout'
+    modelName: 'workout'
 });
 
 module.exports = Workout;

@@ -53,7 +53,7 @@ for (let [key, val] of Object.entries(allExercises)) {
         // no need for timestamps, check workout for those
         timestamps: false,
         sequelize: db,
-        modelName: key
+        modelName: key.toLowerCase()
     });
 }
 
