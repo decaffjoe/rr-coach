@@ -4,6 +4,7 @@ INFRA:
 * Write docs for the frontend logic
 
 BUGS:
+* Summary page today's workout ignored if tab closed and re-opened (while staying logged in) due to identical workout_ids
 
 TEST:
 * Like everything haha (write some unit/integration/etc... tests)
