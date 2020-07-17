@@ -1,5 +1,6 @@
 .vscode
 backend/node_modules
+backend/.branch
 backend/.env*
 
 frontend/.DS_Store

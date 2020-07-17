@@ -1,4 +1,6 @@
-require('dotenv').config({ path: './.env.dev' });
+// load .env.$branch
+require('dotenv').config({ path: './.branch' });
+require('dotenv').config({ path: `./.env.${process.env.BRANCH}` });
 
 // IMPORTS
 const express = require('express');
