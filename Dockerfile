@@ -15,7 +15,10 @@ RUN apt-get install -qy build-essential
 RUN apt-get install -qy nodejs
 RUN apt-get install -qy git
 RUN apt-get install -qy curl
+
+# troubleshooting
 RUN apt-get install -qy iputils-ping
+RUN apt-get install -qy iproute2
 
 # install yarn
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \

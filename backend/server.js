@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({ path: './.env.staging' });
 
 // IMPORTS
 const express = require('express');

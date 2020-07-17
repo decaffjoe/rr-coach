@@ -24,21 +24,23 @@
 
 * Save your host IP address (to connect to postgres from Docker):
 
-    - `export HOST_IP=$(ip addr show <device name> | grep -v inet6 | grep inet | awk '{ print $2  }' | cut -d/ -f1)`
-	    
-	    - Where `<device name>` might be `wlp1s0`, for example 
+    - From the `rr-coach` directory:
 
-* In rr-coach/backend:
+        - `chmod 755 get_host_ip.sh`
+
+        - `./get_host_ip.sh`
+
+* In `rr-coach/backend`:
 
     - `touch .env`
     - Add the following lines to `.env`:
-        
+
         - `PORT=3000`
-        
+
         - `DOMAIN=http://localhost`
-        
+
         - `DB_PATH='postgres://<user>:<password>@hostip:5432/<db name>'`
-        
+
             - Where `<user>` could be `postgres` and `<db name>` could be `rr-coach`
 
 # Application (Docker):
