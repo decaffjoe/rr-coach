@@ -53,30 +53,71 @@ export default {
     // get user's previous workouts by date, if logged in
     async created() {
         if (this.$cookies.isKey("user_id")) {
-            let url = `${process.env.VUE_APP_API}/workout?user_id=${this.$cookies.get("user_id")}`;
+            let url, res;
+
+            // if workout_id cookie but no active workout storage...
+            // check to see if user wants to continue most recent workout, or start a new one!
+            if (!window.sessionStorage['workoutSummary'] && this.$cookies.isKey("workout_id")) {
+                let conf = confirm('It looks like you were just training! Press OK to continue your most recent workout, or Cancel to save and start a new one.');
+                // user decides to continue old workout
+                if (conf) {
+                    // get workout from db
+                    url = `${process.env.VUE_APP_API}/exercise/allSummary?workout_id=${this.$cookies.get("workout_id")}`;
+                    console.log('fetching...');
+                    res = await fetch(url, {
+                        method: 'GET',
+                        mode: 'cors'
+                    });
+                    if (res.status === 200) {
+                        res = await res.json();
+                        // update current workout in browser
+                        window.sessionStorage['workoutSummary'] = JSON.stringify(res);
+                    }
+                    // user decides to begin new workout
+                } else {
+                    // get a new workout_id
+                    url = `${process.env.VUE_APP_API}/workout`;
+                    res = await fetch(url, {
+                        method: 'POST',
+                        mode: 'cors',
+                        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+                        body: JSON.stringify({
+                            user_id: this.$cookies.get("user_id")
+                        })
+                    });
+                    if (res.status === 200) {
+                        res = await res.json();
+                        //                                  expiry path domain secure sameSite
+                        this.$cookies.set("workout_id", res, "6h", null, null, null, "Strict");
+                    }
+                    // init fresh workoutSummary
+                    window.sessionStorage['workoutSummary'] = JSON.stringify({});
+                }
+            }
+
+            // load workout history
+            url = `${process.env.VUE_APP_API}/workout?user_id=${this.$cookies.get("user_id")}`;
             try {
-                let res = await fetch(url);
+                res = await fetch(url);
                 this.workoutHistory = await res.json();
-                // BUG: If user completes workout, closes tab and reopens summary
-                // ...  today's workout (from db) will be ignored because workout_id from db matches cookie workout_id
-                // ...  but since tab was closed, today's workout (sessionStorage) is empty
-                // ...  to the user it appears as if the workout they just did was not saved
-                // filter out the browser workout_id to avoid duplicate entry loading from db
                 this.workoutHistory = this.workoutHistory.filter(workout => workout['workout_id'] !== parseInt(this.$cookies.get("workout_id")));
             } catch (error) {
                 console.log(error);
             }
         }
-        // load today's workout by default, init workoutSummary if user does not go to training first
-        if (!window.sessionStorage['workoutSummary']) window.sessionStorage['workoutSummary'] = JSON.stringify({});
-        this.summary = JSON.parse(window.sessionStorage['workoutSummary']);
+        // load today's workout by default, use dummy object if user does not go to training first
+        if (!window.sessionStorage['workoutSummary']) this.summary = {};
+        else this.summary = JSON.parse(window.sessionStorage['workoutSummary']);
     },
     methods: {
         // name says it all
         async getWorkoutSummary() {
             // user asks for today's workout
-            if (!this.selectedWorkout) return this.summary = JSON.parse(window.sessionStorage['workoutSummary']);
-            // else, user wants historical workout
+            if (!this.selectedWorkout) {
+                if (window.sessionStorage['workoutSummary']) return this.summary = JSON.parse(window.sessionStorage['workoutSummary']);
+                return this.summary = {};
+            }
+            // else, user wants an old workout
             let url = `${process.env.VUE_APP_API}/exercise/allSummary?workout_id=${this.selectedWorkout.workout_id}`;
             try {
                 let res = await fetch(url);
