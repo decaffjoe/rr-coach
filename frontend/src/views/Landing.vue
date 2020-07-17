@@ -80,18 +80,8 @@ section ul {
     text-align: left;
 }
 li {
-    list-style: none;
-    margin: 1em 0;
-    margin-left: -50px;
-}
-li::before {
-    --size: 20px;
-    content: '';
-    display: inline-block;
-    height: calc(var(--size) - 4px);
-    width: var(--size);
-    background-image: url('../assets/arrow.svg');
-    background-size: var(--size);
+    list-style: circle;
+    margin: 1em 10vw 1em -3vw;
 }
 #welcome h1 {
     font-size: 1.6em;

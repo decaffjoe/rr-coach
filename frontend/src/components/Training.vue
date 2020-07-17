@@ -620,18 +620,8 @@ iframe {
     padding: 0 10vw;
 }
 #info ul li {
-    list-style: none;
-    margin: 1em 0;
-    margin-left: -10px;
-}
-#info ul li::before {
-    --size: 20px;
-    content: '';
-    display: inline-block;
-    height: calc(var(--size) - 4px);
-    width: var(--size);
-    background-image: url('../assets/arrow.svg');
-    background-size: var(--size);
+    list-style: circle;
+    margin: 1em 0 1em 4vw;
 }
 #info p {
     border: 2px solid white;

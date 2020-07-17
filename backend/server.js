@@ -1,4 +1,6 @@
-require('dotenv').config();
+// load .env.$branch
+require('dotenv').config({ path: './.branch' });
+require('dotenv').config({ path: `./.env.${process.env.BRANCH}` });
 
 // IMPORTS
 const express = require('express');
@@ -10,13 +12,8 @@ app.use(express.json());
 app.use(cors());
 
 // DATABASE CONNECTION
-const { resetDB, connectDB } = require('./models/seed');
-if (process.env.RESET_DB) {
-    resetDB().then(() => console.log('seeding done!'))
-        .catch(err => console.log(err));
-} else {
-    connectDB().catch(err => console.log(err));
-}
+const { connectDB } = require('./models/seed');
+connectDB().catch(err => console.log(err));
 
 // RPC API ROUTES
 const userRoutes = require('./routes/user'),

@@ -57,6 +57,10 @@ export default {
             try {
                 let res = await fetch(url);
                 this.workoutHistory = await res.json();
+                // BUG: If user completes workout, closes tab and reopens summary
+                // ...  today's workout (from db) will be ignored because workout_id from db matches cookie workout_id
+                // ...  but since tab was closed, today's workout (sessionStorage) is empty
+                // ...  to the user it appears as if the workout they just did was not saved
                 // filter out the browser workout_id to avoid duplicate entry loading from db
                 this.workoutHistory = this.workoutHistory.filter(workout => workout['workout_id'] !== parseInt(this.$cookies.get("workout_id")));
             } catch (error) {
