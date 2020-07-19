@@ -11,7 +11,6 @@
                     <li>Keep tabs on your progress with a full history of your training sessions</li>
                 </ul>
                 <BaseButton id="train-link" v-on:click="goToTrain" :text="'Train now!'" />
-                <Footer id="footer-desktop" />
             </section>
             <section id="info">
                 <section>
@@ -21,6 +20,7 @@
                         <li>6 strength exercises, performed in pairs (set of pullups, set of squats, set of pullups...)</li>
                         <li>3 core strength exercises, performed in a triplet</li>
                     </ul>
+                    <RRLinks />
                 </section>
                 <section>
                     <h2>What do I need?</h2>
@@ -33,17 +33,16 @@
                 </section>
             </section>
         </div>
-        <Footer id="footer" />
     </div>
 </template>
 
 <script>
 import Navbar from "../components/Navbar.vue";
 import BaseButton from "../components/BaseButton.vue";
-import Footer from "../components/Footer.vue";
+import RRLinks from "../components/RRLinks.vue";
 export default {
     name: "Landing",
-    components: { Navbar, BaseButton, Footer },
+    components: { Navbar, BaseButton, RRLinks },
     methods: {
         goToTrain() {
             // Always start at Warmups
@@ -129,9 +128,6 @@ li {
 a {
     color: white;
 }
-#footer-desktop {
-    display: none;
-}
 /* DESKTOP STYLING */
 @media (min-width: 900px) {
     #welcome {
@@ -147,13 +143,11 @@ a {
     #train-link {
         font-size: 1.4em;
     }
-    .grid {
-        grid-template-columns: 3fr 2fr;
-        height: 95vh;
-    }
     #info {
         color: var(--main);
         background-color: white;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
     }
     #info section {
         padding: 6vh 2vw;
@@ -173,12 +167,6 @@ a {
     }
     a {
         color: var(--main);
-    }
-    #footer {
-        display: none;
-    }
-    #footer-desktop {
-        display: block;
     }
 }
 </style>

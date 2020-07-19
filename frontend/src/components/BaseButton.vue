@@ -35,4 +35,7 @@ button {
     padding: 0.5em;
     outline: none;
 }
+button:hover {
+    cursor: pointer;
+}
 </style>
