@@ -76,7 +76,6 @@ export default {
     display: grid;
     grid-template-columns: 1fr;
     margin: 0;
-    height: 95vh;
 }
 #welcome {
     margin: 2vh auto 0;
@@ -150,18 +149,27 @@ a {
     }
     .grid {
         grid-template-columns: 3fr 2fr;
+        height: 95vh;
     }
     #info {
         color: var(--main);
         background-color: white;
     }
     #info section {
-        padding: 4vh 2vw;
+        padding: 6vh 2vw;
         font-size: 1.1em;
     }
     #info section h2 {
         font-size: 1.7em;
-        margin-bottom: 7vh;
+        margin-bottom: 5vh;
+    }
+    #info section ul {
+        padding-left: 4vw;
+        padding-right: 0;
+        margin-right: 0;
+    }
+    #info section ul li {
+        margin: 2vh 5vw 2vh 0;
     }
     a {
         color: var(--main);
