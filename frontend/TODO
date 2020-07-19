@@ -4,6 +4,8 @@ INFRA:
 * Write docs for the frontend logic
 
 BUGS:
+* Desktop styling:
+    - Landing #info grid sections are not centered (and lose bg-color if they are)
 
 TEST:
 * Like everything haha (write some unit/integration/etc... tests)

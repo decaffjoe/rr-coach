@@ -40,14 +40,18 @@
         <!-- EXERCISE INSTRUCTIONS -->
         <section id="info">
             <iframe :src="currentVariant.url" v-show="currentVariant.url"></iframe>
-            <p v-show="currentVariant.desc">Exercise Tips</p>
-            <ul v-show="currentVariant.desc">
-                <li v-for="point of currentVariant.desc.split('.')" :key="point.id">{{ point }}</li>
-            </ul>
-            <p v-show="currentFormCues.length > 0">General Form Cues</p>
-            <ul v-show="currentSection !== 'Warmups'">
-                <li v-for="cue of currentFormCues" :key="cue.id">{{ cue }}</li>
-            </ul>
+            <div>
+                <p v-show="currentVariant.desc">Exercise Tips</p>
+                <ul v-show="currentVariant.desc">
+                    <li v-for="point of currentVariant.desc.split('.')" :key="point.id">{{ point }}</li>
+                </ul>
+            </div>
+            <div>
+                <p v-show="currentFormCues.length > 0">General Form Cues</p>
+                <ul v-show="currentSection !== 'Warmups'">
+                    <li v-for="cue of currentFormCues" :key="cue.id">{{ cue }}</li>
+                </ul>
+            </div>
         </section>
 
     </div>
@@ -507,6 +511,7 @@ export default {
     grid-template-columns: 25% 50% 25%;
     align-items: center;
     justify-items: center;
+    font-size: 1.1em;
 }
 #section>* {
     margin: 0 1em;
@@ -518,12 +523,6 @@ h1 {
     text-transform: uppercase;
     font-size: 1.2em;
     grid-area: text;
-}
-#section .bk-arrow {
-    grid-area: bk-arrow;
-}
-#section .fw-arrow {
-    grid-area: fw-arrow;
 }
 #completed {
     display: inline;
@@ -555,12 +554,6 @@ h1 {
     font-size: 1.5em;
     grid-area: text;
 }
-#set .bk-arrow {
-    grid-area: bk-arrow;
-}
-#set .fw-arrow {
-    grid-area: fw-arrow;
-}
 #rep {
     padding-bottom: 1vh;
 }
@@ -581,7 +574,6 @@ h1 {
 }
 #variant {
     margin: 2vh 0 3vh;
-    font-size: 0.8em;
     display: grid;
     grid-template-areas:"var var var" "bk-arrow text fw-arrow";
     grid-template-columns: 25% 50% 25%;
@@ -600,11 +592,13 @@ h2 {
     font-size: 1.2em;
     grid-area: text;
 }
-#variant .bk-arrow {
+#section .bk-arrow, #set .bk-arrow, #variant .bk-arrow {
     grid-area: bk-arrow;
+    justify-self: end;
 }
-#variant .fw-arrow {
+#section .fw-arrow, #set .fw-arrow, #variant .fw-arrow {
     grid-area: fw-arrow;
+    justify-self: start;
 }
 iframe {
     display: block;
@@ -612,6 +606,9 @@ iframe {
     border: 2px solid white;
     width: 95%;
     height: 25vh;
+}
+#info div {
+    margin: 5vh auto;
 }
 #info ul {
     list-style-position: inside;
@@ -624,13 +621,10 @@ iframe {
     margin: 1em 0 1em 4vw;
 }
 #info p {
-    border: 2px solid white;
+    border: 3px solid white;
     width: fit-content;
     margin: 0 auto;
     padding: 1vh 1vw;
-}
-#info p:nth-of-type(2) {
-    margin-top: 5vh;
 }
 .iblock {
     display: inline-block;
@@ -654,5 +648,34 @@ iframe {
     background-color: var(--main);
     display: block;
     margin: 2vh auto 0;
+}
+@media (min-width: 900px) {
+    #top {
+        font-size: 1.1em;
+    }
+    #section, #set, #variant {
+        grid-template-columns: 40% 20% 40%;
+        padding: 3vh 0;
+    }
+    #rep {
+        padding-bottom: 3vh;
+    }
+    #variant {
+        font-size: 1.0em;
+    }
+    iframe {
+        display: block;
+        margin: 0 auto 2vh;
+        border: 2px solid white;
+        width: 700px;
+        height: 400px;
+    }
+    #info ul {
+        padding: 0 25vw;
+        font-size: 1.1em;
+    }
+    #info p {
+        font-size: 1.4em;
+    }
 }
 </style>

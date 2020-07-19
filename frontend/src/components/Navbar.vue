@@ -86,7 +86,7 @@ p {
 /* DESKTOP STYLING */
 @media (min-width: 900px) {
     div {
-        padding: 2.0vh 10vw;
+        padding: 2.0vh 20vw;
     }
 }
 </style>
