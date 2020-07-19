@@ -1,7 +1,7 @@
 <template>
     <div>
         <section>
-            <p id="rrtt" @click="goToPage('/')">Home</p>
+            <p id="rrtt" @click="goToPage('/')" v-if="this.$route.name !== 'Landing'">Home</p>
         </section>
         <section>
             <p v-if="loggedIn && user_nickname">Hey {{ user_nickname }}!</p>
@@ -82,5 +82,11 @@ div {
 p {
     margin-right: 0.5em;
     display: inline;
+}
+/* DESKTOP STYLING */
+@media (min-width: 900px) {
+    div {
+        padding: 2.0vh 10vw;
+    }
 }
 </style>
