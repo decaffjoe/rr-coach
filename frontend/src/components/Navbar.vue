@@ -83,6 +83,9 @@ p {
     margin-right: 0.5em;
     display: inline;
 }
+section:first-of-type p:hover, section:last-of-type p:hover {
+    cursor: pointer;
+}
 /* DESKTOP STYLING */
 @media (min-width: 900px) {
     div {

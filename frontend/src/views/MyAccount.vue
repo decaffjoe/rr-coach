@@ -71,6 +71,9 @@ section {
     display: block;
     margin: 0 auto;
 }
+h1 {
+    margin-top: 3vh;
+}
 #idInput {
     outline: none;
     width: 80%;
@@ -80,6 +83,10 @@ section {
     background-color: var(--main);
     border: 2px solid white;
     padding: 0.2em 0.3em;
+    text-align: center;
+}
+h2 {
+    margin-top: 5vh;
 }
 h2 + input {
     border-radius: 50px;
@@ -89,5 +96,11 @@ h2 + input {
     outline: none;
     margin: 0 auto;
     display: block;
+}
+@media (min-width: 900px) {
+    #idInput {
+        font-size: 1.1em;
+        width: 40%;
+    }
 }
 </style>

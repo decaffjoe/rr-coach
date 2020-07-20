@@ -642,6 +642,9 @@ iframe {
 .bk-arrow {
     background-image: url('../assets/left_arrow.svg');
 }
+.fw-arrow:hover, .bk-arrow:hover {
+    cursor: pointer;
+}
 #endOfTrainingMsg {
     border: 3px solid var(--main);
     color: white;

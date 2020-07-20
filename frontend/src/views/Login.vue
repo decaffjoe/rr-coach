@@ -202,6 +202,7 @@ br + .idField {
     color: white;
     border: 2px solid white;
     border-radius: 0;
+    text-align: center;
 }
 #yourID {
     margin-top: 0.2em;
@@ -226,6 +227,7 @@ br + .idField {
 }
 h2 {
     margin: 0 auto;
+    font-size: 1.6em;
 }
 #login input {
     color: white;
@@ -237,5 +239,20 @@ h2 {
     color: white;
     background-color: var(--main);
     border: 3px solid var(--main);
+}
+@media (min-width: 900px) {
+    #justFinished {
+        font-size: 1.0em;
+    }
+    p {
+        font-size: 1.1em;
+    }
+    .idField {
+        font-size: 1.1em;
+        width: 40%;
+    }
+    #login {
+        padding-top: 5vh;
+    }
 }
 </style>
