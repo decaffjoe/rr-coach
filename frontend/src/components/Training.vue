@@ -14,7 +14,7 @@
         <section id="set">
             <p>Set</p>
             <i @click="decrementSetNum" class="arrow bk-arrow" v-show="currentSection !== 'Warmups' || currentSectionSet !== 1"></i>
-            <p class="iblock"><span>{{ currentSectionSet }}</span> / <span>{{ currentMaxSets }}</span></p>
+            <p class="iblock">{{ currentSectionSet }} / {{ currentMaxSets }}</p>
             <i @click="incrementSetNum" class="arrow fw-arrow" v-show="currentSection !== 'Core' || currentSectionSet !== 9"></i>
         </section>
 
@@ -60,6 +60,7 @@
 <script>
 import Navbar from "../components/Navbar.vue";
 import BaseButton from "../components/BaseButton.vue";
+
 export default {
     name: "Training",
     components: { Navbar, BaseButton, },
@@ -154,7 +155,7 @@ export default {
                 else if (this.currentSectionSet >= 5) return 3;
                 else return 2;
             }
-        }
+        },
     },
     watch: {
         // update exercise variant cookies when variant is changed
@@ -398,8 +399,8 @@ export default {
             // reset after every "previous/next set" change
             enteredVariant: undefined,
             // cumulative set number per section
-            currentSectionSet: 1,
             currentSection: 'Warmups',
+            currentSectionSet: 1,
             // preferences loaded from cookies or defaulted to 0 if no cookies
             variantPreferences: {
                 'pullup': undefined,
@@ -498,7 +499,7 @@ export default {
 #top {
     text-align: center;
 }
-#nav {
+#navbar {
     background-color: black;
     color: white;
     margin: 0;
@@ -661,7 +662,7 @@ iframe {
         font-size: 1.1em;
     }
     #navbar {
-        font-size: 1.0em;
+        font-size: 0.9em;
     }
     #section, #set, #variant {
         grid-template-columns: 40% 20% 40%;

@@ -69,10 +69,6 @@ div {
     align-items: center;
     font-size: 1.0em;
 }
-#rrtt {
-    color: white;
-    text-decoration: none;
-}
 .btn {
     background-color: black;
     border: 2px solid white;
@@ -82,9 +78,12 @@ div {
 p {
     margin-right: 0.5em;
     display: inline;
+    transition: 60ms;
+    padding-bottom: 0.5vh;
 }
 section:first-of-type p:hover, section:last-of-type p:hover {
     cursor: pointer;
+    border-bottom: 2px solid white;
 }
 /* DESKTOP STYLING */
 @media (min-width: 900px) {
