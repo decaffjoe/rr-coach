@@ -1,9 +1,40 @@
-# Clone repo:
+# 'Normal' way
 
-* `git clone https://gitlab.com/spongechameleon/rr-coach.git`
-* `cd rr-coach`
+## Setup .env (environment variables) file
 
-# Setup a local postgres (database) instance:
+* Make an environment variables file `rr-coach/backend/.env`
+
+* Set: 
+	
+	- `PORT=3000`
+	
+	- `DOMAIN=http://localhost`
+	
+	- `SQLITE_DB=true`
+	
+* If you'd rather use a 'real' database instance (e.g. postgres):
+
+	- Omit `SQLITE_DB`
+
+	- Set `DB_PATH='postgres://<user>:<password>@localhost:5432/<db-name>`
+	
+* If you want your database to reset after every change to the backend (instead of leaving existing data intact):
+
+	- Set `RESET_DB=true`
+	
+## Run application
+
+* Make sure you are in `backend`
+
+* Run `node server.js`
+
+* The backend API should now be accessible from http://localhost:3000
+
+---
+
+# Docker way (messy, experimental)
+
+## Setup a local postgres (database) instance:
 
 * Install postgresql on your local machine
 * Allow connections from docker containers:
@@ -20,7 +51,7 @@
 
     - `systemctl restart postgresql`
 
-# Environment variables:
+## Environment variables:
 
 * Save your host IP address (to connect to postgres from Docker):
 
@@ -43,7 +74,7 @@
 
             - Where `<user>` could be `postgres` and `<db name>` could be `rr-coach`
 
-# Application (Docker):
+## Application (Docker):
 
 * Build image:
 
@@ -53,4 +84,4 @@
 
     - `docker run --rm -ti --add-host=hostip:$HOST_IP -p 3000:3000 rr_coach`
 
-## The backend API should now be accessible from http://localhost:3000
+* The backend API should now be accessible from http://localhost:3000
