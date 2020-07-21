@@ -10,6 +10,6 @@ Welcome to the repo, please see the READMEs for both the [frontend](https://gitl
 
 ## Design documentation
 
-Please see these [diagrams](https://trello.com/c/hXSQsNcG/5-master-flowchart) (hosted on Trello).
+Please see these [diagrams](https://trello.com/c/hXSQsNcG/5-master-flowchart) (hosted on Trello). Start with "Infrastructure" for the big picture!
 
 FYI: We are going with a JAMStack-like approach here, so the frontend and backend are completely de-coupled and start up separately (only JSON is exchanged between them).
