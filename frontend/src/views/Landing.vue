@@ -94,23 +94,24 @@ li {
 #welcome h1 {
     font-size: 1.6em;
     margin: 7vh 0 2vh;
+    color: #633d34;
 }
 #welcome h2 {
-    color: red;
+    color: #633d34;
     text-transform: lowercase;
     font-size: 1.1em;
     margin: 0 0 7vh;
 }
 #welcome h2 a {
-    color: red;
+    color: #633d34;
 }
 #train-link {
     display: block;
-    margin: 7vh auto;
+    margin: 3em auto;
     font-size: 1.5rem;
-    border: 5px solid yellow;
-    color: black;
-    background-color: yellow;
+    border: 5px solid var(--accent);
+    color: white;
+    background-color: var(--accent);
 }
 #info section {
     padding: 3vh 5vw 4vh 10vw;
@@ -122,11 +123,11 @@ li {
     margin: 0 0 0 5vw;
 }
 #info section:first-of-type {
-    background-color: white;
+    background-color: var(--silver);
     color: var(--main);
 }
 a {
-    color: white;
+    color: var(--main);
 }
 /* DESKTOP STYLING */
 @media (min-width: 900px) {
@@ -144,8 +145,8 @@ a {
         font-size: 1.4em;
     }
     #info {
+        background-color: var(--silver);
         color: var(--main);
-        background-color: white;
         display: grid;
         grid-template-columns: 1fr 1fr;
     }

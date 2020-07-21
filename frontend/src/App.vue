@@ -12,11 +12,14 @@ export default {
 
 <style>
 :root {
-    --main: #ff8e30;
+    --main: #633d34;
+    --silver: rgb(245, 245, 245);
+    --accent: #f642d3;
+    --orange: #ff8e30;
 }
 html,body {
-    color: white;
-    background-color: var(--main);
+    color: var(--main);
+    background-color: white;
     font-family: 'Oxygen', sans-serif;
     font-size: 1.0rem;
     font-weight: 700;

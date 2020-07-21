@@ -1,13 +1,13 @@
 <template>
     <div>
-        <section>
-            <p id="rrtt" @click="goToPage('/')" v-if="this.$route.name !== 'Landing'">Home</p>
+        <section class="link">
+            <p @click="goToPage('/')" v-if="this.$route.name !== 'Landing'">Home</p>
         </section>
         <section>
             <p v-if="loggedIn && user_nickname">Hey {{ user_nickname }}!</p>
             <p v-else-if="loggedIn && user_id">Hi, {{ user_id.slice(0, 6) }}...</p>
         </section>
-        <section>
+        <section class="link">
             <p @click="goToPage('/summary')" v-if="this.$route.name === 'TrainNow'">Summary</p>
             <p @click="goToPage('/train')" v-else-if="this.$route.name === 'WorkoutSummary'">Train</p>
             <p @click="goToPage('/login')" v-else-if="!loggedIn && this.$route.name !== 'Login'">Signup / Login</p>
@@ -59,8 +59,8 @@ export default {
 
 <style scoped>
 div {
-    background-color: #dfe0df;
-    color: black;
+    background-color: var(--main);
+    color: white;
     padding: 1.5em 0;
     margin: 0;
     display: grid;
@@ -70,9 +70,9 @@ div {
     font-size: 1.0em;
 }
 .btn {
-    background-color: white;
-    border: 2px solid black;
-    color: black;
+    background-color: var(--main);
+    border: 2px solid white;
+    color: white;
     margin: 0 0.2em;
 }
 p {
@@ -81,9 +81,9 @@ p {
     transition: 60ms;
     padding-bottom: 0.5vh;
 }
-section:first-of-type p:hover, section:last-of-type p:hover {
+.link p:hover {
     cursor: pointer;
-    border-bottom: 2px solid black;
+    border-bottom: 2px solid white;
 }
 /* DESKTOP STYLING */
 @media (min-width: 900px) {

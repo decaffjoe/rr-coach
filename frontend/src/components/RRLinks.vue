@@ -15,7 +15,7 @@ export default {
 
 <style scoped>
 div {
-    background-color: white;
+    background-color: var(--silver);
     padding-top: 2vh;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -30,7 +30,7 @@ div a:nth-of-type(2) {
 }
 .btn {
     color: var(--main);
-    background-color: white;
+    background-color: var(--silver);
     border-color: var(--main);
 }
 /* DESKTOP STYLING */

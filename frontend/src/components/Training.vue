@@ -524,7 +524,7 @@ h1 {
 }
 #set,#rep {
     color: var(--main);
-    background-color: white;
+    background-color: var(--silver);
 }
 #set {
     padding: 2vh 0 0;
@@ -558,10 +558,10 @@ h1 {
     font-size: 1.1em;
 }
 #completed {
-    color: red;
+    color: var(--accent);
 }
 #rep input {
-    border: 3px solid red;
+    border: 3px solid var(--accent);
     font-size: 1.3em;
     outline: none;
     padding: 0.1em 0.5em;
@@ -598,7 +598,7 @@ h2 {
 iframe {
     display: block;
     margin: 0 auto 2vh;
-    border: 2px solid white;
+    border: none;
     width: 95%;
     height: 30vh;
 }
@@ -616,7 +616,7 @@ iframe {
     margin: 1em 0 1em 4vw;
 }
 #info p {
-    border: 3px solid white;
+    border: 3px solid var(--main);
     width: fit-content;
     margin: 0 auto;
     padding: 1vh 1vw;
@@ -665,9 +665,6 @@ iframe {
         font-size: 1.0em;
     }
     iframe {
-        display: block;
-        margin: 0 auto 2vh;
-        border: 2px solid white;
         width: 700px;
         height: 400px;
     }

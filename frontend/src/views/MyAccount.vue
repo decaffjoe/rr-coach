@@ -64,6 +64,9 @@ section {
     position: relative;
 }
 #summaryBtn {
+    color: white;
+    border-color: var(--accent);
+    background-color: var(--accent);
     margin: 4vh auto 2vh;
     font-size: 1.3em;
 }
@@ -79,9 +82,9 @@ h1 {
     width: 80%;
     font-size: 1.05em;
     font-weight: bold;
-    color: white;
-    background-color: var(--main);
-    border: 2px solid white;
+    color: var(--main);
+    background-color: white;
+    border: 2px solid var(--main);
     padding: 0.2em 0.3em;
     text-align: center;
 }
@@ -96,6 +99,9 @@ h2 + input {
     outline: none;
     margin: 0 auto;
     display: block;
+    color: white;
+    background-color: var(--main);
+    text-align: center;
 }
 @media (min-width: 900px) {
     #idInput {

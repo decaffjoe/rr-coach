@@ -157,6 +157,7 @@ table {
     background-color: #ff7320;
     border-radius: 20px;
     padding: 1vh 20px;
+    color: white;
 }
 /* COLORING */
 /* dips & hinges */

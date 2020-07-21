@@ -28,9 +28,9 @@ export default {
 button {
     font-weight: bold;
     font-size: 0.9em;
-    color: var(--main);
-    background-color: white;
-    border: 3px solid white;
+    color: white;
+    background-color: var(--main);
+    border: 3px solid var(--main);
     border-radius: 10px;
     padding: 0.5em;
     outline: none;

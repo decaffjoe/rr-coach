@@ -170,7 +170,7 @@ export default {
 }
 h1 {
     font-size: 1.8em;
-    margin: 3vh auto 1vh;
+    margin: 1.5em auto 1em;
 }
 input {
     border-radius: 50px;
@@ -180,13 +180,16 @@ input {
     outline: none;
     margin: 0 auto;
     display: block;
+    color: white;
+    background-color: var(--main);
+    text-align: center;
 }
 #createID {
     display: block;
     margin: 2vh auto 0;
-    color: black;
-    background-color: yellow;
-    border: 3px solid yellow;
+    color: white;
+    background-color: var(--accent);
+    border: 3px solid var(--accent);
 }
 #nickname {
     display: inline-block;
@@ -197,10 +200,11 @@ input {
     font-weight: bold;
 }
 br + .idField {
-    border-color: white;
-    background-color: var(--main);
-    color: white;
-    border: 2px solid white;
+    margin-top: 2em;
+    border-color: var(--main);
+    background-color: white;
+    color: var(--main);
+    border: 2px solid var(--main);
     border-radius: 0;
     text-align: center;
 }
@@ -217,10 +221,12 @@ br + .idField {
     display: block;
     margin: 5vh auto 0;
     font-size: 1.5rem;
+    color: white;
+    background-color: var(--main);
 }
 #login {
     color: var(--main);
-    background-color: white;
+    background-color: var(--silver);
     padding: 3vh 0;
     margin-top: 8vh;
     flex-grow: 1;
