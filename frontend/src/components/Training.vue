@@ -1,6 +1,6 @@
 <template>
     <div id="top">
-        <Navbar v-on:click="leavePage" />
+        <Navbar id="navbar" v-on:click="leavePage" />
 
         <!-- SECTION CONTROL -->
         <section id="section">
@@ -179,6 +179,10 @@ export default {
     methods: {
         // save and go to next set
         async incrementSetNum() {
+            // go to summary if we're on the last set of the workout!
+            if (this.currentSection === 'Core' && (this.currentSectionSet === this.currentMaxSets)) {
+                return this.goToPage('/summary');
+            }
             await this.saveSet();
             ++this.currentSectionSet;
             // check if value forces next exercise
@@ -655,6 +659,9 @@ iframe {
 @media (min-width: 900px) {
     #top {
         font-size: 1.1em;
+    }
+    #navbar {
+        font-size: 1.0em;
     }
     #section, #set, #variant {
         grid-template-columns: 40% 20% 40%;
