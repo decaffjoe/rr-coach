@@ -59,8 +59,8 @@ export default {
 
 <style scoped>
 div {
-    background-color: black;
-    color: white;
+    background-color: #dfe0df;
+    color: black;
     padding: 1.5em 0;
     margin: 0;
     display: grid;
@@ -70,9 +70,9 @@ div {
     font-size: 1.0em;
 }
 .btn {
-    background-color: black;
-    border: 2px solid white;
-    color: white;
+    background-color: white;
+    border: 2px solid black;
+    color: black;
     margin: 0 0.2em;
 }
 p {
@@ -83,7 +83,7 @@ p {
 }
 section:first-of-type p:hover, section:last-of-type p:hover {
     cursor: pointer;
-    border-bottom: 2px solid white;
+    border-bottom: 2px solid black;
 }
 /* DESKTOP STYLING */
 @media (min-width: 900px) {

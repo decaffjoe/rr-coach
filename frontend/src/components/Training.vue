@@ -610,7 +610,7 @@ iframe {
     margin: 0 auto 2vh;
     border: 2px solid white;
     width: 95%;
-    height: 25vh;
+    height: 30vh;
 }
 #info div {
     margin: 5vh auto;
