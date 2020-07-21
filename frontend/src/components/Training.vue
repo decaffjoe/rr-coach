@@ -166,11 +166,13 @@ export default {
                 }
             }, deep: true
         },
+        // remember section if user refreshes page
         currentSection: {
             handler(value) {
                 window.sessionStorage['currentSection'] = value;
             }
         },
+        // remember set if user refreshes page
         currentSectionSet: {
             handler(value) {
                 window.sessionStorage['currentSectionSet'] = value;
