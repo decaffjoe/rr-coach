@@ -6,8 +6,8 @@
             <option :value="undefined">Today</option>
         </select>
         <!-- SUMMARY -->
-        <table>
-            <div v-for="section of Object.keys(uniqueExercises)" :key="section">
+        <div id="tables">
+            <table v-for="section of Object.keys(uniqueExercises)" :key="section">
                 <!-- e.g. "PULLUPS" -->
                 <tr>
                     <th colspan="4">{{ `${section[0].toUpperCase()}${section.slice(1)}s` }}</th>
@@ -21,8 +21,8 @@
                     <td class="variant-name">{{ variant }}</td>
                     <td class="reps" v-for="reps of uniqueExercises[section][variant]" :key="reps.id">{{ reps }}</td>
                 </tr>
-            </div>
-        </table>
+            </table>
+        </div>
     </div>
 </template>
 
@@ -145,29 +145,40 @@ export default {
 div {
     text-align: center;
 }
+#tables {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    margin: 3vh auto;
+    padding: 0 8vw;
+    gap: 1rem;
+}
 table {
-    border-collapse: collapse;
-    margin: 0 auto;
     text-align: left;
-    table-layout: fixed;
+    background-color: #ff7320;
+    border-radius: 20px;
+    padding: 1vh 20px;
+}
+/* COLORING */
+/* dips & hinges */
+table:nth-of-type(3), table:nth-of-type(4) {
+    background-color: #f76668;
+}
+table:nth-of-type(5), table:nth-of-type(6) {
+    background-color: #c95a8e;
+}
+/* core */
+table:nth-of-type(7), table:nth-of-type(8), table:nth-of-type(9) {
+    background-color: #865c97;
 }
 th {
     text-align: center;
     text-transform: uppercase;
-    height: 3vh;
     font-size: 1.1em;
-    padding-bottom: 1vh;
 }
 #legend {
     text-align: left;
     font-size: 0.9em;
     font-weight: normal;
-}
-table div {
-    margin-bottom: 3vh;
-    background-color: #ff7320;
-    border-radius: 20px;
-    padding: 1vh 3vw;
 }
 .variant-name {
     text-align: left;
@@ -176,7 +187,12 @@ table div {
 td {
     margin-right: 2em;
 }
-.reps {
-    padding: 0 1vw;
+@media (min-width: 900px) {
+    #tables {
+        padding: 0 20vw;
+    }
+    .variant-name {
+        width: 80%;
+    }
 }
 </style>
