@@ -11,10 +11,9 @@ app.use(cors());
 
 // DATABASE CONNECTION
 const { resetDB, connectDB } = require('./models/seed');
-// if (process.env.RESET_DB) {
-//     resetDB().catch(err => console.log(err));
-// } else connectDB().catch(err => console.log(err));
-resetDB();
+if (process.env.RESET_DB) {
+    resetDB().catch(err => console.log(err));
+} else connectDB().catch(err => console.log(err));
 
 // RPC API ROUTES
 const userRoutes = require('./routes/user'),
