@@ -499,16 +499,6 @@ export default {
 #top {
     text-align: center;
 }
-#navbar {
-    background-color: black;
-    color: white;
-    margin: 0;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    justify-items: center;
-    align-items: center;
-    font-size: 1.0em;
-}
 #section {
     margin: 3vh 0 4vh;
     display: grid;
