@@ -1,6 +1,9 @@
 const Sequelize = require('sequelize').Sequelize;
 
-const db = new Sequelize(process.env.DB_PATH, { logging: false });
+let db;
+if (process.env.SQLITE_DB) {
+    db = new Sequelize('sqlite::memory:');
+} else db = new Sequelize(process.env.DB_PATH, { logging: false });
 
 // test connection
 db.authenticate()
