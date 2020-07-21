@@ -26,7 +26,7 @@
             <BaseButton id="endOfTrainingMsg" v-on:click="goToPage('/summary')" v-show="endOfTraining" :text="'See your Summary'" />
             <!-- ERROR ON INPUT HANDLING -->
             <p v-show="error">{{ error }}</p>
-            <p v-show="!endOfTraining">90 second to 3 minute rest between sets</p>
+            <p v-show="currentSection !== 'Warmups' && !endOfTraining">90 second to 3 minute rest between sets</p>
         </section>
 
         <!-- EXERCISE VARIANT CONTROL -->
