@@ -149,7 +149,7 @@ div {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     margin: 3vh auto;
-    padding: 0 8vw;
+    padding: 0 4vw;
     gap: 1rem;
 }
 table {

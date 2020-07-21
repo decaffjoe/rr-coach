@@ -61,7 +61,7 @@ export default {
 div {
     background-color: black;
     color: white;
-    padding: 2.0vh 0;
+    padding: 1.5em 0;
     margin: 0;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
