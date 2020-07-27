@@ -5,7 +5,7 @@
       <div v-if="!error">
           <router-link to="/summary"><BaseButton id="summaryBtn" :text="'My Training Summary'" /></router-link>
           <h1>Your id:</h1>
-          <input type="text" id="idInput" :value="id">
+          <p type="text" id="idInput">{{ id }}</p>
           <br>
           <h2>Update nickname:</h2>
           <input class="block" @keypress.enter="updateNickname" type="text" v-model="nickname">
@@ -85,6 +85,7 @@ h1 {
     color: var(--main);
     background-color: white;
     border: 2px solid var(--main);
+    margin: 0 auto;
     padding: 0.2em 0.3em;
     text-align: center;
 }

@@ -9,7 +9,7 @@
             <BaseButton v-on:click="createUser" id="createID" :text="'Create id'" />
             <p v-show="createError" class="error">{{ createError }}</p>
             <br>
-            <input v-model="newUserId" class="idField" type="text">
+            <p class="idField" type="text">{{ newUserId }}</p>
             <p id="yourID">Your ID</p>
             <p>*No passwords, email, or anything else- so hold on to your id somewhere safe!</p>
             <router-link class="router-link" to="/"><BaseButton id="gotIt" v-show="isSuccessful" :text="'Got it!'" /></router-link>
@@ -172,7 +172,7 @@ h1 {
     font-size: 1.8em;
     margin: 1.5em auto 1em;
 }
-input {
+input, p.idField {
     border-radius: 50px;
     border: none;
     padding: 0.5em 1.0em;
@@ -183,6 +183,9 @@ input {
     color: white;
     background-color: var(--main);
     text-align: center;
+}
+p.idField {
+    height: 2vh;
 }
 #createID {
     display: block;
