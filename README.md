@@ -6,7 +6,9 @@ A website to guide users through reddit's r/bodyweightfitness [Recommended Routi
 
 ## Getting started
 
-Welcome to the repo, please see the READMEs for both the [frontend](https://gitlab.com/spongechameleon/rr-coach/-/tree/master/frontend) and [backend](https://gitlab.com/spongechameleon/rr-coach/-/tree/master/backend) for startup instructions!
+Welcome to the repo, if you would like to contribute (everyone is welcome), please see the [guidelines](https://gitlab.com/spongechameleon/rr-coach/-/blob/CONTRIBUTING.md).
+
+When you're ready to start working, please see the READMEs for both the [frontend](https://gitlab.com/spongechameleon/rr-coach/-/tree/master/frontend) and [backend](https://gitlab.com/spongechameleon/rr-coach/-/tree/master/backend) for startup instructions!
 
 ## Design documentation
 
