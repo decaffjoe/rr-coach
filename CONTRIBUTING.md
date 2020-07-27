@@ -4,7 +4,7 @@ When contributing to this repository, please first discuss the change you wish t
 
 Reddit:
 
-Maintainer - u/spongechameleon
+Maintainer - [u/spongechameleon](https://www.reddit.com/user/spongechameleon)
 
 ## Merge Request Process
 
