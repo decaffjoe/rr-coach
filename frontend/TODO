@@ -12,6 +12,5 @@ FEATURES:
     - Comparison tool between any two workouts
         - Latest session is standard by default (but is changeable)
         - Present graph of reps over time
-* Rest timer in between each set (too soon <= 90-270s => too long)
 * Add alternate paths for strength exercises
     - <select> menu dropdown that changes to an alternate progressions object
