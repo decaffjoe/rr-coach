@@ -118,7 +118,7 @@ export default {
   border-bottom: 2px solid white;
 }
 .bm-burger-button {
-  top: 15px;
+  top: 10px;
   left: 36px;
   position: fixed;
 }
@@ -135,7 +135,7 @@ export default {
 }
 .bm-menu {
   background-color: var(--main-light);
-  padding-top: 10px;
+  padding-top: 0;
 }
 .bm-item-list {
   color: white;
