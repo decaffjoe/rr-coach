@@ -118,7 +118,7 @@ export default {
   border-bottom: 2px solid white;
 }
 .bm-burger-button {
-  top: 10px;
+  top: 4px;
   left: 36px;
   position: fixed;
 }
@@ -139,7 +139,7 @@ export default {
 }
 .bm-item-list {
   color: white;
-  font-size: 14px;
+  font-size: 10px;
 }
 .bm-item-list > * {
   width: fit-content;
