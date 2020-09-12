@@ -1,7 +1,7 @@
 <template>
   <div id="navbar" :class="{ scrolled: scrollY !== 0 }">
     <!-- Hamburger menu -->
-    <Slide right :closeOnNavigation="true" noOverlay width="180">
+    <Slide right :closeOnNavigation="true" noOverlay width="200">
       <p class="navbar-item" @click="goToPage('/')">Home</p>
       <p class="navbar-item" @click="goToPage('/train')">Train</p>
       <p class="navbar-item" @click="goToPage('/summary')">Summary</p>
@@ -118,7 +118,7 @@ export default {
   border-bottom: 2px solid white;
 }
 .bm-burger-button {
-  top: 4px;
+  top: 15px;
   left: 36px;
   position: fixed;
 }
@@ -139,7 +139,7 @@ export default {
 }
 .bm-item-list {
   color: white;
-  font-size: 10px;
+  font-size: 14px;
 }
 .bm-item-list > * {
   width: fit-content;

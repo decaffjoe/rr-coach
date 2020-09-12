@@ -167,7 +167,7 @@ export default {
     font-size: 0.9em;
     margin: 0;
     padding: 0.7vh 0;
-    margin-top: 50px;
+    margin-top: 59px; /* navbar spacing */
 }
 h1 {
     font-size: 1.8em;

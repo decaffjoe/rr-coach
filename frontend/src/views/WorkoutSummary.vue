@@ -26,6 +26,6 @@ p {
     font-size: 0.9em;
     margin: 0;
     padding: 0.7vh 0;
-    margin-top: 59px;
+    margin-top: 59px; /* navbar spacing */
 }
 </style>
