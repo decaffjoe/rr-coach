@@ -13,6 +13,7 @@ export default {
 <style>
 :root {
     --main: #633d34;
+    --main-light: #784d42;
     --silver: rgb(245, 245, 245);
     --accent: #f642d3;
     --orange: #ff8e30;

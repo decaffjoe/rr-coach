@@ -3,15 +3,15 @@
         <Navbar />
         <p id="justFinished">If you just finished your workout, your stats will be saved automatically once you sign up or login!</p>
         <div>
-            <h1>New? All you need is an id</h1>
+            <h1>New? Just generate an ID</h1>
             <p id="nickname">(Optional) nickname:</p>
             <input @keypress.enter="createUser" v-model="newUserNickname" type="text">
             <BaseButton v-on:click="createUser" id="createID" :text="'Create id'" />
             <p v-show="createError" class="error">{{ createError }}</p>
             <br>
             <p class="idField" type="text">{{ newUserId }}</p>
-            <p id="yourID">Your ID</p>
-            <p>*No passwords, email, or anything else- so hold on to your id somewhere safe!</p>
+            <p id="yourID">Your Generated ID</p>
+            <p>*No passwords, email, or anything else- so hold on to your ID somewhere safe!</p>
             <router-link class="router-link" to="/"><BaseButton id="gotIt" v-show="isSuccessful" :text="'Got it!'" /></router-link>
         </div>
         <section id="login">
@@ -167,6 +167,7 @@ export default {
     font-size: 0.9em;
     margin: 0;
     padding: 0.7vh 0;
+    margin-top: 50px;
 }
 h1 {
     font-size: 1.8em;
