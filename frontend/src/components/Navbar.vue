@@ -1,7 +1,13 @@
 <template>
   <div id="navbar" :class="{ scrolled: scrollY !== 0 }">
     <!-- Hamburger menu -->
-    <Slide id="slide" right :closeOnNavigation="true" noOverlay width="200">
+    <Slide
+      id="slide"
+      right
+      :closeOnNavigation="true"
+      noOverlay
+      :width="burgerMenuWidth"
+    >
       <p class="navbar-item" @click="goToPage('/')">Home</p>
       <p class="navbar-item" @click="goToPage('/train')">Train</p>
       <p class="navbar-item" @click="goToPage('/summary')">Summary</p>
@@ -23,6 +29,14 @@ import { Slide } from "vue-burger-menu";
 export default {
   name: "Navbar",
   components: { Slide },
+  computed: {
+    burgerMenuWidth() {
+      if (this.screenWidth < 900) {
+        return "200";
+      }
+      return "400";
+    },
+  },
   watch: {
     scrollY: {
       handler(value) {
@@ -49,12 +63,17 @@ export default {
       if (name !== "null" && name !== null) this.user_nickname = name;
       this.user_id = this.$cookies.get("user_id");
     }
-    // keep track of scrolling
+    // keep track of scrolling (for background fill)
     document.addEventListener("scroll", () => {
       this.scrollY = window.scrollY;
     });
+    // keep track of screen width (for width prop)
+    window.onresize = () => {
+      this.screenWidth = window.innerWidth;
+    };
   },
   mounted() {
+    this.screenWidth = window.innerWidth;
     this.burgerMenu = document.querySelector(".bm-burger-button");
     this.burgerMenuBars = document.querySelectorAll(".bm-burger-bars");
   },
@@ -81,6 +100,7 @@ export default {
       user_id: undefined,
       user_nickname: undefined,
       scrollY: 0,
+      screenWidth: 0,
       burgerMenu: undefined,
       burgerMenuBars: undefined,
     };
@@ -118,9 +138,9 @@ export default {
   border-bottom: 2px solid white;
 }
 #slide >>> .bm-burger-button {
-  top: 15px;
-  left: 36px;
   position: fixed;
+  top: 12px;
+  right: 36px !important;
 }
 #slide >>> .bm-burger-bars {
   background-color: var(--main);
@@ -154,6 +174,14 @@ export default {
 @media (min-width: 900px) {
   #navbar {
     padding: 2vh 20vw;
+    height: 30px;
+  }
+  #slide >>> .bm-burger-button {
+    top: 20px;
+    right: 12vw !important;
+  }
+  #slide >>> .bm-item-list {
+    font-size: 22px;
   }
 }
 </style>
