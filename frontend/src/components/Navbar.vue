@@ -117,7 +117,7 @@ export default {
   position: fixed;
   top: 0;
   width: 100%;
-  height: 2px;
+  height: 0px;
   padding: 1.5em 0;
   margin: 0;
   display: grid;
@@ -161,7 +161,7 @@ export default {
 }
 #slide >>> .bm-item-list {
   color: white;
-  font-size: 14px;
+  font-size: 16px;
 }
 #slide >>> .bm-item-list > * {
   width: fit-content;
