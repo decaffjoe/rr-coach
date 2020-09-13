@@ -38,7 +38,7 @@ body {
 }
 @media (min-width: 900px) {
   :root {
-    --nav-spacing: 100px;
+    --nav-spacing: 70px;
   }
 }
 </style>

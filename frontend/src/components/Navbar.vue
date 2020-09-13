@@ -117,7 +117,7 @@ export default {
   position: fixed;
   top: 0;
   width: 100%;
-  height: 15px;
+  height: 2px;
   padding: 1.5em 0;
   margin: 0;
   display: grid;
@@ -139,7 +139,9 @@ export default {
 }
 #slide >>> .bm-burger-button {
   position: fixed;
-  top: 12px;
+  height: 20px;
+  width: 30px;
+  top: 11px;
   right: 36px !important;
 }
 #slide >>> .bm-burger-bars {
@@ -174,11 +176,13 @@ export default {
 @media (min-width: 900px) {
   #navbar {
     padding: 2vh 20vw;
-    height: 30px;
+    height: 14px;
   }
   #slide >>> .bm-burger-button {
-    top: 20px;
+    top: 15px;
     right: 12vw !important;
+    height: 23px;
+    width: 34px;
   }
   #slide >>> .bm-item-list {
     font-size: 22px;
