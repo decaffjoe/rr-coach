@@ -1,7 +1,7 @@
 <template>
   <div id="navbar" :class="{ scrolled: scrollY !== 0 }">
     <!-- Hamburger menu -->
-    <Slide right :closeOnNavigation="true" noOverlay width="200">
+    <Slide id="slide" right :closeOnNavigation="true" noOverlay width="200">
       <p class="navbar-item" @click="goToPage('/')">Home</p>
       <p class="navbar-item" @click="goToPage('/train')">Train</p>
       <p class="navbar-item" @click="goToPage('/summary')">Summary</p>
@@ -88,7 +88,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .scrolled {
   background-color: var(--main) !important;
 }
@@ -117,36 +117,36 @@ export default {
   cursor: pointer;
   border-bottom: 2px solid white;
 }
-.bm-burger-button {
+#slide >>> .bm-burger-button {
   top: 15px;
   left: 36px;
   position: fixed;
 }
-.bm-burger-bars {
+#slide >>> .bm-burger-bars {
   background-color: var(--main);
   transition: 200ms;
 }
-.bm-cross {
+#slide >>> .bm-cross {
   background: none;
 }
-.bm-cross-button {
+#slide >>> .bm-cross-button {
   height: 50px;
   width: 50px;
 }
-.bm-menu {
+#slide >>> .bm-menu {
   background-color: var(--main-light);
   padding-top: 0;
 }
-.bm-item-list {
+#slide >>> .bm-item-list {
   color: white;
   font-size: 14px;
 }
-.bm-item-list > * {
+#slide >>> .bm-item-list > * {
   width: fit-content;
   margin: 2em 0;
   border-bottom: 2px solid white;
 }
-.bm-item-list > *:hover {
+#slide >>> .bm-item-list > *:hover {
   cursor: pointer;
   border-bottom: 2px solid white;
 }
