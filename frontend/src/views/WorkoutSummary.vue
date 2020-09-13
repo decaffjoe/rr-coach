@@ -26,7 +26,7 @@ export default {
 
 <style scoped>
 .topPageMargin {
-  margin-top: 59px; /* navbar spacing */
+  margin-top: var(--nav-spacing);
 }
 div {
   text-align: center;

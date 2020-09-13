@@ -677,7 +677,7 @@ export default {
   align-items: center;
   justify-items: center;
   font-size: 1.1em;
-  margin-top: 59px; /* navbar spacing */
+  margin-top: var(--nav-spacing);
 }
 #section > * {
   margin: 0 1em;

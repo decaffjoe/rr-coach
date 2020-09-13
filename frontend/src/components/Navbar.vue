@@ -97,7 +97,7 @@ export default {
   position: fixed;
   top: 0;
   width: 100%;
-  height: 20px;
+  height: 15px;
   padding: 1.5em 0;
   margin: 0;
   display: grid;

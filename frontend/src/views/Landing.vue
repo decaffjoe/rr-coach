@@ -75,6 +75,7 @@ export default {
     display: grid;
     grid-template-columns: 1fr;
     margin: 0;
+    margin-top: calc(var(--nav-spacing) / 2);
 }
 #welcome {
     margin: 2vh auto 0;

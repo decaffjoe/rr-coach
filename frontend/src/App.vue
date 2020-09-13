@@ -17,6 +17,7 @@ export default {
     --silver: rgb(245, 245, 245);
     --accent: #f642d3;
     --orange: #ff8e30;
+    --nav-spacing: 80px;
 }
 html,body {
     color: var(--main);

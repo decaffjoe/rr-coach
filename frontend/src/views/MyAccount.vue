@@ -63,7 +63,7 @@ section {
     position: relative;
 }
 div {
-  margin-top: 100px; /* navbar spacing */
+  margin-top: calc(var(--nav-spacing) * 1.5);
 }
 #summaryBtn {
     color: white;
