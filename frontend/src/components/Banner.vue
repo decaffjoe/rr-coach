@@ -1,7 +1,7 @@
 <template>
   <p id="banner">
     {{ text }}
-    <a id="banner-link" @click="goToPage(link)">{{ linkText }}</a>
+    <router-link id="banner-link" :to="link">{{ linkText }}</router-link>
   </p>
 </template>
 
@@ -9,11 +9,6 @@
 export default {
   name: "Banner",
   props: { text: String, link: String, linkText: String },
-  methods: {
-    goToPage(link) {
-      this.$router.push(link);
-    },
-  },
 };
 </script>
 
