@@ -20,7 +20,7 @@ export default {
 <style scoped>
 #banner {
   color: darkolivegreen;
-  background-color: rgb(245, 245, 245);
+  background-color: #dfeadf;
   font-weight: 700;
   font-size: 0.9rem;
   margin: 0 10vw;
