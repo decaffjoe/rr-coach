@@ -1,16 +1,15 @@
 <template>
   <div>
     <Navbar />
-    <p
-      v-if="!this.$cookies.isKey('user_id')"
-      :class="{ topPageMargin: !this.$cookies.isKey('user_id') }"
-    >
-      Want to save these stats for the future? Create an account or login from
-      the homepage.
-    </p>
-    <h1 :class="{ topPageMargin: this.$cookies.isKey('user_id') }">
+    <h1>
       Your Training Summary
     </h1>
+    <Banner
+      v-if="!this.$cookies.isKey('user_id')"
+      text="Want to save these stats for the future?"
+      link="/login"
+      linkText="Create an account or login"
+    />
     <Summary />
   </div>
 </template>
@@ -18,24 +17,18 @@
 <script>
 import Navbar from "../components/Navbar.vue";
 import Summary from "../components/Summary.vue";
+import Banner from "../components/Banner.vue";
 export default {
   name: "WorkoutSummary",
-  components: { Navbar, Summary },
+  components: { Navbar, Summary, Banner },
 };
 </script>
 
 <style scoped>
-.topPageMargin {
-  margin-top: var(--nav-spacing);
-}
 div {
   text-align: center;
 }
-p {
-  color: white;
-  background-color: darkolivegreen;
-  font-size: 0.9em;
-  margin: 0;
-  padding: 0.7vh 0;
+h1 {
+  margin-top: var(--nav-spacing);
 }
 </style>

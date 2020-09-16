@@ -14,10 +14,11 @@ export default {
 :root {
   --main: #633d34;
   --main-light: #784d42;
-  --silver: rgb(245, 245, 245);
+  --silver: rgb(240, 240, 240);
   --accent: #f642d3;
   --orange: #ff8e30;
   --nav-spacing: 80px;
+  font-size: 14px;
 }
 html,
 body {

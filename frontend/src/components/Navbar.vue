@@ -167,10 +167,12 @@ export default {
   width: fit-content;
   margin: 2em 0;
   border-bottom: 2px solid white;
+  transition: 200ms;
 }
 #slide >>> .bm-item-list > *:hover {
   cursor: pointer;
-  border-bottom: 2px solid white;
+  color: #000;
+  border-bottom: 2px solid #000;
 }
 /* DESKTOP STYLING */
 @media (min-width: 900px) {
