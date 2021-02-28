@@ -12,7 +12,7 @@
       <p class="navbar-item" @click="goToPage('/train')">Train</p>
       <p class="navbar-item" @click="goToPage('/summary')">Summary</p>
       <p class="navbar-item" @click="goToPage('/login')" v-show="!loggedIn">
-        Signup / Login
+        Login
       </p>
       <p class="navbar-item" @click="goToPage('/account')" v-show="loggedIn">
         My Account

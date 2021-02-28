@@ -1,31 +1,6 @@
 <template>
   <div id="top">
     <Navbar />
-    <div>
-      <h1>New? Just generate an ID</h1>
-      <Banner
-        id="banner"
-        text="If you just finished your workout, your stats will be auto-saved once you sign up!"
-      />
-      <p id="nickname">(Optional) nickname:</p>
-      <input
-        @keypress.enter="createUser"
-        v-model="newUserNickname"
-        type="text"
-      />
-      <BaseButton v-on:click="createUser" id="createID" text="Create ID" />
-      <p v-show="createError" class="error">{{ createError }}</p>
-      <br />
-      <p class="idField" type="text">{{ newUserId }}</p>
-      <p id="yourID">Your Generated ID</p>
-      <p>
-        *No passwords, email, or anything else- so hold on to your ID somewhere
-        safe!
-      </p>
-      <router-link class="router-link" to="/"
-        ><BaseButton id="gotIt" v-show="isSuccessful" :text="'Got it!'"
-      /></router-link>
-    </div>
     <section id="login">
       <h2>Returning users please login here</h2>
       <input
@@ -44,10 +19,9 @@
 <script>
 import Navbar from "../components/Navbar.vue";
 import BaseButton from "../components/BaseButton.vue";
-import Banner from "../components/Banner.vue";
 export default {
   name: "Login",
-  components: { Navbar, BaseButton, Banner },
+  components: { Navbar, BaseButton },
   methods: {
     makeCookies(user_id, user_nickname = "") {
       //                                    expiry   path  domain secure sameSite
@@ -107,115 +81,6 @@ export default {
         await this.postExistingWorkout();
       } catch (error) {
         console.log(error);
-      }
-    },
-    async createUser() {
-      if (this.newUserId)
-        return (this.createError =
-          "It looks like you've already created an id!");
-      if (this.loginString)
-        return (this.createError =
-          "Trying to login? Please see the returning users field below.");
-      if (this.newUserNickname && this.newUserNickname.length > 6)
-        return (this.createError = "Nickname must be 6 characters or less.");
-      this.createError = undefined;
-      try {
-        // create user in db
-        let res;
-        if (this.newUserNickname) {
-          res = await fetch(`${process.env.VUE_APP_API}/user`, {
-            method: "POST",
-            mode: "cors",
-            headers: { "Content-Type": "application/json; charset=utf-8" },
-            body: JSON.stringify({
-              nickname: this.newUserNickname,
-            }),
-          });
-        } else
-          res = await fetch(`${process.env.VUE_APP_API}/user`, {
-            method: "POST",
-            mode: "cors",
-          });
-        // create cookie in client with user info
-        if (res.status === 200) {
-          this.isSuccessful = true;
-          this.newUserId = await res.json();
-          this.makeCookies(this.newUserId, this.newUserNickname);
-        }
-        // post existing workout data (if they worked out first)
-        await this.postExistingWorkout();
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    // post existing workout data (if user worked out first, then logged in/created account)
-    async postExistingWorkout() {
-      if (window.sessionStorage["workoutSummary"]) {
-        let session = JSON.parse(window.sessionStorage["workoutSummary"]);
-        // if no pullups/squats/dips/hinges were done, assume empty/user didn't workout
-        if (
-          !(
-            session["pullup"] ||
-            session["squat"] ||
-            session["dip"] ||
-            session["hinge"]
-          )
-        )
-          return;
-        let section,
-          set,
-          url,
-          firstPost = true;
-        // iterate over exercise categories
-        for (section in session) {
-          // iterate over the sets in each category
-          for (set of session[section]) {
-            // if set hasn't been posted yet
-            if (set["postPath"]) {
-              // get a workout_id the first time we find a set that needs to be posted
-              if (firstPost) {
-                let res = await fetch(`${process.env.VUE_APP_API}/workout`, {
-                  method: "POST",
-                  mode: "cors",
-                  headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                  },
-                  body: JSON.stringify({
-                    user_id: this.$cookies.get("user_id"),
-                  }),
-                });
-                res = await res.json();
-                this.$cookies.set(
-                  "workout_id",
-                  res,
-                  "12h",
-                  null,
-                  null,
-                  null,
-                  "Strict",
-                );
-                firstPost = false;
-              }
-              // post the set
-              url = set["postPath"];
-              let res = await fetch(url, {
-                method: "POST",
-                mode: "cors",
-                headers: { "Content-Type": "application/json; charset=utf-8" },
-                body: JSON.stringify({
-                  reps: set["reps"],
-                  setNumber: set["setNumber"],
-                  progression: set["progression"],
-                  workout_id: this.$cookies.get("workout_id"),
-                }),
-              });
-              // if post successful, delete post url (so we don't try to re-post)
-              if (res.status === 200) delete set["postPath"];
-            }
-          }
-        }
-        // overwrite session storage without postPath on the sets (since they've been posted now)
-        window.sessionStorage["workoutSummary"] = JSON.stringify(session);
       }
     },
   },

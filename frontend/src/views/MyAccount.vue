@@ -3,6 +3,11 @@
       <Navbar :key="updated" />
       <p v-if="error">{{ errorMsg }}</p>
       <div v-if="!error">
+          <WarningBanner
+            text="Attention! The RR Coach database is being shut off on March 21. This means no more accounts and no more saving & viewing old workout data. You will still be able to use the 'Train' section normally and view your in-progress workout summary."
+            link="/summary"
+            linkText="If you have an account and want to save your workout history, please see the summary page."
+          />
           <h1>Your id:</h1>
           <p type="text" id="idInput">{{ id }}</p>
           <br>
@@ -17,9 +22,10 @@
 <script>
 import Navbar from "../components/Navbar.vue";
 import BaseButton from "../components/BaseButton.vue";
+import WarningBanner from "../components/WarningBanner";
 export default {
     name: "MyAccount",
-    components: { Navbar, BaseButton, },
+    components: { Navbar, BaseButton, WarningBanner },
     created() {
         if (!this.$cookies.isKey("user_id")) return this.error = true;
         if (this.$cookies.isKey("user_nickname")) this.nickname = this.$cookies.get("user_nickname");
