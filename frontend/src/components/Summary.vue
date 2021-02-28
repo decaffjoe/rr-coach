@@ -1,10 +1,10 @@
 <template>
     <div>
         <!-- SELECT TRAINING SESSION DATA TO DISPLAY -->
-        <select @change="getWorkoutSummary" v-model="selectedWorkout" v-if="this.$cookies.isKey('user_id')">
-            <option v-for="workout of workoutHistory" :key="workout.workout_id" :value="workout">{{ new Date(workout.createdAt).toDateString() }}</option>
-            <option :value="undefined">Today</option>
-        </select>
+        <!-- <select @change="getWorkoutSummary" v-model="selectedWorkout" v-if="this.$cookies.isKey('user_id')"> -->
+        <!--     <option v-for="workout of workoutHistory" :key="workout.workout_id" :value="workout">{{ new Date(workout.createdAt).toDateString() }}</option> -->
+        <!--     <option :value="undefined">Today</option> -->
+        <!-- </select> -->
         <!-- SUMMARY -->
         <div id="tables">
             <table v-for="section of Object.keys(uniqueExercises)" :key="section">

@@ -386,11 +386,10 @@ export default {
       }
       return;
     },
-    // save set data to sessionStorage and API
+    // save set data to sessionStorage
     async saveSet() {
       // reps gotta be inputted first eh
       if (this.repsDone) {
-        // SESSION STORAGE
         // read workout summary from sessionStorage
         let session = JSON.parse(window.sessionStorage["workoutSummary"]);
         if (!session[this.currentPath]) session[this.currentPath] = [];
@@ -409,48 +408,6 @@ export default {
         set["setNumber"] = this.specificExerciseSet;
         set["progression"] = this.currentVariant.num;
 
-        // API
-        // set url to post
-        let url = `${process.env.VUE_APP_API}/exercise/${this.currentPath}Set`;
-        // assume logged out, or post failure
-        let dbSaveSuccess = false;
-        if (this.$cookies.isKey("workout_id")) {
-          let body = {
-            reps: set["reps"],
-            progression: set["progression"],
-          };
-          let method;
-          // updating an existing set
-          if (set["hasPosted"]) {
-            method = "PUT";
-            body["db_id"] = set["db_id"];
-          } else {
-            // posting a new set
-            method = "POST";
-            body["workout_id"] = this.$cookies.get("workout_id");
-            body["setNumber"] = set["setNumber"];
-          }
-          body = JSON.stringify(body);
-          let res = await fetch(url, {
-            method,
-            body,
-            mode: "cors",
-            headers: { "Content-Type": "application/json; charset=utf-8" },
-          });
-          if (res.status === 200) {
-            // save for future PUT request if user updates
-            if (method === "POST") set["db_id"] = await res.json();
-            dbSaveSuccess = true;
-            set["hasPosted"] = true;
-          }
-        }
-
-        // SESSION STORAGE PT. 2
-        // add post url to set if we're not posting to db right now (failed or not logged in)
-        if (!dbSaveSuccess) {
-          set["postPath"] = url;
-          set["hasPosted"] = false;
-        }
         // update sessionStorage with new/updated set
         session[this.currentPath][this.specificExerciseSet - 1] = set;
         window.sessionStorage["workoutSummary"] = JSON.stringify(session);
@@ -478,69 +435,9 @@ export default {
       if (window.sessionStorage["currentSectionSet"])
         this.currentSectionSet = window.sessionStorage["currentSectionSet"];
 
-      // if workout_id cookie but no active workout storage...
-      // check to see if user wants to continue most recent workout, or start a new one!
-      let getNewWorkoutId = false;
-      if (
-        !window.sessionStorage["workoutSummary"] &&
-        this.$cookies.isKey("workout_id")
-      ) {
-        let conf = confirm(
-          "It looks like you were just training! Press OK to continue your most recent workout, or Cancel to start a new one.",
-        );
-        // user decides to continue old workout
-        if (conf) {
-          // get workout from db
-          let url = `${
-            process.env.VUE_APP_API
-          }/exercise/allSummary?workout_id=${this.$cookies.get("workout_id")}`;
-          console.log("fetching...");
-          let res = await fetch(url, {
-            method: "GET",
-            mode: "cors",
-          });
-          if (res.status === 200) {
-            res = await res.json();
-            // update current workout in browser
-            window.sessionStorage["workoutSummary"] = JSON.stringify(res);
-          }
-          // user decides to begin new workout
-        } else getNewWorkoutId = true;
-      }
-
       // init workout storage
       if (!window.sessionStorage["workoutSummary"])
         window.sessionStorage["workoutSummary"] = JSON.stringify({});
-
-      // get a new workout_id (if user is logged in without existing workout_id)
-      if (
-        (this.$cookies.isKey("user_id") &&
-          !this.$cookies.isKey("workout_id")) ||
-        getNewWorkoutId
-      ) {
-        let url = `${process.env.VUE_APP_API}/workout`;
-        let res = await fetch(url, {
-          method: "POST",
-          mode: "cors",
-          headers: { "Content-Type": "application/json; charset=utf-8" },
-          body: JSON.stringify({
-            user_id: this.$cookies.get("user_id"),
-          }),
-        });
-        if (res.status === 200) {
-          res = await res.json();
-          //                                  expiry path domain secure sameSite
-          this.$cookies.set(
-            "workout_id",
-            res,
-            "6h",
-            null,
-            null,
-            null,
-            "Strict",
-          );
-        }
-      }
 
       // load variantPreferences from cookies, or default to easiest variant (progression 0)
       let varObj = {};
