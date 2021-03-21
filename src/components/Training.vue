@@ -478,7 +478,7 @@ export default {
         antirotation: undefined,
         extension: undefined,
       },
-      // Warmup info and paths for API/sessionStorage saving (by generic exercise e.g. 'pullup')
+      // Warmup info and paths for sessionStorage saving (by generic exercise e.g. 'pullup')
       sections: {
         Warmups: {
           maxSets: 8,

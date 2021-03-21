@@ -11,15 +11,6 @@
       <p class="navbar-item" @click="goToPage('/')">Home</p>
       <p class="navbar-item" @click="goToPage('/train')">Train</p>
       <p class="navbar-item" @click="goToPage('/summary')">Summary</p>
-      <p class="navbar-item" @click="goToPage('/login')" v-show="!loggedIn">
-        Login
-      </p>
-      <p class="navbar-item" @click="goToPage('/account')" v-show="loggedIn">
-        My Account
-      </p>
-      <p class="navbar-item" @click="logout" v-show="loggedIn">
-        Logout
-      </p>
     </Slide>
   </div>
 </template>
@@ -55,14 +46,6 @@ export default {
     },
   },
   created() {
-    // if user is logged in
-    if (this.$cookies.isKey("user_id")) {
-      this.loggedIn = true;
-      let name = this.$cookies.get("user_nickname");
-      // if there is a real name, use nickname
-      if (name !== "null" && name !== null) this.user_nickname = name;
-      this.user_id = this.$cookies.get("user_id");
-    }
     // keep track of scrolling (for background fill)
     document.addEventListener("scroll", () => {
       this.scrollY = window.scrollY;
@@ -82,23 +65,9 @@ export default {
       this.$emit("click");
       this.$router.push(page);
     },
-    logout() {
-      // reset cookies
-      this.$cookies.remove("user_id");
-      this.$cookies.remove("user_nickname");
-      this.$cookies.remove("workout_id");
-      // logout of navbar
-      this.logoutReq = true;
-      // reset sessionStorage and go back to homepage
-      window.sessionStorage.clear();
-      this.$router.push("/");
-    },
   },
   data() {
     return {
-      loggedIn: false,
-      user_id: undefined,
-      user_nickname: undefined,
       scrollY: 0,
       screenWidth: 0,
       burgerMenu: undefined,

@@ -10,18 +10,9 @@
             >r/bodyweightfitness</a
           >
         </h2>
-        <WarningBanner
-          text="Attention! Idk if anybody still uses this but the RR Coach database is being shut off on March 21. This means no more accounts and no more saving & viewing old workout data. You will still be able to use the 'Train' section normally and view your in-progress workout summary."
-          link="/summary"
-          linkText="If you have an account and want to save your workout history, please see the summary page."
-        />
         <ul>
           <li>Track your reps</li>
           <li>Built-in videos and tips to improve your form</li>
-          <li>
-            Keep tabs on your progress with a full history of your training
-            sessions
-          </li>
         </ul>
         <BaseButton
           id="train-link"
@@ -78,10 +69,9 @@
 import Navbar from "../components/Navbar.vue";
 import BaseButton from "../components/BaseButton.vue";
 import RRLinks from "../components/RRLinks.vue";
-import WarningBanner from "../components/WarningBanner";
 export default {
   name: "Landing",
-  components: { Navbar, BaseButton, RRLinks, WarningBanner },
+  components: { Navbar, BaseButton, RRLinks },
   methods: {
     goToTrain() {
       // Always start at Warmups

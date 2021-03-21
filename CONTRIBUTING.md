@@ -1,18 +1,7 @@
 # Contributing
 
-When contributing to this repository, please first discuss the change you wish to make- via issue, email or reddit chat- with the owner of this repository before making a change.
+I do not actively maintain this project any longer. If you're serious about making a better tool for the r/bodyweightfitness community, I would consider forking this repo or starting a new project from scratch.
 
-Reddit:
+If you'd like to submit merge requests though, that's cool too. I'll try my best to review them as quickly as possible but no guarantees.
 
-Maintainer - [u/spongechameleon](https://www.reddit.com/user/spongechameleon)
-
-## Merge Request Process
-
-1. Open an issue for the feature/bug update and checkout a branch to commit changes
-
-2. Please remember to update frontend/README.md & backend/README.md with details of changes to the interface, this includes new environment variables, exposed ports, build instructions, etc...
-
-## Code of Conduct
-
-We're all here to help people follow the Recommended Routine, so let's be pleasant and work together to make something useful for the whole community!
-
+Either way hit me up on reddit to if you have any questions! [u/spongechameleon](https://www.reddit.com/user/spongechameleon)
