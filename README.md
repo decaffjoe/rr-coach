@@ -1,4 +1,4 @@
-[Live website](https://rr.coach)
+[Live website](https://rr-coach.netlify.app)
 
 # Project setup
 
