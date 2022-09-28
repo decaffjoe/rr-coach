@@ -8,21 +8,21 @@ import WorkoutSummary from "../views/WorkoutSummary.vue";
 Vue.use(VueRouter);
 
 const routes = [
-  {
-    path: "/",
-    name: "Landing",
-    component: Landing,
-  },
-  {
-    path: "/train",
-    name: "TrainNow",
-    component: TrainNow,
-  },
-  {
-    path: "/summary",
-    name: "WorkoutSummary",
-    component: WorkoutSummary,
-  },
+	{
+		path: "/",
+		name: "Landing",
+		component: Landing,
+	},
+	{
+		path: "/train",
+		name: "TrainNow",
+		component: TrainNow,
+	},
+	{
+		path: "/summary",
+		name: "WorkoutSummary",
+		component: WorkoutSummary,
+	},
 ];
 
 // Create router
